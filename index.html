@@ -7,132 +7,131 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --sun-yellow: #FFB000;
-        }
-        body { background-color: #000000; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-        .hidden-screen { display: none; }
+        :root { --sun-yellow: #FFB000; }
+        body { background-color: #000000; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; overflow-x: hidden; }
+        .screen { display: none; min-height: 100vh; padding-bottom: 100px; }
+        .screen.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Стиль премиальной карточки */
-        .card-premium { 
-            background: linear-gradient(145deg, #141414 0%, #0a0a0c 100%); 
-            border: 1px solid #1a1a1c; 
-            transition: all 0.2s ease;
-        }
-        
-        .card-premium:active { 
-            transform: scale(0.96); 
-            border-color: var(--sun-yellow);
-            box-shadow: 0 0 20px rgba(255, 176, 0, 0.1);
-        }
+        .card-premium { background: linear-gradient(145deg, #141414 0%, #0a0a0c 100%); border: 1px solid #1a1a1c; transition: all 0.2s ease; }
+        .card-premium:active { transform: scale(0.96); border-color: var(--sun-yellow); }
+        .icon-container { border: 1px solid rgba(255, 176, 0, 0.2); box-shadow: 0 0 15px rgba(255, 176, 0, 0.15); }
 
-        /* Стиль для светящейся иконки */
-        .icon-container {
-            border: 1px solid rgba(255, 176, 0, 0.2);
-            box-shadow: 0 0 15px rgba(255, 176, 0, 0.15);
-        }
+        /* Стиль карточки контента из видео */
+        .content-card { background: #141414; border: 1px solid #1a1a1c; border-radius: 20px; overflow: hidden; margin-bottom: 20px; }
+        .tag-sun { background: rgba(255, 176, 0, 0.1); color: var(--sun-yellow); font-size: 10px; font-weight: bold; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; }
+        .filter-chip { background: #1a1a1c; color: #666; padding: 8px 16px; border-radius: 12px; font-size: 12px; font-weight: bold; white-space: nowrap; cursor: pointer; border: 1px solid transparent; }
+        .filter-chip.active { background: var(--sun-yellow); color: #000; }
     </style>
 </head>
-<body class="pb-24 pt-6">
+<body class="pt-6">
 
-    <div id="home-screen" class="px-4">
-        
+    <div id="home-screen" class="screen active px-4">
         <div class="flex flex-col items-center mb-8">
             <h1 class="text-5xl font-black tracking-widest text-white mb-1">SUN</h1>
             <p class="text-[10px] font-bold tracking-[0.35em] text-[#FFB000]">INFOBUSINESS</p>
         </div>
-
-        <div class="bg-[#141414] border border-[#1a1a1c] rounded-xl p-3 mb-8 flex items-center focus-within:border-[#FFB000] transition-colors">
+        <div class="bg-[#141414] border border-[#1a1a1c] rounded-xl p-3 mb-8 flex items-center">
             <span class="text-gray-500 mr-2">🔍</span>
             <input type="text" placeholder="Поиск по базе знаний..." class="bg-transparent border-none text-white w-full focus:outline-none placeholder-gray-600 text-sm">
         </div>
-
         <div class="grid grid-cols-2 gap-4">
-            
-            <div class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden">
-                    <img src="efiry.png" alt="Эфиры" class="w-full h-full object-cover">
-                </div>
+            <div onclick="openCategory('efiry-screen')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
+                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="efiry.png" class="w-full h-full object-cover"></div>
                 <div class="text-lg font-bold uppercase tracking-wide text-white mt-auto">Эфиры</div>
             </div>
-
-            <div class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden">
-                    <img src="kursy.png" alt="Курсы" class="w-full h-full object-cover">
-                </div>
+            <div onclick="openCategory('kursy-screen')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
+                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="kursy.png" class="w-full h-full object-cover"></div>
                 <div class="text-lg font-bold uppercase tracking-wide text-white mt-auto">Курсы</div>
             </div>
-
-            <div class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden">
-                    <img src="razbory.png" alt="Разборы" class="w-full h-full object-cover">
-                </div>
+            <div onclick="openCategory('razbory-screen')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
+                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="razbory.png" class="w-full h-full object-cover"></div>
                 <div class="text-lg font-bold uppercase tracking-wide text-white mt-auto">Разборы</div>
             </div>
-
-            <div onclick="openBooks()" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden">
-                    <img src="knigi.png" alt="Книги" class="w-full h-full object-cover">
-                </div>
+            <div onclick="openCategory('knigi-screen')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
+                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="knigi.png" class="w-full h-full object-cover"></div>
                 <div class="text-lg font-bold uppercase tracking-wide text-white mt-auto">Книги</div>
             </div>
-
         </div>
     </div>
 
-    <div id="books-screen" class="hidden-screen px-4">
-        <div class="flex justify-between items-center mb-6 pt-2">
-            <h2 class="text-xl font-bold uppercase tracking-wider w-full text-center">База книг</h2>
+    <div id="kursy-screen" class="screen px-4">
+        <h2 class="text-xl font-bold uppercase tracking-wider text-center mb-6">Курсы</h2>
+        <div class="bg-[#141414] border border-[#1a1a1c] rounded-xl p-3 mb-4 flex items-center">
+            <span class="text-gray-500 mr-2">🔍</span>
+            <input type="text" placeholder="Поиск курса..." class="bg-transparent border-none text-white w-full focus:outline-none placeholder-gray-600 text-sm">
+        </div>
+        <div class="flex gap-2 overflow-x-auto pb-6 no-scrollbar">
+            <div class="filter-chip active">Все</div>
+            <div class="filter-chip">Маркетинг</div>
+            <div class="filter-chip">Продажи</div>
+            <div class="filter-chip">Мышление</div>
         </div>
 
-        <div class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-5 mb-4 relative">
-            <div class="flex justify-between items-center mb-4">
-                <span class="font-bold uppercase text-xs text-[#FFB000] tracking-wider">Must Read</span>
-                <span class="text-gray-500 text-xl cursor-pointer hover:text-[#FFB000] transition-colors">☆</span>
+        <div class="content-card">
+            <div class="h-48 bg-cover bg-center" style="background-image: url('kursy.jpg');"></div>
+            <div class="p-5">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="tag-sun">#МАРКЕТИНГ</span>
+                    <span class="text-gray-500 text-xl">☆</span>
+                </div>
+                <h3 class="text-lg font-bold mb-2">Реальный инфобизнес 2.0</h3>
+                <p class="text-gray-400 text-sm leading-relaxed mb-4">Пошаговая система запуска твоего продукта с нуля до миллиона.</p>
+                <div class="w-full h-1 bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-[#FFB000]" style="width: 45%;"></div>
+                </div>
+                <div class="flex justify-between mt-2 text-[10px] font-bold text-gray-600">
+                    <span>ПРОГРЕСС</span>
+                    <span>45%</span>
+                </div>
             </div>
-            <div class="w-full h-64 bg-cover bg-center rounded-xl mb-5 border border-gray-800" style="background-image: url('https://m.media-amazon.com/images/I/71Xn+yP2+ZL._AC_UF1000,1000_QL80_.jpg');"></div>
-            <h3 class="text-lg font-bold mb-3 leading-tight">Джефф Смарт, Рэнди Стрит <br><span class="text-gray-400 font-normal leading-normal text-sm">Кто. Решите вашу проблему номер один</span></h3>
-            <p class="text-gray-400 text-sm leading-relaxed">О том, как находить сильных людей в команду, чтобы перестать тащить всё самому и начать реально расти.</p>
         </div>
     </div>
 
     <div class="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-sm border-t border-[#1a1a1c] flex justify-around py-3 pb-8 z-50">
-        <div onclick="openHome()" class="flex flex-col items-center text-[#FFB000] cursor-pointer transition-colors nav-item">
+        <div onclick="showScreen('home-screen')" class="flex flex-col items-center text-[#FFB000] cursor-pointer nav-item">
             <span class="text-2xl mb-1">🏠</span>
             <span class="text-[10px] font-bold uppercase tracking-wider">Домой</span>
         </div>
-        <div class="flex flex-col items-center text-gray-600 cursor-pointer transition-colors nav-item">
-            <span class="text-2xl mb-1">👥</span>
-            <span class="text-[10px] font-bold uppercase tracking-wider">Клуб</span>
-        </div>
-        <div class="flex flex-col items-center text-gray-600 cursor-pointer transition-colors nav-item">
-            <span class="text-2xl mb-1">💬</span>
-            <span class="text-[10px] font-bold uppercase tracking-wider">Чаты</span>
-        </div>
-        <div class="flex flex-col items-center text-gray-600 cursor-pointer transition-colors nav-item">
-            <span class="text-2xl mb-1">⭐</span>
-            <span class="text-[10px] font-bold uppercase tracking-wider">Топ</span>
-        </div>
+        <div class="flex flex-col items-center text-gray-600 cursor-pointer nav-item"><span class="text-2xl mb-1">👥</span><span class="text-[10px] font-bold uppercase tracking-wider">Клуб</span></div>
+        <div class="flex flex-col items-center text-gray-600 cursor-pointer nav-item"><span class="text-2xl mb-1">💬</span><span class="text-[10px] font-bold uppercase tracking-wider">Чаты</span></div>
+        <div class="flex flex-col items-center text-gray-600 cursor-pointer nav-item"><span class="text-2xl mb-1">⭐</span><span class="text-[10px] font-bold uppercase tracking-wider">Топ</span></div>
     </div>
 
     <script>
-        window.Telegram.WebApp.ready();
-        window.Telegram.WebApp.expand();
-        window.Telegram.WebApp.setHeaderColor('#000000');
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+        tg.setHeaderColor('#000000');
 
-        function openBooks() {
-            document.getElementById('home-screen').classList.add('hidden-screen');
-            document.getElementById('books-screen').classList.remove('hidden-screen');
-            let navItems = document.querySelectorAll('.nav-item');
-            navItems[0].classList.replace('text-[#FFB000]', 'text-gray-600');
+        const backButton = tg.BackButton;
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            
+            if (screenId === 'home-screen') {
+                backButton.hide();
+            } else {
+                backButton.show();
+            }
         }
 
-        function openHome() {
-            document.getElementById('books-screen').classList.add('hidden-screen');
-            document.getElementById('home-screen').classList.remove('hidden-screen');
-            let navItems = document.querySelectorAll('.nav-item');
-            navItems[0].classList.replace('text-gray-600', 'text-[#FFB000]');
+        function openCategory(screenId) {
+            showScreen(screenId);
         }
+
+        backButton.onClick(() => {
+            showScreen('home-screen');
+        });
+
+        // Слушатель для кнопок меню (чтобы менять цвет иконки при клике)
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.replace('text-[#FFB000]', 'text-gray-600'));
+                this.classList.replace('text-gray-600', 'text-[#FFB000]');
+            });
+        });
     </script>
 </body>
 </html>
