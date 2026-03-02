@@ -7,94 +7,131 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        :root {
+            --sun-yellow: #FFB000; /* Твой фирменный цвет с логотипа */
+        }
         body { background-color: #000000; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-        .card-bg { background: linear-gradient(135deg, #111115 0%, #0a1128 100%); border: 1px solid #1f2937; }
-        /* Скрываем элементы, которые не должны быть видны сразу */
         .hidden-screen { display: none; }
+        
+        /* Премиальные матовые карточки */
+        .card-premium { 
+            background: linear-gradient(145deg, #1c1c1e 0%, #0a0a0c 100%); 
+            border: 1px solid #2a2a2c; 
+            transition: all 0.2s ease;
+        }
+        
+        /* Эффект свечения при нажатии */
+        .card-premium:active { 
+            transform: scale(0.96); 
+            border-color: var(--sun-yellow);
+            box-shadow: 0 0 15px rgba(255, 176, 0, 0.15);
+        }
+
+        /* Желтый бейджик */
+        .badge-sun {
+            background-color: var(--sun-yellow);
+            color: #000000;
+        }
     </style>
 </head>
-<body class="pb-24 pt-4">
+<body class="pb-24 pt-6">
 
     <div id="home-screen" class="px-4">
-        <div class="bg-[#1c1c1e] rounded-xl p-3 mb-6 flex items-center">
-            <span class="text-gray-400 mr-2">🔍</span>
-            <input type="text" placeholder="Поиск..." class="bg-transparent border-none text-white w-full focus:outline-none">
+        
+        <div class="flex flex-col items-center mb-8">
+            <h1 class="text-5xl font-black tracking-widest text-white mb-1">SUN</h1>
+            <p class="text-[10px] font-bold tracking-[0.35em] text-[#FFB000]">INFOBUSINESS</p>
+        </div>
+
+        <div class="bg-[#141414] border border-[#2a2a2c] rounded-xl p-3 mb-8 flex items-center focus-within:border-[#FFB000] transition-colors">
+            <span class="text-gray-500 mr-2">🔍</span>
+            <input type="text" placeholder="Поиск по базе знаний..." class="bg-transparent border-none text-white w-full focus:outline-none placeholder-gray-600 text-sm">
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-            <div class="card-bg rounded-2xl p-4 h-40 flex flex-col justify-between relative">
-                <div class="absolute top-3 right-3 bg-blue-700 rounded-full w-7 h-7 flex items-center justify-center text-xs font-bold">19</div>
-                <div class="mt-auto text-xl font-bold uppercase">Эфиры</div>
+            
+            <div class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between relative cursor-pointer">
+                <div class="absolute top-4 right-4 badge-sun rounded-full px-2 py-0.5 flex items-center justify-center text-[11px] font-extrabold">19</div>
+                <div class="text-3xl text-gray-500 mb-2">🎙️</div>
+                <div class="mt-auto text-lg font-bold uppercase tracking-wide">Эфиры</div>
             </div>
-            <div class="card-bg rounded-2xl p-4 h-40 flex flex-col justify-between relative">
-                <div class="absolute top-3 right-3 bg-blue-700 rounded-full w-7 h-7 flex items-center justify-center text-xs font-bold">6</div>
-                <div class="mt-auto text-xl font-bold uppercase">Курсы</div>
+
+            <div class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between relative cursor-pointer">
+                <div class="absolute top-4 right-4 badge-sun rounded-full px-2 py-0.5 flex items-center justify-center text-[11px] font-extrabold">6</div>
+                <div class="text-3xl text-gray-500 mb-2">🧠</div>
+                <div class="mt-auto text-lg font-bold uppercase tracking-wide">Курсы</div>
             </div>
-            <div class="card-bg rounded-2xl p-4 h-40 flex flex-col justify-between relative">
-                <div class="absolute top-3 right-3 bg-blue-700 rounded-full w-7 h-7 flex items-center justify-center text-xs font-bold">22</div>
-                <div class="mt-auto text-xl font-bold uppercase">Разборы</div>
+
+            <div class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between relative cursor-pointer">
+                <div class="absolute top-4 right-4 badge-sun rounded-full px-2 py-0.5 flex items-center justify-center text-[11px] font-extrabold">22</div>
+                <div class="text-3xl text-gray-500 mb-2">🧩</div>
+                <div class="mt-auto text-lg font-bold uppercase tracking-wide">Разборы</div>
             </div>
-            <div onclick="openBooks()" class="card-bg rounded-2xl p-4 h-40 flex flex-col justify-between relative active:scale-95 transition-transform cursor-pointer">
-                <div class="absolute top-3 right-3 bg-blue-700 rounded-full w-7 h-7 flex items-center justify-center text-xs font-bold">10</div>
-                <div class="mt-auto text-xl font-bold uppercase">Книги</div>
+
+            <div onclick="openBooks()" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between relative cursor-pointer">
+                <div class="absolute top-4 right-4 badge-sun rounded-full px-2 py-0.5 flex items-center justify-center text-[11px] font-extrabold">10</div>
+                <div class="text-3xl text-gray-500 mb-2">📚</div>
+                <div class="mt-auto text-lg font-bold uppercase tracking-wide">Книги</div>
             </div>
+
         </div>
     </div>
 
     <div id="books-screen" class="hidden-screen px-4">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold uppercase text-center w-full">Сначала новые ⌄</h2>
+        <div class="flex justify-between items-center mb-6 pt-2">
+            <h2 class="text-xl font-bold uppercase tracking-wider w-full">База книг</h2>
         </div>
 
-        <div class="bg-[#111115] border border-gray-800 rounded-2xl p-4 mb-4 relative">
+        <div class="bg-[#141414] border border-[#2a2a2c] rounded-2xl p-5 mb-4 relative">
             <div class="flex justify-between items-center mb-4">
-                <span class="font-bold uppercase text-sm">Книга на апрель</span>
-                <span class="text-gray-400 text-xl cursor-pointer">☆</span>
+                <span class="font-bold uppercase text-xs text-[#FFB000] tracking-wider">Must Read</span>
+                <span class="text-gray-500 text-xl cursor-pointer hover:text-[#FFB000] transition-colors">☆</span>
             </div>
-            <div class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center text-gray-500">
-                [Обложка книги]
-            </div>
-            <h3 class="text-lg font-bold mb-2">Джефф Смарт, Рэнди Стрит - Кто. Решите вашу проблему номер один</h3>
-            <p class="text-gray-400 text-sm">О том, как находить сильных людей в команду, чтобы перестать тащить всё самому...</p>
+            <div class="w-full h-64 bg-cover bg-center rounded-xl mb-5 border border-gray-800" style="background-image: url('https://m.media-amazon.com/images/I/71Xn+yP2+ZL._AC_UF1000,1000_QL80_.jpg');"></div>
+            <h3 class="text-lg font-bold mb-3 leading-tight">Джефф Смарт, Рэнди Стрит <br><span class="text-gray-400 font-normal">Кто. Решите вашу проблему номер один</span></h3>
+            <p class="text-gray-400 text-sm leading-relaxed">О том, как находить сильных людей в команду, чтобы перестать тащить всё самому и начать реально расти.</p>
         </div>
     </div>
 
-    <div class="fixed bottom-0 left-0 w-full bg-[#0a0a0a] border-t border-gray-800 flex justify-around py-3 pb-8 z-50">
-        <div onclick="openHome()" class="flex flex-col items-center text-blue-600 cursor-pointer">
+    <div class="fixed bottom-0 left-0 w-full bg-[#050505]/90 backdrop-blur-md border-t border-[#1a1a1c] flex justify-around py-3 pb-8 z-50">
+        <div onclick="openHome()" class="flex flex-col items-center text-[#FFB000] cursor-pointer transition-colors nav-item">
             <span class="text-2xl mb-1">🏠</span>
-            <span class="text-[10px] font-medium">Домой</span>
+            <span class="text-[10px] font-bold uppercase tracking-wider">Домой</span>
         </div>
-        <div class="flex flex-col items-center text-gray-500 cursor-pointer">
+        <div class="flex flex-col items-center text-gray-600 cursor-pointer transition-colors nav-item">
             <span class="text-2xl mb-1">👥</span>
-            <span class="text-[10px] font-medium">О сообществе</span>
+            <span class="text-[10px] font-bold uppercase tracking-wider">Клуб</span>
         </div>
-        <div class="flex flex-col items-center text-gray-500 cursor-pointer">
+        <div class="flex flex-col items-center text-gray-600 cursor-pointer transition-colors nav-item">
             <span class="text-2xl mb-1">💬</span>
-            <span class="text-[10px] font-medium">Чаты</span>
+            <span class="text-[10px] font-bold uppercase tracking-wider">Чаты</span>
         </div>
-        <div class="flex flex-col items-center text-gray-500 cursor-pointer">
+        <div class="flex flex-col items-center text-gray-600 cursor-pointer transition-colors nav-item">
             <span class="text-2xl mb-1">⭐</span>
-            <span class="text-[10px] font-medium">Избранное</span>
+            <span class="text-[10px] font-bold uppercase tracking-wider">Топ</span>
         </div>
     </div>
 
     <script>
         window.Telegram.WebApp.ready();
         window.Telegram.WebApp.expand();
+        // Устанавливаем цвет верхнего бара Телеграма в черный
+        window.Telegram.WebApp.setHeaderColor('#000000');
 
-        // Логика переключения экранов
         function openBooks() {
             document.getElementById('home-screen').classList.add('hidden-screen');
             document.getElementById('books-screen').classList.remove('hidden-screen');
-            // Делаем иконку "Домой" серой, чтобы показать, что мы ушли с главного экрана
-            document.querySelectorAll('.fixed .text-blue-600')[0].className = "flex flex-col items-center text-gray-500 cursor-pointer";
+            
+            let navItems = document.querySelectorAll('.nav-item');
+            navItems[0].classList.replace('text-[#FFB000]', 'text-gray-600');
         }
 
         function openHome() {
             document.getElementById('books-screen').classList.add('hidden-screen');
             document.getElementById('home-screen').classList.remove('hidden-screen');
-            // Возвращаем синий цвет иконке "Домой"
-            document.querySelectorAll('.fixed > div')[0].className = "flex flex-col items-center text-blue-600 cursor-pointer";
+            
+            let navItems = document.querySelectorAll('.nav-item');
+            navItems[0].classList.replace('text-gray-600', 'text-[#FFB000]');
         }
     </script>
 </body>
