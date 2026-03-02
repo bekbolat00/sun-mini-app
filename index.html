@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SUN App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #000000; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+        .card-bg { background: linear-gradient(135deg, #111115 0%, #0a1128 100%); border: 1px solid #1f2937; }
+        /* Скрываем элементы, которые не должны быть видны сразу */
+        .hidden-screen { display: none; }
+    </style>
+</head>
+<body class="pb-24 pt-4">
+
+    <div id="home-screen" class="px-4">
+        <div class="bg-[#1c1c1e] rounded-xl p-3 mb-6 flex items-center">
+            <span class="text-gray-400 mr-2">🔍</span>
+            <input type="text" placeholder="Поиск..." class="bg-transparent border-none text-white w-full focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div class="card-bg rounded-2xl p-4 h-40 flex flex-col justify-between relative">
+                <div class="absolute top-3 right-3 bg-blue-700 rounded-full w-7 h-7 flex items-center justify-center text-xs font-bold">19</div>
+                <div class="mt-auto text-xl font-bold uppercase">Эфиры</div>
+            </div>
+            <div class="card-bg rounded-2xl p-4 h-40 flex flex-col justify-between relative">
+                <div class="absolute top-3 right-3 bg-blue-700 rounded-full w-7 h-7 flex items-center justify-center text-xs font-bold">6</div>
+                <div class="mt-auto text-xl font-bold uppercase">Курсы</div>
+            </div>
+            <div class="card-bg rounded-2xl p-4 h-40 flex flex-col justify-between relative">
+                <div class="absolute top-3 right-3 bg-blue-700 rounded-full w-7 h-7 flex items-center justify-center text-xs font-bold">22</div>
+                <div class="mt-auto text-xl font-bold uppercase">Разборы</div>
+            </div>
+            <div onclick="openBooks()" class="card-bg rounded-2xl p-4 h-40 flex flex-col justify-between relative active:scale-95 transition-transform cursor-pointer">
+                <div class="absolute top-3 right-3 bg-blue-700 rounded-full w-7 h-7 flex items-center justify-center text-xs font-bold">10</div>
+                <div class="mt-auto text-xl font-bold uppercase">Книги</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="books-screen" class="hidden-screen px-4">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold uppercase text-center w-full">Сначала новые ⌄</h2>
+        </div>
+
+        <div class="bg-[#111115] border border-gray-800 rounded-2xl p-4 mb-4 relative">
+            <div class="flex justify-between items-center mb-4">
+                <span class="font-bold uppercase text-sm">Книга на апрель</span>
+                <span class="text-gray-400 text-xl cursor-pointer">☆</span>
+            </div>
+            <div class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center text-gray-500">
+                [Обложка книги]
+            </div>
+            <h3 class="text-lg font-bold mb-2">Джефф Смарт, Рэнди Стрит - Кто. Решите вашу проблему номер один</h3>
+            <p class="text-gray-400 text-sm">О том, как находить сильных людей в команду, чтобы перестать тащить всё самому...</p>
+        </div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 w-full bg-[#0a0a0a] border-t border-gray-800 flex justify-around py-3 pb-8 z-50">
+        <div onclick="openHome()" class="flex flex-col items-center text-blue-600 cursor-pointer">
+            <span class="text-2xl mb-1">🏠</span>
+            <span class="text-[10px] font-medium">Домой</span>
+        </div>
+        <div class="flex flex-col items-center text-gray-500 cursor-pointer">
+            <span class="text-2xl mb-1">👥</span>
+            <span class="text-[10px] font-medium">О сообществе</span>
+        </div>
+        <div class="flex flex-col items-center text-gray-500 cursor-pointer">
+            <span class="text-2xl mb-1">💬</span>
+            <span class="text-[10px] font-medium">Чаты</span>
+        </div>
+        <div class="flex flex-col items-center text-gray-500 cursor-pointer">
+            <span class="text-2xl mb-1">⭐</span>
+            <span class="text-[10px] font-medium">Избранное</span>
+        </div>
+    </div>
+
+    <script>
+        window.Telegram.WebApp.ready();
+        window.Telegram.WebApp.expand();
+
+        // Логика переключения экранов
+        function openBooks() {
+            document.getElementById('home-screen').classList.add('hidden-screen');
+            document.getElementById('books-screen').classList.remove('hidden-screen');
+            // Делаем иконку "Домой" серой, чтобы показать, что мы ушли с главного экрана
+            document.querySelectorAll('.fixed .text-blue-600')[0].className = "flex flex-col items-center text-gray-500 cursor-pointer";
+        }
+
+        function openHome() {
+            document.getElementById('books-screen').classList.add('hidden-screen');
+            document.getElementById('home-screen').classList.remove('hidden-screen');
+            // Возвращаем синий цвет иконке "Домой"
+            document.querySelectorAll('.fixed > div')[0].className = "flex flex-col items-center text-blue-600 cursor-pointer";
+        }
+    </script>
+</body>
+</html>
