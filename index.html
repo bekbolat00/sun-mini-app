@@ -8,23 +8,33 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --sun-yellow: #FFB000; /* Твой фирменный цвет с логотипа */
+            --sun-yellow: #FFB000; /* Твой фирменный цвет */
         }
         body { background-color: #000000; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
         .hidden-screen { display: none; }
         
-        /* Премиальные матовые карточки */
-        .card-premium { 
-            background: linear-gradient(145deg, #1c1c1e 0%, #0a0a0c 100%); 
-            border: 1px solid #2a2a2c; 
+        /* Премиальные карточки с фоновыми изображениями и сильным затемнением для текста */
+        .card-illustrated { 
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #1a1a1c; 
             transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
         }
         
-        /* Эффект свечения при нажатии */
-        .card-premium:active { 
+        /* Плавное затемнение для идеальной читаемости текста */
+        .card-illustrated::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; h-full;
+            background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.1) 100%);
+            z-index: 1;
+        }
+        
+        .card-illustrated:active { 
             transform: scale(0.96); 
             border-color: var(--sun-yellow);
-            box-shadow: 0 0 15px rgba(255, 176, 0, 0.15);
         }
 
         /* Желтый бейджик */
@@ -43,35 +53,35 @@
             <p class="text-[10px] font-bold tracking-[0.35em] text-[#FFB000]">INFOBUSINESS</p>
         </div>
 
-        <div class="bg-[#141414] border border-[#2a2a2c] rounded-xl p-3 mb-8 flex items-center focus-within:border-[#FFB000] transition-colors">
+        <div class="bg-[#141414] border border-[#1a1a1c] rounded-xl p-3 mb-8 flex items-center focus-within:border-[#FFB000] transition-colors">
             <span class="text-gray-500 mr-2">🔍</span>
             <input type="text" placeholder="Поиск по базе знаний..." class="bg-transparent border-none text-white w-full focus:outline-none placeholder-gray-600 text-sm">
         </div>
 
         <div class="grid grid-cols-2 gap-4">
             
-            <div class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between relative cursor-pointer">
-                <div class="absolute top-4 right-4 badge-sun rounded-full px-2 py-0.5 flex items-center justify-center text-[11px] font-extrabold">19</div>
-                <div class="text-3xl text-gray-500 mb-2">🎙️</div>
-                <div class="mt-auto text-lg font-bold uppercase tracking-wide">Эфиры</div>
+            <div class="card-illustrated rounded-2xl h-40 flex flex-col justify-between relative cursor-pointer" 
+                 style="background-image: url('https://images.unsplash.com/photo-1590602847861-f357a93021be?q=80&w=500');">
+                <div class="absolute top-4 right-4 badge-sun rounded-full px-2 py-0.5 flex items-center justify-center text-[11px] font-extrabold z-10">19</div>
+                <div class="mt-auto p-5 text-lg font-bold uppercase tracking-wide relative z-10">Эфиры</div>
             </div>
 
-            <div class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between relative cursor-pointer">
-                <div class="absolute top-4 right-4 badge-sun rounded-full px-2 py-0.5 flex items-center justify-center text-[11px] font-extrabold">6</div>
-                <div class="text-3xl text-gray-500 mb-2">🧠</div>
-                <div class="mt-auto text-lg font-bold uppercase tracking-wide">Курсы</div>
+            <div class="card-illustrated rounded-2xl h-40 flex flex-col justify-between relative cursor-pointer" 
+                 style="background-image: url('https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=500');">
+                <div class="absolute top-4 right-4 badge-sun rounded-full px-2 py-0.5 flex items-center justify-center text-[11px] font-extrabold z-10">6</div>
+                <div class="mt-auto p-5 text-lg font-bold uppercase tracking-wide relative z-10">Курсы</div>
             </div>
 
-            <div class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between relative cursor-pointer">
-                <div class="absolute top-4 right-4 badge-sun rounded-full px-2 py-0.5 flex items-center justify-center text-[11px] font-extrabold">22</div>
-                <div class="text-3xl text-gray-500 mb-2">🧩</div>
-                <div class="mt-auto text-lg font-bold uppercase tracking-wide">Разборы</div>
+            <div class="card-illustrated rounded-2xl h-40 flex flex-col justify-between relative cursor-pointer" 
+                 style="background-image: url('https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?q=80&w=500');">
+                <div class="absolute top-4 right-4 badge-sun rounded-full px-2 py-0.5 flex items-center justify-center text-[11px] font-extrabold z-10">22</div>
+                <div class="mt-auto p-5 text-lg font-bold uppercase tracking-wide relative z-10">Разборы</div>
             </div>
 
-            <div onclick="openBooks()" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between relative cursor-pointer">
-                <div class="absolute top-4 right-4 badge-sun rounded-full px-2 py-0.5 flex items-center justify-center text-[11px] font-extrabold">10</div>
-                <div class="text-3xl text-gray-500 mb-2">📚</div>
-                <div class="mt-auto text-lg font-bold uppercase tracking-wide">Книги</div>
+            <div onclick="openBooks()" class="card-illustrated rounded-2xl h-40 flex flex-col justify-between relative cursor-pointer" 
+                 style="background-image: url('https://images.unsplash.com/photo-1589998059171-988d887df646?q=80&w=500');">
+                <div class="absolute top-4 right-4 badge-sun rounded-full px-2 py-0.5 flex items-center justify-center text-[11px] font-extrabold z-10">10</div>
+                <div class="mt-auto p-5 text-lg font-bold uppercase tracking-wide relative z-10">Книги</div>
             </div>
 
         </div>
@@ -79,21 +89,21 @@
 
     <div id="books-screen" class="hidden-screen px-4">
         <div class="flex justify-between items-center mb-6 pt-2">
-            <h2 class="text-xl font-bold uppercase tracking-wider w-full">База книг</h2>
+            <h2 class="text-xl font-bold uppercase tracking-wider w-full text-center">База книг</h2>
         </div>
 
-        <div class="bg-[#141414] border border-[#2a2a2c] rounded-2xl p-5 mb-4 relative">
+        <div class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-5 mb-4 relative">
             <div class="flex justify-between items-center mb-4">
                 <span class="font-bold uppercase text-xs text-[#FFB000] tracking-wider">Must Read</span>
                 <span class="text-gray-500 text-xl cursor-pointer hover:text-[#FFB000] transition-colors">☆</span>
             </div>
             <div class="w-full h-64 bg-cover bg-center rounded-xl mb-5 border border-gray-800" style="background-image: url('https://m.media-amazon.com/images/I/71Xn+yP2+ZL._AC_UF1000,1000_QL80_.jpg');"></div>
-            <h3 class="text-lg font-bold mb-3 leading-tight">Джефф Смарт, Рэнди Стрит <br><span class="text-gray-400 font-normal">Кто. Решите вашу проблему номер один</span></h3>
+            <h3 class="text-lg font-bold mb-3 leading-tight">Джефф Смарт, Рэнди Стрит <br><span class="text-gray-400 font-normal leading-normal text-sm">Кто. Решите вашу проблему номер один</span></h3>
             <p class="text-gray-400 text-sm leading-relaxed">О том, как находить сильных людей в команду, чтобы перестать тащить всё самому и начать реально расти.</p>
         </div>
     </div>
 
-    <div class="fixed bottom-0 left-0 w-full bg-[#050505]/90 backdrop-blur-md border-t border-[#1a1a1c] flex justify-around py-3 pb-8 z-50">
+    <div class="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-sm border-t border-[#1a1a1c] flex justify-around py-3 pb-8 z-50">
         <div onclick="openHome()" class="flex flex-col items-center text-[#FFB000] cursor-pointer transition-colors nav-item">
             <span class="text-2xl mb-1">🏠</span>
             <span class="text-[10px] font-bold uppercase tracking-wider">Домой</span>
@@ -115,13 +125,11 @@
     <script>
         window.Telegram.WebApp.ready();
         window.Telegram.WebApp.expand();
-        // Устанавливаем цвет верхнего бара Телеграма в черный
         window.Telegram.WebApp.setHeaderColor('#000000');
 
         function openBooks() {
             document.getElementById('home-screen').classList.add('hidden-screen');
             document.getElementById('books-screen').classList.remove('hidden-screen');
-            
             let navItems = document.querySelectorAll('.nav-item');
             navItems[0].classList.replace('text-[#FFB000]', 'text-gray-600');
         }
@@ -129,7 +137,6 @@
         function openHome() {
             document.getElementById('books-screen').classList.add('hidden-screen');
             document.getElementById('home-screen').classList.remove('hidden-screen');
-            
             let navItems = document.querySelectorAll('.nav-item');
             navItems[0].classList.replace('text-gray-600', 'text-[#FFB000]');
         }
