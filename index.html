@@ -22,6 +22,12 @@
         .course-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); padding: 15px 20px 35px; border-top: 1px solid #1a1a1c; z-index: 100; display: flex; gap: 12px; }
         .btn-main { flex: 1; background: #fff; color: #000; font-weight: bold; padding: 14px; border-radius: 12px; text-align: center; font-size: 14px; cursor: pointer; }
         .btn-outline { flex: 1; background: #1a1a1c; color: #fff; font-weight: bold; padding: 14px; border-radius: 12px; text-align: center; font-size: 14px; border: 1px solid #2a2a2c; cursor: pointer; }
+        
+        .gold-glow { box-shadow: 0 0 30px rgba(255, 176, 0, 0.15); border: 1px solid rgba(255, 176, 0, 0.3); }
+
+        /* Анимация для всплывающего окна */
+        @keyframes modalSlideUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .modal-animate { animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
     </style>
 </head>
 <body class="pt-6">
@@ -57,14 +63,36 @@
 
         <div id="home-progress-section" class="mt-10 hidden pb-4">
             <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4 ml-1">Что ты хочешь заманьячить?</h3>
-            <div id="home-progress-list" class="grid grid-cols-2 gap-3">
-                </div>
+            <div id="home-progress-list" class="grid grid-cols-2 gap-3"></div>
+        </div>
+    </div>
+
+    <div id="club-screen" class="screen px-4">
+        <h2 class="text-xl font-bold uppercase text-center mb-6 mt-2 tracking-widest">Сообщество</h2>
+
+        <div class="bg-[#141414] gold-glow rounded-[20px] p-6 mb-8 relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#FFB000] opacity-10 rounded-full blur-2xl"></div>
+            <h3 class="text-xl font-black mb-1 uppercase italic">Твоя подписка</h3>
+            <p class="text-sm text-gray-400 mb-6 relative z-10">Доступ ко всем материалам, эфирам, базе знаний и закрытым чатам резидентов SUN.</p>
+            
+            <div onclick="openPaymentModal()" class="w-full bg-[#FFB000] text-black text-center font-bold py-3.5 rounded-xl uppercase text-sm tracking-widest cursor-pointer hover:bg-white transition-colors">
+                Продлить доступ
+            </div>
+        </div>
+
+        <div class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-6 mb-8">
+            <h3 class="text-sm font-bold text-[#FFB000] mb-5 uppercase tracking-widest flex items-center"><span class="mr-2 text-lg">⚖️</span> Правила клуба</h3>
+            <ul class="text-sm text-gray-300 space-y-4">
+                <li class="leading-relaxed"><strong class="text-white">1. Уважение.</strong> Экологичное общение без токсичности, перехода на личности и агрессии. Мы здесь, чтобы расти.</li>
+                <li class="leading-relaxed"><strong class="text-white">2. Никакого спама.</strong> Прямая самореклама, продажа своих услуг и рассылка ссылок запрещены.</li>
+                <li class="leading-relaxed"><strong class="text-white">3. Вклад.</strong> Не только бери, но и отдавай. Делись своими инсайтами, таблицами, опытом.</li>
+                <li class="leading-relaxed"><strong class="text-white">4. Конфиденциальность.</strong> Внутренняя кухня бизнесов других участников, цифры и разборы остаются строго внутри клуба.</li>
+            </ul>
         </div>
     </div>
 
     <div id="list-screen" class="screen px-4">
         <h2 id="list-title" class="text-xl font-bold uppercase text-center mb-6">Загрузка...</h2>
-        
         <div class="mb-4 flex items-center cursor-pointer relative w-max" id="sort-container" style="display: none;">
             <select id="sort-select" onchange="changeSort()" class="appearance-none bg-transparent text-white font-bold text-sm focus:outline-none pr-4 cursor-pointer">
                 <option value="new" class="text-black">Сначала новые</option>
@@ -72,7 +100,6 @@
             </select>
             <span class="text-white text-[10px] pointer-events-none absolute right-0 top-1/2 transform -translate-y-1/2">▼</span>
         </div>
-
         <div id="items-list"></div>
     </div>
 
@@ -92,10 +119,49 @@
         </div>
     </div>
 
+    <div id="payment-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[150] hidden items-center justify-center px-4">
+        <div class="bg-[#141414] border border-[#2a2a2c] rounded-[24px] p-6 w-full max-w-sm relative modal-animate">
+            <button onclick="closePaymentModal()" class="absolute top-4 right-5 text-gray-500 hover:text-white text-xl">✕</button>
+
+            <div id="payment-step-1">
+                <h3 class="text-xl font-bold mb-6 text-center mt-2">Способ оплаты</h3>
+                
+                <button onclick="payWithKaspi()" class="w-full bg-[#F14635] text-white font-bold py-4 rounded-xl mb-3 flex items-center justify-center gap-2 transition-transform active:scale-95">
+                    Оплатить через Kaspi
+                </button>
+                
+                <button onclick="showRequisites()" class="w-full bg-[#1a1a1c] border border-[#2a2a2c] text-white font-bold py-4 rounded-xl transition-transform active:scale-95">
+                    Карта другого банка
+                </button>
+            </div>
+
+            <div id="payment-step-2" class="hidden">
+                <h3 class="text-xl font-bold mb-4 text-center mt-2">Реквизиты</h3>
+                <p class="text-sm text-gray-400 mb-5 text-center leading-relaxed">Переведите сумму на карту ниже и отправьте чек менеджеру для активации.</p>
+                
+                <div class="bg-[#0a0a0c] p-4 rounded-xl mb-5 border border-[#2a2a2c]">
+                    <div class="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Номер карты</div>
+                    <div class="font-mono text-lg tracking-widest mb-3 text-white" id="req-card">4400 4301 1234 5678</div>
+                    
+                    <div class="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Получатель</div>
+                    <div class="font-bold text-sm text-white">Бекболат Б.</div>
+                </div>
+
+                <button onclick="copyRequisites()" class="w-full bg-[#FFB000] text-black font-bold py-3.5 rounded-xl mb-3 transition-transform active:scale-95">
+                    Скопировать номер карты
+                </button>
+                
+                <button onclick="tg.openTelegramLink('https://t.me/твой_менеджер_или_бот')" class="w-full bg-[#1a1a1c] border border-[#2a2a2c] text-white font-bold py-3.5 rounded-xl transition-transform active:scale-95">
+                    Отправить чек менеджеру
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-sm border-t border-[#1a1a1c] flex justify-around py-3 pb-8 z-50">
         <div onclick="showScreen('home-screen')" class="flex flex-col items-center text-[#FFB000] cursor-pointer nav-item"><span class="text-2xl mb-1">🏠</span><span class="text-[10px] font-bold uppercase tracking-wider">Домой</span></div>
-        <div class="flex flex-col items-center text-gray-600 cursor-pointer nav-item"><span class="text-2xl mb-1">👥</span><span class="text-[10px] font-bold uppercase tracking-wider">Клуб</span></div>
-        <div class="flex flex-col items-center text-gray-600 cursor-pointer nav-item"><span class="text-2xl mb-1">💬</span><span class="text-[10px] font-bold uppercase tracking-wider">Чаты</span></div>
+        <div onclick="showScreen('club-screen')" class="flex flex-col items-center text-gray-600 cursor-pointer nav-item"><span class="text-2xl mb-1">👥</span><span class="text-[10px] font-bold uppercase tracking-wider">Клуб</span></div>
+        <div class="flex flex-col items-center text-gray-600 cursor-pointer nav-item" onclick="tg.showAlert('Чаты появятся позже!')"><span class="text-2xl mb-1">💬</span><span class="text-[10px] font-bold uppercase tracking-wider">Чаты</span></div>
         <div onclick="openFavorites()" class="flex flex-col items-center text-gray-600 cursor-pointer nav-item"><span class="text-2xl mb-1">⭐</span><span class="text-[10px] font-bold uppercase tracking-wider">Топ</span></div>
     </div>
 
@@ -131,25 +197,68 @@
                     link: r[6] || ''
                 })).filter(item => item.id); 
 
-                // Рисуем блоки прогресса после загрузки данных
                 renderHomeProgress();
             }
         });
 
-        // ФУНКЦИЯ ПОДСЧЕТА И ОТРИСОВКИ ПРОГРЕССА ПО ТЕМАМ (ТЕГАМ)
+        // --- ЛОГИКА ОКНА ОПЛАТЫ ---
+        function openPaymentModal() {
+            document.getElementById('payment-modal').classList.remove('hidden');
+            document.getElementById('payment-modal').classList.add('flex');
+            // Сбрасываем на первый шаг при открытии
+            document.getElementById('payment-step-1').classList.remove('hidden');
+            document.getElementById('payment-step-2').classList.add('hidden');
+        }
+
+        function closePaymentModal() {
+            document.getElementById('payment-modal').classList.add('hidden');
+            document.getElementById('payment-modal').classList.remove('flex');
+        }
+
+        function payWithKaspi() {
+            // ЗДЕСЬ ВСТАВЬ СВОЮ ССЫЛКУ НА ОПЛАТУ KASPI (Счет или Kaspi Pay)
+            tg.openLink('https://kaspi.kz/pay/'); 
+        }
+
+        function showRequisites() {
+            document.getElementById('payment-step-1').classList.add('hidden');
+            document.getElementById('payment-step-2').classList.remove('hidden');
+        }
+
+        function copyRequisites() {
+            // Берем текст карты, убираем пробелы
+            const cardNumber = document.getElementById('req-card').innerText.replace(/\s/g, '');
+            
+            // Копируем в буфер обмена телефона
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(cardNumber);
+            } else {
+                // Запасной метод для старых телефонов
+                let textArea = document.createElement("textarea");
+                textArea.value = cardNumber;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-999999px";
+                textArea.style.top = "-999999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try { document.execCommand('copy'); } catch (err) {}
+                textArea.remove();
+            }
+            
+            // Показываем красивое уведомление Телеграма
+            tg.showAlert('Номер карты скопирован! Теперь вы можете вставить его в приложение вашего банка.');
+        }
+        // -----------------------------
+
         function renderHomeProgress() {
             if (globalData.length === 0) return;
-
             let tagStats = {};
-            
-            // Считаем сколько всего курсов по каждому тегу и сколько пройдено
             globalData.forEach(item => {
                 const tag = item.tag;
                 if (!tagStats[tag]) tagStats[tag] = { total: 0, completed: 0 };
                 tagStats[tag].total++;
-                if (userProgress[item.id] === 100) {
-                    tagStats[tag].completed++;
-                }
+                if (userProgress[item.id] === 100) tagStats[tag].completed++;
             });
 
             const tags = Object.keys(tagStats);
@@ -159,13 +268,11 @@
             tags.forEach(tag => {
                 const stat = tagStats[tag];
                 const percent = Math.round((stat.completed / stat.total) * 100);
-                
                 html += `
                     <div class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-4">
                         <div class="font-bold text-sm mb-4 truncate text-white capitalize">${tag}</div>
                         <div class="flex justify-between text-[8px] text-gray-500 font-bold mb-1.5 uppercase tracking-wider">
-                            <span>твой прогресс</span>
-                            <span>${percent}%</span>
+                            <span>твой прогресс</span><span>${percent}%</span>
                         </div>
                         <div class="w-full h-1 bg-[#2a2a2c] rounded-full overflow-hidden">
                             <div class="h-full bg-[#FFB000] transition-all duration-500" style="width: ${percent}%;"></div>
@@ -183,14 +290,19 @@
             document.getElementById(screenId).classList.add('active');
             
             document.querySelectorAll('.nav-item').forEach(i => i.classList.replace('text-[#FFB000]', 'text-gray-600'));
-            if(screenId === 'home-screen') document.querySelectorAll('.nav-item')[0].classList.replace('text-gray-600', 'text-[#FFB000]');
-            if(currentRenderState.type === 'favorites') document.querySelectorAll('.nav-item')[3].classList.replace('text-gray-600', 'text-[#FFB000]');
+            if(screenId === 'home-screen') {
+                document.querySelectorAll('.nav-item')[0].classList.replace('text-gray-600', 'text-[#FFB000]');
+                currentRenderState = { type: 'home' };
+            } else if(screenId === 'club-screen') {
+                document.querySelectorAll('.nav-item')[1].classList.replace('text-gray-600', 'text-[#FFB000]');
+                currentRenderState = { type: 'club' };
+            } else if(currentRenderState.type === 'favorites') {
+                document.querySelectorAll('.nav-item')[3].classList.replace('text-gray-600', 'text-[#FFB000]');
+            }
 
             if (screenId === 'home-screen') {
                 tg.BackButton.hide();
                 historyList = ['home-screen'];
-                currentRenderState = { type: 'home' };
-                // Обновляем прогресс при возврате на главный экран
                 renderHomeProgress(); 
             } else {
                 if (historyList[historyList.length-1] !== screenId) historyList.push(screenId);
@@ -201,48 +313,29 @@
         function toggleFavorite(event, id) {
             event.stopPropagation();
             id = id.toString();
-            
-            if (favorites.includes(id)) {
-                favorites = favorites.filter(f => f !== id);
-            } else {
-                favorites.push(id);
-            }
+            if (favorites.includes(id)) { favorites = favorites.filter(f => f !== id); } else { favorites.push(id); }
             localStorage.setItem('sun_favorites', JSON.stringify(favorites));
             
-            if (currentRenderState.type === 'category') {
-                openCategory(currentRenderState.keyword, currentRenderState.title);
-            } else if (currentRenderState.type === 'favorites') {
-                openFavorites();
-            }
+            if (currentRenderState.type === 'category') openCategory(currentRenderState.keyword, currentRenderState.title);
+            else if (currentRenderState.type === 'favorites') openFavorites();
         }
 
         function toggleDetailFavorite() {
             if(!currentDetailId) return;
             const id = currentDetailId.toString();
-            if (favorites.includes(id)) {
-                favorites = favorites.filter(f => f !== id);
-            } else {
-                favorites.push(id);
-            }
+            if (favorites.includes(id)) { favorites = favorites.filter(f => f !== id); } else { favorites.push(id); }
             localStorage.setItem('sun_favorites', JSON.stringify(favorites));
             document.getElementById('detail-fav').innerText = favorites.includes(id) ? '★' : '☆';
-            document.getElementById('detail-fav').classList.toggle('text-[#FFB000]', favorites.includes(id));
-            document.getElementById('detail-fav').classList.toggle('text-gray-500', !favorites.includes(id));
+            document.getElementById('detail-fav').className = favorites.includes(id) ? 'text-[#FFB000] text-2xl cursor-pointer' : 'text-gray-500 text-2xl cursor-pointer';
         }
 
         function sortAndRender() {
-            if (currentSort === 'new') {
-                currentItems.sort((a, b) => parseInt(b.id) - parseInt(a.id));
-            } else {
-                currentItems.sort((a, b) => parseInt(a.id) - parseInt(b.id));
-            }
+            if (currentSort === 'new') currentItems.sort((a, b) => parseInt(b.id) - parseInt(a.id));
+            else currentItems.sort((a, b) => parseInt(a.id) - parseInt(b.id));
             renderCards(currentItems);
         }
 
-        function changeSort() {
-            currentSort = document.getElementById('sort-select').value;
-            sortAndRender();
-        }
+        function changeSort() { currentSort = document.getElementById('sort-select').value; sortAndRender(); }
 
         function renderCards(items) {
             const list = document.getElementById('items-list');
@@ -251,13 +344,10 @@
                 document.getElementById('sort-container').style.display = 'none';
                 return;
             }
-            
             document.getElementById('sort-container').style.display = 'flex';
-            
             list.innerHTML = items.map(item => {
                 const isFav = favorites.includes(item.id.toString());
                 const itemProgress = userProgress[item.id.toString()] || 0;
-                
                 return `
                     <div onclick="openDetail('${item.id}')" class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] overflow-hidden mb-6 cursor-pointer relative">
                         <div class="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-full text-lg ${isFav ? 'text-[#FFB000]' : 'text-gray-400'} transition-colors" onclick="toggleFavorite(event, '${item.id}')">
@@ -269,8 +359,7 @@
                             <h3 class="text-lg font-bold mt-2">${item.title}</h3>
                             <div class="mt-4">
                                 <div class="flex justify-between text-[10px] text-gray-500 font-bold mb-2 uppercase tracking-wider">
-                                    <span>Твой прогресс</span>
-                                    <span>${itemProgress}%</span>
+                                    <span>Твой прогресс</span><span>${itemProgress}%</span>
                                 </div>
                                 <div class="w-full h-1.5 bg-[#1a1a1c] rounded-full overflow-hidden">
                                     <div class="h-full bg-[#FFB000] transition-all duration-500" style="width: ${itemProgress}%;"></div>
@@ -286,11 +375,9 @@
             currentRenderState = { type: 'category', keyword: categoryKeyword, title: pageTitle };
             document.getElementById('list-title').innerText = pageTitle;
             currentItems = globalData.filter(item => item.category.toLowerCase().includes(categoryKeyword.toLowerCase()));
-            
             document.getElementById('sort-select').value = 'new';
             currentSort = 'new';
             sortAndRender();
-            
             showScreen('list-screen');
         }
 
@@ -298,11 +385,9 @@
             currentRenderState = { type: 'favorites' };
             document.getElementById('list-title').innerText = 'Избранное';
             currentItems = globalData.filter(item => favorites.includes(item.id.toString()));
-            
             document.getElementById('sort-select').value = 'new';
             currentSort = 'new';
             sortAndRender();
-            
             showScreen('list-screen');
         }
 
@@ -322,20 +407,13 @@
 
             const watchBtn = document.getElementById('watch-btn');
             watchBtn.onclick = () => {
-                // ДОБАВЛЯЕМ ПРОГРЕСС И СРАЗУ ПЕРЕСЧИТЫВАЕМ
                 userProgress[item.id.toString()] = 100;
                 localStorage.setItem('sun_progress', JSON.stringify(userProgress));
-                renderHomeProgress(); // Пересчет для главного экрана
+                renderHomeProgress(); 
 
                 if (item.link) {
-                    if(item.link.includes('t.me')) {
-                        tg.openTelegramLink(item.link);
-                    } else {
-                        tg.openLink(item.link);
-                    }
-                } else {
-                    tg.showAlert("Ссылка на материал пока не добавлена!");
-                }
+                    if(item.link.includes('t.me')) { tg.openTelegramLink(item.link); } else { tg.openLink(item.link); }
+                } else { tg.showAlert("Ссылка на материал пока не добавлена!"); }
             };
 
             showScreen('detail-screen');
@@ -345,12 +423,16 @@
             historyList.pop();
             const prev = historyList[historyList.length - 1];
             
+            // Если закрываем модалку оплаты (кнопкой назад на андроид)
+            if (!document.getElementById('payment-modal').classList.contains('hidden')) {
+                closePaymentModal();
+                historyList.push('club-screen'); // Возвращаем стейт
+                return;
+            }
+            
             if (prev === 'list-screen') {
-                if (currentRenderState.type === 'category') {
-                    openCategory(currentRenderState.keyword, currentRenderState.title);
-                } else if (currentRenderState.type === 'favorites') {
-                    openFavorites();
-                }
+                if (currentRenderState.type === 'category') openCategory(currentRenderState.keyword, currentRenderState.title);
+                else if (currentRenderState.type === 'favorites') openFavorites();
             } else {
                 showScreen(prev);
             }
