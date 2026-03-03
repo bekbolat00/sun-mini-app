@@ -10,24 +10,17 @@
     <style>
         :root { --sun-yellow: #FFB000; }
         body { background-color: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; overflow-x: hidden; }
+        .skeleton { background: linear-gradient(90deg, #141414 25%, #1a1a1c 50%, #141414 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
+        @keyframes loading { from { background-position: 200% 0; } to { background-position: -200% 0; } }
         .screen { display: none; min-height: 100vh; padding-bottom: 100px; }
         .screen.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
         .card-premium { background: linear-gradient(145deg, #141414 0%, #0a0a0c 100%); border: 1px solid #1a1a1c; transition: all 0.2s ease; }
-        .card-premium:active { transform: scale(0.96); border-color: var(--sun-yellow); }
-        .icon-container { border: 1px solid rgba(255, 176, 0, 0.2); box-shadow: 0 0 15px rgba(255, 176, 0, 0.15); }
         .tag-sun { background: rgba(255, 176, 0, 0.1); color: var(--sun-yellow); font-size: 10px; font-weight: bold; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; }
-        
         .course-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); padding: 15px 20px 35px; border-top: 1px solid #1a1a1c; z-index: 100; display: flex; gap: 12px; }
         .btn-main { flex: 1; background: #fff; color: #000; font-weight: bold; padding: 14px; border-radius: 12px; text-align: center; font-size: 14px; cursor: pointer; }
-        .btn-outline { flex: 1; background: #1a1a1c; color: #fff; font-weight: bold; padding: 14px; border-radius: 12px; text-align: center; font-size: 14px; border: 1px solid #2a2a2c; cursor: pointer; }
-        
-        .gold-glow { box-shadow: 0 0 30px rgba(255, 176, 0, 0.15); border: 1px solid rgba(255, 176, 0, 0.3); }
-
-        /* Анимация для всплывающего окна */
-        @keyframes modalSlideUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        .modal-animate { animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .modal-animate { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     </style>
 </head>
 <body class="pt-6">
@@ -37,150 +30,95 @@
             <h1 class="text-5xl font-black tracking-widest mb-1">SUN</h1>
             <p class="text-[10px] font-bold tracking-[0.35em] text-[#FFB000]">INFOBUSINESS</p>
         </div>
-        <div class="bg-[#141414] border border-[#1a1a1c] rounded-xl p-3 mb-8 flex items-center">
-            <span class="text-gray-500 mr-2">🔍</span>
-            <input type="text" placeholder="Поиск по базе знаний..." class="bg-transparent border-none text-white w-full focus:outline-none placeholder-gray-600 text-sm">
-        </div>
-        
         <div class="grid grid-cols-2 gap-4">
             <div onclick="openCategory('Эфир', 'Эфиры')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="efiry.jpg" class="w-full h-full object-cover"></div>
+                <div class="w-12 h-12 rounded-xl border border-yellow-500/20 bg-neutral-900 flex items-center justify-center text-2xl">📻</div>
                 <div class="text-lg font-bold uppercase mt-auto">Эфиры</div>
             </div>
             <div onclick="openCategory('Курс', 'Курсы')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="kursy.jpg" class="w-full h-full object-cover"></div>
+                <div class="w-12 h-12 rounded-xl border border-yellow-500/20 bg-neutral-900 flex items-center justify-center text-2xl">🎓</div>
                 <div class="text-lg font-bold uppercase mt-auto">Курсы</div>
             </div>
             <div onclick="openCategory('Разбор', 'Разборы')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="razbory.jpg" class="w-full h-full object-cover"></div>
+                <div class="w-12 h-12 rounded-xl border border-yellow-500/20 bg-neutral-900 flex items-center justify-center text-2xl">🔍</div>
                 <div class="text-lg font-bold uppercase mt-auto">Разборы</div>
             </div>
             <div onclick="openCategory('Книг', 'Книги')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="knigi.jpg" class="w-full h-full object-cover"></div>
+                <div class="w-12 h-12 rounded-xl border border-yellow-500/20 bg-neutral-900 flex items-center justify-center text-2xl">📚</div>
                 <div class="text-lg font-bold uppercase mt-auto">Книги</div>
             </div>
         </div>
-
-        <div id="home-progress-section" class="mt-10 hidden pb-4">
-            <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4 ml-1">Что ты хочешь заманьячить?</h3>
-            <div id="home-progress-list" class="grid grid-cols-2 gap-3"></div>
+        <div id="home-progress-section" class="mt-10 pb-4">
+            <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4 ml-1">Твой прогресс</h3>
+            <div id="home-progress-list" class="grid grid-cols-2 gap-3">
+                <div class="skeleton h-24 rounded-2xl"></div>
+                <div class="skeleton h-24 rounded-2xl"></div>
+            </div>
         </div>
     </div>
 
     <div id="club-screen" class="screen px-4">
         <h2 class="text-xl font-bold uppercase text-center mb-6 mt-2 tracking-widest">Сообщество</h2>
-
-        <div class="bg-[#141414] gold-glow rounded-[20px] p-6 mb-8 relative overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#FFB000] opacity-10 rounded-full blur-2xl"></div>
-            <h3 class="text-xl font-black mb-1 uppercase italic">Твоя подписка</h3>
-            <p class="text-sm text-gray-400 mb-6 relative z-10">Доступ ко всем материалам, эфирам, базе знаний и закрытым чатам резидентов SUN.</p>
-            
-            <div onclick="openPaymentModal()" class="w-full bg-[#FFB000] text-black text-center font-bold py-3.5 rounded-xl uppercase text-sm tracking-widest cursor-pointer hover:bg-white transition-colors">
+        <div class="card-premium rounded-[24px] p-6 mb-8 border-yellow-500/30 relative overflow-hidden">
+            <h3 class="text-xl font-black mb-1 uppercase italic">SUN CLUB</h3>
+            <p class="text-sm text-gray-400 mb-6">Получи доступ ко всем материалам и закрытому комьюнити.</p>
+            <div onclick="openPaymentModal()" class="w-full bg-[#FFB000] text-black text-center font-bold py-4 rounded-xl uppercase text-sm tracking-widest cursor-pointer active:scale-95 transition-transform">
                 Продлить доступ
             </div>
         </div>
-
         <div class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-6 mb-8">
-            <h3 class="text-sm font-bold text-[#FFB000] mb-5 uppercase tracking-widest flex items-center"><span class="mr-2 text-lg">⚖️</span> Правила клуба</h3>
-            <ul class="text-sm text-gray-300 space-y-4">
-                <li class="leading-relaxed"><strong class="text-white">1. Уважение.</strong> Экологичное общение без токсичности, перехода на личности и агрессии. Мы здесь, чтобы расти.</li>
-                <li class="leading-relaxed"><strong class="text-white">2. Никакого спама.</strong> Прямая самореклама, продажа своих услуг и рассылка ссылок запрещены.</li>
-                <li class="leading-relaxed"><strong class="text-white">3. Вклад.</strong> Не только бери, но и отдавай. Делись своими инсайтами, таблицами, опытом.</li>
-                <li class="leading-relaxed"><strong class="text-white">4. Конфиденциальность.</strong> Внутренняя кухня бизнесов других участников, цифры и разборы остаются строго внутри клуба.</li>
-            </ul>
+            <h3 class="text-sm font-bold text-[#FFB000] mb-4 uppercase">⚖️ Правила</h3>
+            <p class="text-sm text-gray-300 leading-relaxed">1. Уважение участников.<br>2. Без спама и рекламы.<br>3. Конфиденциальность разборов.</p>
         </div>
     </div>
 
     <div id="list-screen" class="screen px-4">
-        <h2 id="list-title" class="text-xl font-bold uppercase text-center mb-6">Загрузка...</h2>
-        <div class="mb-4 flex items-center cursor-pointer relative w-max" id="sort-container" style="display: none;">
-            <select id="sort-select" onchange="changeSort()" class="appearance-none bg-transparent text-white font-bold text-sm focus:outline-none pr-4 cursor-pointer">
-                <option value="new" class="text-black">Сначала новые</option>
-                <option value="old" class="text-black">Сначала старые</option>
-            </select>
-            <span class="text-white text-[10px] pointer-events-none absolute right-0 top-1/2 transform -translate-y-1/2">▼</span>
-        </div>
-        <div id="items-list"></div>
+        <h2 id="list-title" class="text-xl font-bold uppercase text-center mb-6 mt-2">Загрузка...</h2>
+        <div id="items-list" class="space-y-6"></div>
     </div>
 
     <div id="detail-screen" class="screen">
-        <div id="detail-header-img" class="w-full h-72 bg-cover bg-center"></div>
+        <div id="detail-header-img" class="w-full h-72 bg-cover bg-center skeleton"></div>
         <div class="px-6 -mt-6 bg-black rounded-t-[30px] pt-8 relative z-10">
-            <div class="flex justify-between items-start mb-4">
-                <span id="detail-tag" class="tag-sun">#КАТЕГОРИЯ</span>
-                <span id="detail-fav" class="text-gray-500 text-2xl cursor-pointer" onclick="toggleDetailFavorite()">☆</span>
-            </div>
-            <h2 id="detail-title" class="text-2xl font-black mb-4 uppercase italic">Название</h2>
-            <div id="detail-desc" class="text-gray-400 text-sm leading-relaxed mb-24 whitespace-pre-wrap">Описание...</div>
+            <h2 id="detail-title" class="text-2xl font-black mb-4 uppercase italic">Загрузка...</h2>
+            <div id="detail-desc" class="text-gray-400 text-sm leading-relaxed mb-24 whitespace-pre-wrap"></div>
         </div>
         <div class="course-footer">
-            <div class="btn-outline" onclick="tg.showAlert('Конспект появится позже!')">Конспект</div>
-            <div id="watch-btn" class="btn-main">Смотреть</div>
+            <div class="btn-main" id="watch-btn">Смотреть</div>
         </div>
     </div>
 
-    <div id="payment-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[150] hidden items-center justify-center px-4">
-        <div class="bg-[#141414] border border-[#2a2a2c] rounded-[24px] p-6 w-full max-w-sm relative modal-animate">
-            <button onclick="closePaymentModal()" class="absolute top-4 right-5 text-gray-500 hover:text-white text-xl">✕</button>
-
-            <div id="payment-step-1">
-                <h3 class="text-xl font-bold mb-6 text-center mt-2">Способ оплаты</h3>
-                
-                <button onclick="payWithKaspi()" class="w-full bg-[#F14635] text-white font-bold py-4 rounded-xl mb-3 flex items-center justify-center gap-2 transition-transform active:scale-95">
-                    Оплатить через Kaspi
-                </button>
-                
-                <button onclick="showRequisites()" class="w-full bg-[#1a1a1c] border border-[#2a2a2c] text-white font-bold py-4 rounded-xl transition-transform active:scale-95">
-                    Карта другого банка
-                </button>
-            </div>
-
-            <div id="payment-step-2" class="hidden">
-                <h3 class="text-xl font-bold mb-4 text-center mt-2">Реквизиты</h3>
-                <p class="text-sm text-gray-400 mb-5 text-center leading-relaxed">Переведите сумму на карту ниже и отправьте чек менеджеру для активации.</p>
-                
-                <div class="bg-[#0a0a0c] p-4 rounded-xl mb-5 border border-[#2a2a2c]">
-                    <div class="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Номер карты</div>
-                    <div class="font-mono text-lg tracking-widest mb-3 text-white" id="req-card">4400 4301 1234 5678</div>
-                    
-                    <div class="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Получатель</div>
-                    <div class="font-bold text-sm text-white">Бекболат Б.</div>
-                </div>
-
-                <button onclick="copyRequisites()" class="w-full bg-[#FFB000] text-black font-bold py-3.5 rounded-xl mb-3 transition-transform active:scale-95">
-                    Скопировать номер карты
-                </button>
-                
-                <button onclick="tg.openTelegramLink('https://t.me/твой_менеджер_или_бот')" class="w-full bg-[#1a1a1c] border border-[#2a2a2c] text-white font-bold py-3.5 rounded-xl transition-transform active:scale-95">
-                    Отправить чек менеджеру
-                </button>
-            </div>
+    <div id="payment-modal" class="fixed inset-0 bg-black/90 z-[200] hidden flex-col justify-end">
+        <div class="bg-[#141414] rounded-t-[32px] p-8 pb-12 border-t border-yellow-500/20 modal-animate">
+            <h3 class="text-xl font-black mb-6 text-center italic uppercase tracking-widest">Выберите способ</h3>
+            
+            <button onclick="payWithKaspi()" class="w-full bg-[#F14635] text-white py-4 rounded-xl font-bold mb-3 uppercase tracking-wider active:scale-95 transition-transform">
+                Kaspi Pay
+            </button>
+            
+            <button onclick="tg.showAlert('Реквизиты: Kaspi Gold\n4400 4301 **** ****\nБекболат Б.')" class="w-full bg-[#1a1a1c] border border-[#2a2a2c] text-white py-4 rounded-xl font-bold mb-6 uppercase tracking-wider active:scale-95 transition-transform">
+                Другой банк
+            </button>
+            
+            <button onclick="closePaymentModal()" class="w-full text-gray-500 font-bold uppercase text-xs tracking-[0.2em]">Отмена</button>
         </div>
     </div>
 
-    <div class="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-sm border-t border-[#1a1a1c] flex justify-around py-3 pb-8 z-50">
-        <div onclick="showScreen('home-screen')" class="flex flex-col items-center text-[#FFB000] cursor-pointer nav-item"><span class="text-2xl mb-1">🏠</span><span class="text-[10px] font-bold uppercase tracking-wider">Домой</span></div>
-        <div onclick="showScreen('club-screen')" class="flex flex-col items-center text-gray-600 cursor-pointer nav-item"><span class="text-2xl mb-1">👥</span><span class="text-[10px] font-bold uppercase tracking-wider">Клуб</span></div>
-        <div class="flex flex-col items-center text-gray-600 cursor-pointer nav-item" onclick="tg.showAlert('Чаты появятся позже!')"><span class="text-2xl mb-1">💬</span><span class="text-[10px] font-bold uppercase tracking-wider">Чаты</span></div>
-        <div onclick="openFavorites()" class="flex flex-col items-center text-gray-600 cursor-pointer nav-item"><span class="text-2xl mb-1">⭐</span><span class="text-[10px] font-bold uppercase tracking-wider">Топ</span></div>
+    <div class="fixed bottom-0 left-0 w-full bg-[#000]/90 backdrop-blur-md border-t border-[#1a1a1c] flex justify-around py-4 pb-8 z-50">
+        <div onclick="showScreen('home-screen')" class="flex flex-col items-center text-[#FFB000] nav-item"><span class="text-xl">🏠</span><span class="text-[9px] mt-1 uppercase font-bold">Домой</span></div>
+        <div onclick="showScreen('club-screen')" class="flex flex-col items-center text-gray-600 nav-item"><span class="text-xl">👥</span><span class="text-[9px] mt-1 uppercase font-bold">Клуб</span></div>
+        <div onclick="tg.showAlert('Скоро!')" class="flex flex-col items-center text-gray-600 nav-item"><span class="text-xl">💬</span><span class="text-[9px] mt-1 uppercase font-bold">Чаты</span></div>
+        <div onclick="tg.showAlert('Избранное в разработке')" class="flex flex-col items-center text-gray-600 nav-item"><span class="text-xl">⭐</span><span class="text-[9px] mt-1 uppercase font-bold">Топ</span></div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready(); tg.expand(); tg.setHeaderColor('#000000');
 
-        const baseSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4MBQNze85Cb2YOXQOIMdsQI-94xxAIp-KuQgYmiHaaXS5besYLMrNwwdFfeeqg1wZKQJ-0wfwnTFm/pub?output=csv";
-        const sheetUrl = baseSheetUrl + "&nocache=" + new Date().getTime();
+        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4MBQNze85Cb2YOXQOIMdsQI-94xxAIp-KuQgYmiHaaXS5besYLMrNwwdFfeeqg1wZKQJ-0wfwnTFm/pub?output=csv&nocache=" + Date.now();
         
         let globalData = [];
-        let currentItems = [];
-        let currentSort = 'new';
-        
-        let favorites = JSON.parse(localStorage.getItem('sun_favorites')) || [];
         let userProgress = JSON.parse(localStorage.getItem('sun_progress')) || {};
-
-        let currentRenderState = { type: 'home' };
-        let currentDetailId = null;
 
         Papa.parse(sheetUrl, {
             download: true,
@@ -188,255 +126,78 @@
             complete: function(results) {
                 let rows = results.data.slice(1);
                 globalData = rows.map(r => ({
-                    id: r[0],
-                    category: r[1] ? r[1].trim() : '',
-                    tag: r[2] ? r[2].trim() : 'ИНФОБИЗ',
-                    title: r[3] || 'Без названия',
-                    desc: r[4] || 'Описание скоро появится...',
-                    img: r[5] || 'kursy.jpg', 
-                    link: r[6] || ''
-                })).filter(item => item.id); 
-
+                    id: r[0], category: r[1], tag: r[2], title: r[3], desc: r[4], img: r[5], link: r[6]
+                })).filter(i => i.id);
                 renderHomeProgress();
             }
         });
 
-        // --- ЛОГИКА ОКНА ОПЛАТЫ ---
-        function openPaymentModal() {
-            document.getElementById('payment-modal').classList.remove('hidden');
-            document.getElementById('payment-modal').classList.add('flex');
-            // Сбрасываем на первый шаг при открытии
-            document.getElementById('payment-step-1').classList.remove('hidden');
-            document.getElementById('payment-step-2').classList.add('hidden');
-        }
-
-        function closePaymentModal() {
-            document.getElementById('payment-modal').classList.add('hidden');
-            document.getElementById('payment-modal').classList.remove('flex');
-        }
-
-        function payWithKaspi() {
-            // ЗДЕСЬ ВСТАВЬ СВОЮ ССЫЛКУ НА ОПЛАТУ KASPI (Счет или Kaspi Pay)
-            tg.openLink('https://kaspi.kz/pay/'); 
-        }
-
-        function showRequisites() {
-            document.getElementById('payment-step-1').classList.add('hidden');
-            document.getElementById('payment-step-2').classList.remove('hidden');
-        }
-
-        function copyRequisites() {
-            // Берем текст карты, убираем пробелы
-            const cardNumber = document.getElementById('req-card').innerText.replace(/\s/g, '');
-            
-            // Копируем в буфер обмена телефона
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(cardNumber);
-            } else {
-                // Запасной метод для старых телефонов
-                let textArea = document.createElement("textarea");
-                textArea.value = cardNumber;
-                textArea.style.position = "fixed";
-                textArea.style.left = "-999999px";
-                textArea.style.top = "-999999px";
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                try { document.execCommand('copy'); } catch (err) {}
-                textArea.remove();
-            }
-            
-            // Показываем красивое уведомление Телеграма
-            tg.showAlert('Номер карты скопирован! Теперь вы можете вставить его в приложение вашего банка.');
-        }
-        // -----------------------------
-
-        function renderHomeProgress() {
-            if (globalData.length === 0) return;
-            let tagStats = {};
-            globalData.forEach(item => {
-                const tag = item.tag;
-                if (!tagStats[tag]) tagStats[tag] = { total: 0, completed: 0 };
-                tagStats[tag].total++;
-                if (userProgress[item.id] === 100) tagStats[tag].completed++;
-            });
-
-            const tags = Object.keys(tagStats);
-            if (tags.length === 0) return;
-
-            let html = '';
-            tags.forEach(tag => {
-                const stat = tagStats[tag];
-                const percent = Math.round((stat.completed / stat.total) * 100);
-                html += `
-                    <div class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-4">
-                        <div class="font-bold text-sm mb-4 truncate text-white capitalize">${tag}</div>
-                        <div class="flex justify-between text-[8px] text-gray-500 font-bold mb-1.5 uppercase tracking-wider">
-                            <span>твой прогресс</span><span>${percent}%</span>
-                        </div>
-                        <div class="w-full h-1 bg-[#2a2a2c] rounded-full overflow-hidden">
-                            <div class="h-full bg-[#FFB000] transition-all duration-500" style="width: ${percent}%;"></div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            document.getElementById('home-progress-list').innerHTML = html;
-            document.getElementById('home-progress-section').classList.remove('hidden');
-        }
-
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
-            
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.replace('text-[#FFB000]', 'text-gray-600'));
-            if(screenId === 'home-screen') {
-                document.querySelectorAll('.nav-item')[0].classList.replace('text-gray-600', 'text-[#FFB000]');
-                currentRenderState = { type: 'home' };
-            } else if(screenId === 'club-screen') {
-                document.querySelectorAll('.nav-item')[1].classList.replace('text-gray-600', 'text-[#FFB000]');
-                currentRenderState = { type: 'club' };
-            } else if(currentRenderState.type === 'favorites') {
-                document.querySelectorAll('.nav-item')[3].classList.replace('text-gray-600', 'text-[#FFB000]');
-            }
-
-            if (screenId === 'home-screen') {
-                tg.BackButton.hide();
-                historyList = ['home-screen'];
-                renderHomeProgress(); 
-            } else {
-                if (historyList[historyList.length-1] !== screenId) historyList.push(screenId);
-                tg.BackButton.show();
-            }
+            document.querySelectorAll('.nav-item').forEach((i, idx) => {
+                i.style.color = (screenId === 'home-screen' && idx === 0) || (screenId === 'club-screen' && idx === 1) ? '#FFB000' : '#4b5563';
+            });
+            if (screenId === 'home-screen') { tg.BackButton.hide(); } else { tg.BackButton.show(); }
         }
 
-        function toggleFavorite(event, id) {
-            event.stopPropagation();
-            id = id.toString();
-            if (favorites.includes(id)) { favorites = favorites.filter(f => f !== id); } else { favorites.push(id); }
-            localStorage.setItem('sun_favorites', JSON.stringify(favorites));
-            
-            if (currentRenderState.type === 'category') openCategory(currentRenderState.keyword, currentRenderState.title);
-            else if (currentRenderState.type === 'favorites') openFavorites();
-        }
-
-        function toggleDetailFavorite() {
-            if(!currentDetailId) return;
-            const id = currentDetailId.toString();
-            if (favorites.includes(id)) { favorites = favorites.filter(f => f !== id); } else { favorites.push(id); }
-            localStorage.setItem('sun_favorites', JSON.stringify(favorites));
-            document.getElementById('detail-fav').innerText = favorites.includes(id) ? '★' : '☆';
-            document.getElementById('detail-fav').className = favorites.includes(id) ? 'text-[#FFB000] text-2xl cursor-pointer' : 'text-gray-500 text-2xl cursor-pointer';
-        }
-
-        function sortAndRender() {
-            if (currentSort === 'new') currentItems.sort((a, b) => parseInt(b.id) - parseInt(a.id));
-            else currentItems.sort((a, b) => parseInt(a.id) - parseInt(b.id));
-            renderCards(currentItems);
-        }
-
-        function changeSort() { currentSort = document.getElementById('sort-select').value; sortAndRender(); }
-
-        function renderCards(items) {
-            const list = document.getElementById('items-list');
-            if (items.length === 0) {
-                list.innerHTML = `<h3 class="text-center mt-10 text-gray-500 font-bold">Здесь пока пусто</h3>`;
-                document.getElementById('sort-container').style.display = 'none';
-                return;
-            }
-            document.getElementById('sort-container').style.display = 'flex';
-            list.innerHTML = items.map(item => {
-                const isFav = favorites.includes(item.id.toString());
-                const itemProgress = userProgress[item.id.toString()] || 0;
-                return `
-                    <div onclick="openDetail('${item.id}')" class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] overflow-hidden mb-6 cursor-pointer relative">
-                        <div class="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-full text-lg ${isFav ? 'text-[#FFB000]' : 'text-gray-400'} transition-colors" onclick="toggleFavorite(event, '${item.id}')">
-                            ${isFav ? '★' : '☆'}
-                        </div>
-                        <div class="h-48 bg-cover bg-center" style="background-image: url('${item.img}')"></div>
-                        <div class="p-5">
-                            <span class="tag-sun">#${item.tag}</span>
-                            <h3 class="text-lg font-bold mt-2">${item.title}</h3>
-                            <div class="mt-4">
-                                <div class="flex justify-between text-[10px] text-gray-500 font-bold mb-2 uppercase tracking-wider">
-                                    <span>Твой прогресс</span><span>${itemProgress}%</span>
-                                </div>
-                                <div class="w-full h-1.5 bg-[#1a1a1c] rounded-full overflow-hidden">
-                                    <div class="h-full bg-[#FFB000] transition-all duration-500" style="width: ${itemProgress}%;"></div>
-                                </div>
-                            </div>
-                        </div>
+        function renderHomeProgress() {
+            let tagStats = {};
+            globalData.forEach(i => {
+                if(!tagStats[i.tag]) tagStats[i.tag] = { total: 0, done: 0 };
+                tagStats[i.tag].total++;
+                if(userProgress[i.id] == 100) tagStats[i.tag].done++;
+            });
+            let html = Object.keys(tagStats).map(t => {
+                let p = Math.round((tagStats[t].done / tagStats[t].total) * 100);
+                return `<div class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-4">
+                    <div class="text-[10px] font-bold mb-3 truncate uppercase text-gray-400">${t}</div>
+                    <div class="flex justify-between text-[10px] font-bold mb-1"><span>${p}%</span></div>
+                    <div class="w-full h-1 bg-[#2a2a2c] rounded-full overflow-hidden">
+                        <div class="h-full bg-[#FFB000]" style="width:${p}%"></div>
                     </div>
-                `;
+                </div>`;
             }).join('');
+            document.getElementById('home-progress-list').innerHTML = html;
         }
 
-        function openCategory(categoryKeyword, pageTitle) {
-            currentRenderState = { type: 'category', keyword: categoryKeyword, title: pageTitle };
-            document.getElementById('list-title').innerText = pageTitle;
-            currentItems = globalData.filter(item => item.category.toLowerCase().includes(categoryKeyword.toLowerCase()));
-            document.getElementById('sort-select').value = 'new';
-            currentSort = 'new';
-            sortAndRender();
-            showScreen('list-screen');
-        }
-
-        function openFavorites() {
-            currentRenderState = { type: 'favorites' };
-            document.getElementById('list-title').innerText = 'Избранное';
-            currentItems = globalData.filter(item => favorites.includes(item.id.toString()));
-            document.getElementById('sort-select').value = 'new';
-            currentSort = 'new';
-            sortAndRender();
+        function openCategory(kw, title) {
+            document.getElementById('list-title').innerText = title;
+            const items = globalData.filter(i => i.category.includes(kw));
+            document.getElementById('items-list').innerHTML = items.map(i => `
+                <div onclick="openDetail('${i.id}')" class="card-premium rounded-[24px] overflow-hidden mb-6">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('${i.img}')"></div>
+                    <div class="p-5">
+                        <span class="tag-sun">#${i.tag}</span>
+                        <h3 class="text-lg font-black italic uppercase mt-2">${i.title}</h3>
+                    </div>
+                </div>
+            `).join('');
             showScreen('list-screen');
         }
 
         function openDetail(id) {
-            const item = globalData.find(c => c.id === id.toString());
-            if (!item) return;
-
-            currentDetailId = id;
-            document.getElementById('detail-header-img').style.backgroundImage = `url('${item.img}')`;
-            document.getElementById('detail-tag').innerText = `#${item.tag}`;
-            document.getElementById('detail-title').innerText = item.title;
-            document.getElementById('detail-desc').innerText = item.desc;
-            
-            const isFav = favorites.includes(id.toString());
-            document.getElementById('detail-fav').innerText = isFav ? '★' : '☆';
-            document.getElementById('detail-fav').className = isFav ? 'text-[#FFB000] text-2xl cursor-pointer' : 'text-gray-500 text-2xl cursor-pointer';
-
-            const watchBtn = document.getElementById('watch-btn');
-            watchBtn.onclick = () => {
-                userProgress[item.id.toString()] = 100;
+            const i = globalData.find(d => d.id == id);
+            document.getElementById('detail-header-img').style.backgroundImage = `url('${i.img}')`;
+            document.getElementById('detail-title').innerText = i.title;
+            document.getElementById('detail-desc').innerText = i.desc;
+            document.getElementById('watch-btn').onclick = () => {
+                userProgress[id] = 100;
                 localStorage.setItem('sun_progress', JSON.stringify(userProgress));
-                renderHomeProgress(); 
-
-                if (item.link) {
-                    if(item.link.includes('t.me')) { tg.openTelegramLink(item.link); } else { tg.openLink(item.link); }
-                } else { tg.showAlert("Ссылка на материал пока не добавлена!"); }
+                tg.openLink(i.link);
             };
-
             showScreen('detail-screen');
         }
 
-        tg.BackButton.onClick(() => {
-            historyList.pop();
-            const prev = historyList[historyList.length - 1];
-            
-            // Если закрываем модалку оплаты (кнопкой назад на андроид)
-            if (!document.getElementById('payment-modal').classList.contains('hidden')) {
-                closePaymentModal();
-                historyList.push('club-screen'); // Возвращаем стейт
-                return;
-            }
-            
-            if (prev === 'list-screen') {
-                if (currentRenderState.type === 'category') openCategory(currentRenderState.keyword, currentRenderState.title);
-                else if (currentRenderState.type === 'favorites') openFavorites();
-            } else {
-                showScreen(prev);
-            }
-        });
+        function openPaymentModal() { document.getElementById('payment-modal').classList.replace('hidden', 'flex'); }
+        function closePaymentModal() { document.getElementById('payment-modal').classList.replace('flex', 'hidden'); }
+
+        // ТВОЯ КАСПИ ССЫЛКА
+        function payWithKaspi() {
+            tg.openLink('https://pay.kaspi.kz/pay/0o2tyjk1');
+        }
+
+        tg.BackButton.onClick(() => showScreen('home-screen'));
     </script>
 </body>
 </html>
