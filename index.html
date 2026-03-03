@@ -10,20 +10,33 @@
     <style>
         :root { --sun-yellow: #FFB000; }
         body { background-color: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; overflow-x: hidden; }
-        
+        .skeleton { background: linear-gradient(90deg, #141414 25%, #1a1a1c 50%, #141414 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
+        @keyframes loading { from { background-position: 200% 0; } to { background-position: -200% 0; } }
         .screen { display: none; min-height: 100vh; padding-bottom: 100px; }
         .screen.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
+        /* Стили для главных карт категорий */
+        .category-card { position: relative; width: 100%; h-40 rounded-2xl overflow-hidden mb-2; background-size: cover; background-position: center; transition: all 0.2s ease; cursor: pointer; }
+        .category-card:active { transform: scale(0.97); }
+        .category-card-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%); z-index: 5; }
+        .category-card-content { position: absolute; top: 16px; left: 16px; z-index: 10; text-align: left; }
+        .category-card-title { font-size: 24px; font-weight: 900; text-transform: uppercase; font-style: italic; color: #fff; margin-bottom: 2px; }
+        .category-card-sub { font-size: 13px; color: #d1d5db; text-transform: lowercase; }
+
+        /* Стили полоски прогресса КАТЕГОРИИ */
+        .category-progress-container { width: 100%; h-8 bg-[#141414] rounded-full overflow-hidden mb-6 border border-neutral-800 relative flex items-center justify-center; }
+        .category-progress-fill { position: absolute; left: 0; top: 0; h-full bg-[#FFB000] rounded-full transition-all duration-500 z-5; }
+        .category-progress-text { position: relative; z-index: 10; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #fff; letter-spacing: 0.1em; }
+
+        /* Обычные карточки в списке */
         .card-premium { background: linear-gradient(145deg, #141414 0%, #0a0a0c 100%); border: 1px solid #1a1a1c; transition: all 0.2s ease; }
-        .card-premium:active { transform: scale(0.96); border-color: var(--sun-yellow); }
-        .icon-container { border: 1px solid rgba(255, 176, 0, 0.2); box-shadow: 0 0 15px rgba(255, 176, 0, 0.15); }
         .tag-sun { background: rgba(255, 176, 0, 0.1); color: var(--sun-yellow); font-size: 10px; font-weight: bold; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; }
         
         .course-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); padding: 15px 20px 35px; border-top: 1px solid #1a1a1c; z-index: 100; display: flex; gap: 12px; }
         .btn-main { flex: 1; background: #fff; color: #000; font-weight: bold; padding: 14px; border-radius: 12px; text-align: center; font-size: 14px; cursor: pointer; }
-        
-        /* Стили модального окна */
+        .btn-outline { flex: 1; background: #1a1a1c; color: #fff; font-weight: bold; padding: 14px; border-radius: 12px; text-align: center; font-size: 14px; border: 1px solid #2a2a2c; cursor: pointer; }
+
         .modal-animate { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     </style>
@@ -36,48 +49,31 @@
             <p class="text-[10px] font-bold tracking-[0.35em] text-[#FFB000]">INFOBUSINESS</p>
         </div>
         
-        <div class="grid grid-cols-2 gap-4">
-            <div onclick="openCategory('Эфир', 'Эфиры')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="efiry.jpg" class="w-full h-full object-cover"></div>
-                <div class="text-lg font-bold uppercase mt-auto">Эфиры</div>
-            </div>
-            <div onclick="openCategory('Курс', 'Курсы')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="kursy.jpg" class="w-full h-full object-cover"></div>
-                <div class="text-lg font-bold uppercase mt-auto text-white">Курсы</div>
-            </div>
-            <div onclick="openCategory('Разбор', 'Разборы')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="razbory.jpg" class="w-full h-full object-cover"></div>
-                <div class="text-lg font-bold uppercase mt-auto">Разборы</div>
-            </div>
-            <div onclick="openCategory('Книг', 'Книги')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="knigi.jpg" class="w-full h-full object-cover"></div>
-                <div class="text-lg font-bold uppercase mt-auto">Книги</div>
-            </div>
+        <div class="bg-[#141414] border border-[#1a1a1c] rounded-xl p-3 mb-8 flex items-center">
+            <span class="text-gray-500 mr-2">🔍</span>
+            <input type="text" placeholder="Поиск по базе знаний..." class="bg-transparent border-none text-white w-full focus:outline-none placeholder-gray-600 text-sm">
         </div>
 
-        <div id="home-progress-section" class="mt-10 pb-4 hidden">
-            <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4 ml-1 italic">Твой прогресс</h3>
-            <div id="home-progress-list" class="grid grid-cols-2 gap-3"></div>
+        <div id="home-categories-list" class="space-y-0">
+            <div class="skeleton h-40 rounded-2xl mb-2 opacity-30"></div>
+            <div class="skeleton h-8 rounded-full mb-6 opacity-30"></div>
+            <div class="skeleton h-40 rounded-2xl mb-2 opacity-30"></div>
+            <div class="skeleton h-8 rounded-full mb-6 opacity-30"></div>
         </div>
     </div>
 
     <div id="club-screen" class="screen px-4">
         <h2 class="text-xl font-bold uppercase text-center mb-6 mt-2 tracking-widest italic">Сообщество</h2>
         <div class="card-premium rounded-[24px] p-6 mb-8 border-yellow-500/30 relative overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#FFB000] opacity-10 rounded-full blur-2xl"></div>
             <h3 class="text-xl font-black mb-1 uppercase italic">SUN CLUB</h3>
-            <p class="text-sm text-gray-400 mb-6">Доступ ко всем материалам и закрытым чатам.</p>
-            <div onclick="openPaymentModal()" class="w-full bg-[#FFB000] text-black text-center font-bold py-4 rounded-xl uppercase text-xs tracking-widest cursor-pointer active:scale-95 transition-all">
+            <p class="text-sm text-gray-400 mb-6">Получи доступ ко всем материалам и закрытому комьюнити.</p>
+            <div onclick="openPaymentModal()" class="w-full bg-[#FFB000] text-black text-center font-bold py-4 rounded-xl uppercase text-xs tracking-widest cursor-pointer active:scale-95 transition-transform">
                 Продлить доступ
             </div>
         </div>
         <div class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-6 mb-8">
-            <h3 class="text-[10px] font-bold text-[#FFB000] mb-5 uppercase tracking-widest">⚖️ Правила сообщества</h3>
-            <ul class="text-[13px] text-gray-400 space-y-3">
-                <li><span class="text-white font-bold">1.</span> Уважение и конструктив.</li>
-                <li><span class="text-white font-bold">2.</span> Никакого спама и рекламы.</li>
-                <li><span class="text-white font-bold">3.</span> Конфиденциальность инсайтов.</li>
-            </ul>
+            <h3 class="text-sm font-bold text-[#FFB000] mb-4 uppercase">⚖️ Правила</h3>
+            <p class="text-sm text-gray-300 leading-relaxed">1. Без спама и негатива.<br>2. Делимся опытом.<br>3. Конфиденциальность разборов.</p>
         </div>
     </div>
 
@@ -87,20 +83,151 @@
     </div>
 
     <div id="detail-screen" class="screen">
-        <div id="detail-header-img" class="w-full h-72 bg-cover bg-center"></div>
+        <div id="detail-header-img" class="w-full h-72 bg-cover bg-center skeleton"></div>
         <div class="px-6 -mt-6 bg-black rounded-t-[30px] pt-8 relative z-10">
             <h2 id="detail-title" class="text-2xl font-black mb-4 uppercase italic">Загрузка...</h2>
             <div id="detail-desc" class="text-gray-400 text-sm leading-relaxed mb-24 whitespace-pre-wrap"></div>
         </div>
         <div class="course-footer">
-            <div class="btn-main" id="watch-btn">Смотреть</div>
+            <div class="btn-outline" onclick="tg.showAlert('Будет доступно позже')">Конспект</div>
+            <div id="watch-btn" class="btn-main">Смотреть</div>
         </div>
     </div>
 
     <div id="payment-modal" class="fixed inset-0 bg-black/90 z-[200] hidden flex-col justify-end">
         <div class="bg-[#141414] rounded-t-[32px] p-8 pb-12 border-t border-yellow-500/20 modal-animate">
-            <h3 class="text-xl font-black mb-8 text-center italic uppercase tracking-widest">Способ оплаты</h3>
-            <button onclick="payWithKaspi()" class="w-full bg-[#F14635] text-white py-4 rounded-xl font-bold mb-3 uppercase tracking-wider active:scale-95 transition-all shadow-lg shadow-red-500/10">
+            <h3 class="text-xl font-black mb-8 text-center italic uppercase tracking-widest">Выберите способ</h3>
+            <button onclick="payWithKaspi()" class="w-full bg-[#F14635] text-white py-4 rounded-xl font-bold mb-3 uppercase tracking-wider active:scale-95 transition-transform shadow-lg shadow-red-500/10">
                 Kaspi Pay
             </button>
-            <button onclick="tg.showAlert('Реквизиты: Kaspi Gold\nБекболат Б.\n4400 4301 **** ****')" class="w-full bg-[#1a1a1c] border border-[#2a2a2c] text-white py-4 rounded-xl font
+            <button onclick="tg.showAlert('Для оплаты в другом банке свяжитесь с менеджером: @bekbolat')" class="w-full bg-[#1a1a1c] border border-[#2a2a2c] text-white py-4 rounded-xl font-bold mb-8 uppercase tracking-wider active:scale-95 transition-transform">
+                Другой банк
+            </button>
+            <button onclick="closePaymentModal()" class="w-full text-gray-600 font-bold uppercase text-xs tracking-widest">Отмена</button>
+        </div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 w-full bg-[#000]/90 backdrop-blur-md border-t border-[#1a1a1c] flex justify-around py-4 pb-8 z-50">
+        <div onclick="showScreen('home-screen')" class="flex flex-col items-center text-[#FFB000] nav-item"><span class="text-xl mb-1">🏠</span><span class="text-[9px] uppercase font-bold tracking-tight">Домой</span></div>
+        <div onclick="showScreen('club-screen')" class="flex flex-col items-center text-gray-600 nav-item"><span class="text-xl mb-1">👥</span><span class="text-[9px] uppercase font-bold tracking-tight">Клуб</span></div>
+        <div onclick="tg.showAlert('Чаты в разработке')" class="flex flex-col items-center text-gray-600 nav-item"><span class="text-xl mb-1">💬</span><span class="text-[9px] uppercase font-bold tracking-tight">Чаты</span></div>
+        <div onclick="tg.showAlert('Топ будет доступен позже')" class="flex flex-col items-center text-gray-600 nav-item"><span class="text-xl mb-1">⭐</span><span class="text-[9px] uppercase font-bold tracking-tight">Топ</span></div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready(); tg.expand(); tg.setHeaderColor('#000000');
+
+        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4MBQNze85Cb2YOXQOIMdsQI-94xxAIp-KuQgYmiHaaXS5besYLMrNwwdFfeeqg1wZKQJ-0wfwnTFm/pub?output=csv&nocache=" + Date.now();
+        
+        let globalData = [];
+        let userProgress = JSON.parse(localStorage.getItem('sun_progress')) || {};
+
+        Papa.parse(sheetUrl, {
+            download: true,
+            header: false,
+            complete: function(results) {
+                let rows = results.data.slice(1);
+                globalData = rows.map(r => ({
+                    id: r[0], category: r[1], tag: r[2], title: r[3], desc: r[4], img: r[5], link: r[6]
+                })).filter(i => i.id);
+                renderHomeCategoriesWithProgress(); // Рисуем категории с прогрессом
+            }
+        });
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach((i, idx) => {
+                i.style.color = (screenId === 'home-screen' && idx === 0) || (screenId === 'club-screen' && idx === 1) ? '#FFB000' : '#4b5563';
+            });
+            if (screenId === 'home-screen') { tg.BackButton.hide(); } else { tg.BackButton.show(); }
+        }
+
+        // ОТРИСОВКА КАТЕГОРИЙ С ПОЛОСКАМИ ПРОГРЕССА ПОД НИМИ
+        function renderHomeCategoriesWithProgress() {
+            const categories = [
+                { kw: 'Эфир', title: 'Эфиры', subtext: 'прямые трансляции', img: 'efiry.jpg' },
+                { kw: 'Курс', title: 'Курсы', subtext: 'обучающие программы', img: 'kursy.jpg' },
+                { kw: 'Разбор', title: 'Разборы', subtext: 'разбор бизнес-кейсов', img: 'razbory.jpg' },
+                { kw: 'Книг', title: 'Книги', subtext: 'библиотека знаний', img: 'knigi.jpg' }
+            ];
+
+            // Считаем общий прогресс по каждой категории (по ключевому слову)
+            let stats = {};
+            categories.forEach(c => { stats[c.kw] = { total: 0, done: 0 }; });
+
+            globalData.forEach(i => {
+                categories.forEach(c => {
+                    if (i.category.toLowerCase().includes(c.kw.toLowerCase())) {
+                        stats[c.kw].total++;
+                        if (userProgress[i.id] == 100) stats[c.kw].done++;
+                    }
+                });
+            });
+
+            // Генерируем HTML: Карта -> Прогресс Бар -> Карта...
+            let html = categories.map(c => {
+                let done = stats[c.kw].done;
+                let total = stats[c.kw].total;
+                let percent = total > 0 ? Math.round((done / total) * 100) : 0;
+                
+                return `
+                    <div onclick="openCategory('${c.kw}', '${c.title}')" class="category-card rounded-2xl h-40" style="background-image: url('${c.img}')">
+                        <div class="category-card-overlay"></div>
+                        <div class="category-card-content">
+                            <div class="category-card-title">${c.title}</div>
+                            <div class="category-card-sub">${c.subtext}</div>
+                        </div>
+                    </div>
+                    <div class="category-progress-container">
+                        <div class="category-progress-text">Твой прогресс ${percent}%</div>
+                        <div class="category-progress-fill" style="width: ${percent}%;"></div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('home-categories-list').innerHTML = html;
+        }
+
+        function openCategory(kw, title) {
+            document.getElementById('list-title').innerText = title;
+            const items = globalData.filter(i => i.category.toLowerCase().includes(kw.toLowerCase()));
+            document.getElementById('items-list').innerHTML = items.map(i => `
+                <div onclick="openDetail('${i.id}')" class="card-premium rounded-[24px] overflow-hidden mb-6 relative active:scale-97 transition-all">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('${i.img}')"></div>
+                    <div class="p-5">
+                        <span class="tag-sun">#${i.tag}</span>
+                        <h3 class="text-lg font-black italic uppercase mt-2">${i.title}</h3>
+                    </div>
+                </div>
+            `).join('');
+            showScreen('list-screen');
+        }
+
+        function openDetail(id) {
+            const i = globalData.find(d => d.id == id);
+            document.getElementById('detail-header-img').style.backgroundImage = `url('${i.img}')`;
+            document.getElementById('detail-title').innerText = i.title;
+            document.getElementById('detail-desc').innerText = i.desc;
+            document.getElementById('watch-btn').onclick = () => {
+                userProgress[id] = 100;
+                localStorage.setItem('sun_progress', JSON.stringify(userProgress));
+                renderHomeCategoriesWithProgress(); // Пересчитываем прогресс на главной
+                tg.openLink(i.link);
+            };
+            showScreen('detail-screen');
+        }
+
+        function openPaymentModal() { document.getElementById('payment-modal').classList.replace('hidden', 'flex'); }
+        function closePaymentModal() { document.getElementById('payment-modal').classList.replace('flex', 'hidden'); }
+
+        // ТВОЯ КАСПИ ССЫЛКА
+        function payWithKaspi() {
+            tg.openLink('https://pay.kaspi.kz/pay/0o2tyjk1');
+        }
+
+        tg.BackButton.onClick(() => showScreen('home-screen'));
+    </script>
+</body>
+</html>
