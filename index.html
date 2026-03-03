@@ -49,7 +49,7 @@
                 <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="razbory.jpg" class="w-full h-full object-cover"></div>
                 <div class="text-lg font-bold uppercase mt-auto">Разборы</div>
             </div>
-            <div onclick="openCategory('Книга', 'Книги')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
+            <div onclick="openCategory('Книг', 'Книги')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
                 <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="knigi.jpg" class="w-full h-full object-cover"></div>
                 <div class="text-lg font-bold uppercase mt-auto">Книги</div>
             </div>
@@ -58,8 +58,7 @@
 
     <div id="list-screen" class="screen px-4">
         <h2 id="list-title" class="text-xl font-bold uppercase text-center mb-6">Загрузка...</h2>
-        <div id="items-list">
-            </div>
+        <div id="items-list"></div>
     </div>
 
     <div id="detail-screen" class="screen">
@@ -72,7 +71,6 @@
             <h2 id="detail-title" class="text-2xl font-black mb-4 uppercase italic">Название</h2>
             <div id="detail-desc" class="text-gray-400 text-sm leading-relaxed mb-24 whitespace-pre-wrap">Описание...</div>
         </div>
-        
         <div class="course-footer">
             <div class="btn-outline" onclick="tg.showAlert('Конспект появится позже!')">Конспект</div>
             <div id="watch-btn" class="btn-main">Смотреть</div>
@@ -80,10 +78,7 @@
     </div>
 
     <div class="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-sm border-t border-[#1a1a1c] flex justify-around py-3 pb-8 z-50">
-        <div onclick="showScreen('home-screen')" class="flex flex-col items-center text-[#FFB000] cursor-pointer nav-item">
-            <span class="text-2xl mb-1">🏠</span>
-            <span class="text-[10px] font-bold uppercase tracking-wider">Домой</span>
-        </div>
+        <div onclick="showScreen('home-screen')" class="flex flex-col items-center text-[#FFB000] cursor-pointer nav-item"><span class="text-2xl mb-1">🏠</span><span class="text-[10px] font-bold uppercase tracking-wider">Домой</span></div>
         <div class="flex flex-col items-center text-gray-600 cursor-pointer nav-item"><span class="text-2xl mb-1">👥</span><span class="text-[10px] font-bold uppercase tracking-wider">Клуб</span></div>
         <div class="flex flex-col items-center text-gray-600 cursor-pointer nav-item"><span class="text-2xl mb-1">💬</span><span class="text-[10px] font-bold uppercase tracking-wider">Чаты</span></div>
         <div class="flex flex-col items-center text-gray-600 cursor-pointer nav-item"><span class="text-2xl mb-1">⭐</span><span class="text-[10px] font-bold uppercase tracking-wider">Топ</span></div>
@@ -94,24 +89,27 @@
         tg.ready(); tg.expand(); tg.setHeaderColor('#000000');
 
         // ТВОЯ ТАБЛИЦА GOOGLE SHEETS
-        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4MBQNze85Cb2YOXQOIMdsQI-94xxAIp-KuQgYmiHaaXS5besYLMrNwwdFfeeqg1wZKQJ-0wfwnTFm/pub?output=csv";
+        const baseSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4MBQNze85Cb2YOXQOIMdsQI-94xxAIp-KuQgYmiHaaXS5besYLMrNwwdFfeeqg1wZKQJ-0wfwnTFm/pub?output=csv";
+        
+        // УБИЙЦА КЭША: Добавляем уникальное время к ссылке, чтобы данные обновлялись МГНОВЕННО
+        const sheetUrl = baseSheetUrl + "&nocache=" + new Date().getTime();
+        
         let globalData = [];
 
-        // АВТОМАТИЧЕСКАЯ ЗАГРУЗКА БАЗЫ ДАННЫХ ПРИ СТАРТЕ
         Papa.parse(sheetUrl, {
             download: true,
             header: false,
             complete: function(results) {
-                let rows = results.data.slice(1); // Пропускаем строку с заголовками
+                let rows = results.data.slice(1);
                 globalData = rows.map(r => ({
                     id: r[0],
                     category: r[1] ? r[1].trim() : '',
                     tag: r[2] || 'ИНФОБИЗ',
                     title: r[3] || 'Без названия',
                     desc: r[4] || 'Описание скоро появится...',
-                    img: r[5] || 'kursy.jpg', // Картинка по умолчанию, если пусто
+                    img: r[5] || 'kursy.jpg', 
                     link: r[6] || ''
-                })).filter(item => item.id); // Убираем пустые строки
+                })).filter(item => item.id); 
             }
         });
 
@@ -130,12 +128,11 @@
             }
         }
 
-        // ОТКРЫТИЕ КАТЕГОРИИ (ФИЛЬТРАЦИЯ ДАННЫХ ИЗ ТАБЛИЦЫ)
         function openCategory(categoryKeyword, pageTitle) {
             document.getElementById('list-title').innerText = pageTitle;
-            
             const list = document.getElementById('items-list');
-            // Ищем все элементы, у которых в категории есть наше слово (например, "Курс")
+            
+            // Фильтр сработает, даже если в таблице написано "Книги", а мы ищем "Книг"
             const items = globalData.filter(item => item.category.toLowerCase().includes(categoryKeyword.toLowerCase()));
             
             if (items.length === 0) {
@@ -154,7 +151,6 @@
             showScreen('list-screen');
         }
 
-        // ОТКРЫТИЕ ДЕТАЛЕЙ И НАСТРОЙКА КНОПКИ ТЕЛЕГРАМ
         function openDetail(id) {
             const item = globalData.find(c => c.id === id);
             if (!item) return;
@@ -167,7 +163,6 @@
             const watchBtn = document.getElementById('watch-btn');
             watchBtn.onclick = () => {
                 if (item.link) {
-                    // Магия Телеграма: если ссылка t.me, открываем бесшовно
                     if(item.link.includes('t.me')) {
                         tg.openTelegramLink(item.link);
                     } else {
