@@ -58,6 +58,15 @@
 
     <div id="list-screen" class="screen px-4">
         <h2 id="list-title" class="text-xl font-bold uppercase text-center mb-6">Загрузка...</h2>
+        
+        <div class="mb-4 flex items-center cursor-pointer relative w-max" id="sort-container" style="display: none;">
+            <select id="sort-select" onchange="changeSort()" class="appearance-none bg-transparent text-white font-bold text-sm focus:outline-none pr-4 cursor-pointer">
+                <option value="new" class="text-black">Сначала новые</option>
+                <option value="old" class="text-black">Сначала старые</option>
+            </select>
+            <span class="text-white text-[10px] pointer-events-none absolute right-0 top-1/2 transform -translate-y-1/2">▼</span>
+        </div>
+
         <div id="items-list"></div>
     </div>
 
@@ -92,12 +101,13 @@
         const sheetUrl = baseSheetUrl + "&nocache=" + new Date().getTime();
         
         let globalData = [];
+        let currentItems = []; // Массив текущих отображаемых карточек
+        let currentSort = 'new'; // Текущая сортировка
         
-        // ЗАГРУЖАЕМ ИЗБРАННОЕ И ПРОГРЕСС ИЗ ПАМЯТИ ТЕЛЕФОНА
         let favorites = JSON.parse(localStorage.getItem('sun_favorites')) || [];
         let userProgress = JSON.parse(localStorage.getItem('sun_progress')) || {};
 
-        let currentRenderState = { type: 'home' }; // Запоминаем, где мы находимся
+        let currentRenderState = { type: 'home' };
         let currentDetailId = null;
 
         Papa.parse(sheetUrl, {
@@ -123,7 +133,6 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
             
-            // Подсветка иконок в меню
             document.querySelectorAll('.nav-item').forEach(i => i.classList.replace('text-[#FFB000]', 'text-gray-600'));
             if(screenId === 'home-screen') document.querySelectorAll('.nav-item')[0].classList.replace('text-gray-600', 'text-[#FFB000]');
             if(currentRenderState.type === 'favorites') document.querySelectorAll('.nav-item')[3].classList.replace('text-gray-600', 'text-[#FFB000]');
@@ -138,9 +147,8 @@
             }
         }
 
-        // ДОБАВИТЬ/УДАЛИТЬ ИЗ ИЗБРАННОГО
         function toggleFavorite(event, id) {
-            event.stopPropagation(); // Чтобы карточка не открывалась при клике на звезду
+            event.stopPropagation();
             id = id.toString();
             
             if (favorites.includes(id)) {
@@ -150,7 +158,6 @@
             }
             localStorage.setItem('sun_favorites', JSON.stringify(favorites));
             
-            // Перерисовываем список, чтобы звезда обновилась
             if (currentRenderState.type === 'category') {
                 openCategory(currentRenderState.keyword, currentRenderState.title);
             } else if (currentRenderState.type === 'favorites') {
@@ -172,13 +179,32 @@
             document.getElementById('detail-fav').classList.toggle('text-gray-500', !favorites.includes(id));
         }
 
-        // УНИВЕРСАЛЬНАЯ ФУНКЦИЯ ОТРИСОВКИ КАРТОЧЕК (С ПРОГРЕССОМ И ЗВЕЗДАМИ)
+        // ПРИМЕНЕНИЕ СОРТИРОВКИ К ТЕКУЩЕМУ СПИСКУ
+        function sortAndRender() {
+            if (currentSort === 'new') {
+                // Сортировка по убыванию ID (Новые наверху)
+                currentItems.sort((a, b) => parseInt(b.id) - parseInt(a.id));
+            } else {
+                // Сортировка по возрастанию ID (Старые наверху)
+                currentItems.sort((a, b) => parseInt(a.id) - parseInt(b.id));
+            }
+            renderCards(currentItems);
+        }
+
+        function changeSort() {
+            currentSort = document.getElementById('sort-select').value;
+            sortAndRender();
+        }
+
         function renderCards(items) {
             const list = document.getElementById('items-list');
             if (items.length === 0) {
                 list.innerHTML = `<h3 class="text-center mt-10 text-gray-500 font-bold">Здесь пока пусто</h3>`;
+                document.getElementById('sort-container').style.display = 'none'; // Скрываем фильтр, если пусто
                 return;
             }
+            
+            document.getElementById('sort-container').style.display = 'flex'; // Показываем фильтр
             
             list.innerHTML = items.map(item => {
                 const isFav = favorites.includes(item.id.toString());
@@ -189,12 +215,10 @@
                         <div class="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-full text-lg ${isFav ? 'text-[#FFB000]' : 'text-gray-400'} transition-colors" onclick="toggleFavorite(event, '${item.id}')">
                             ${isFav ? '★' : '☆'}
                         </div>
-                        
                         <div class="h-48 bg-cover bg-center" style="background-image: url('${item.img}')"></div>
                         <div class="p-5">
                             <span class="tag-sun">#${item.tag}</span>
                             <h3 class="text-lg font-bold mt-2">${item.title}</h3>
-                            
                             <div class="mt-4">
                                 <div class="flex justify-between text-[10px] text-gray-500 font-bold mb-2 uppercase tracking-wider">
                                     <span>Твой прогресс</span>
@@ -213,17 +237,25 @@
         function openCategory(categoryKeyword, pageTitle) {
             currentRenderState = { type: 'category', keyword: categoryKeyword, title: pageTitle };
             document.getElementById('list-title').innerText = pageTitle;
-            const items = globalData.filter(item => item.category.toLowerCase().includes(categoryKeyword.toLowerCase()));
-            renderCards(items);
+            currentItems = globalData.filter(item => item.category.toLowerCase().includes(categoryKeyword.toLowerCase()));
+            
+            // Сбрасываем фильтр на "Сначала новые" при входе в раздел
+            document.getElementById('sort-select').value = 'new';
+            currentSort = 'new';
+            sortAndRender();
+            
             showScreen('list-screen');
         }
 
-        // ОТКРЫТЬ СПИСОК ИЗБРАННОГО (КНОПКА ТОП)
         function openFavorites() {
             currentRenderState = { type: 'favorites' };
             document.getElementById('list-title').innerText = 'Избранное';
-            const items = globalData.filter(item => favorites.includes(item.id.toString()));
-            renderCards(items);
+            currentItems = globalData.filter(item => favorites.includes(item.id.toString()));
+            
+            document.getElementById('sort-select').value = 'new';
+            currentSort = 'new';
+            sortAndRender();
+            
             showScreen('list-screen');
         }
 
@@ -243,7 +275,6 @@
 
             const watchBtn = document.getElementById('watch-btn');
             watchBtn.onclick = () => {
-                // ДОБАВЛЯЕМ ПРОГРЕСС 100% ПРИ ПРОСМОТРЕ!
                 userProgress[item.id.toString()] = 100;
                 localStorage.setItem('sun_progress', JSON.stringify(userProgress));
 
@@ -265,7 +296,6 @@
             historyList.pop();
             const prev = historyList[historyList.length - 1];
             
-            // Если мы возвращаемся назад в список, нужно его перерисовать (чтобы обновились звезды и прогресс)
             if (prev === 'list-screen') {
                 if (currentRenderState.type === 'category') {
                     openCategory(currentRenderState.keyword, currentRenderState.title);
