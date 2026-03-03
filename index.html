@@ -30,111 +30,14 @@
             <h1 class="text-5xl font-black tracking-widest mb-1">SUN</h1>
             <p class="text-[10px] font-bold tracking-[0.35em] text-[#FFB000]">INFOBUSINESS</p>
         </div>
-        <div class="grid grid-cols-2 gap-4">
-            <div onclick="showScreen('kursy-screen')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="kursy.jpg" class="w-full h-full object-cover"></div>
-                <div class="text-lg font-bold uppercase mt-auto">Курсы</div>
-            </div>
-            </div>
-    </div>
-
-    <div id="kursy-screen" class="screen px-4">
-        <h2 class="text-xl font-bold uppercase text-center mb-6">Курсы</h2>
-        <div id="courses-list">
-            </div>
-    </div>
-
-    <div id="detail-screen" class="screen">
-        <div id="course-header-img" class="w-full h-72 bg-cover bg-center"></div>
-        <div class="px-6 -mt-6 bg-black rounded-t-[30px] pt-8 relative z-10">
-            <div class="flex justify-between items-start mb-4">
-                <span id="course-tag" class="tag-sun">#КАТЕГОРИЯ</span>
-                <span class="text-gray-500 text-2xl">☆</span>
-            </div>
-            <h2 id="course-title" class="text-2xl font-black mb-4 uppercase italic">Название</h2>
-            <div id="course-desc" class="text-gray-400 text-sm leading-relaxed mb-6">Описание...</div>
-            
-            <h4 class="font-bold uppercase text-xs tracking-widest text-gray-500 mb-4">Программа:</h4>
-            <ul id="course-program" class="text-sm text-gray-300 space-y-2 mb-20">
-                </ul>
+        <div class="bg-[#141414] border border-[#1a1a1c] rounded-xl p-3 mb-8 flex items-center">
+            <span class="text-gray-500 mr-2">🔍</span>
+            <input type="text" placeholder="Поиск по базе знаний..." class="bg-transparent border-none text-white w-full focus:outline-none placeholder-gray-600 text-sm">
         </div>
         
-        <div class="course-footer">
-            <div class="btn-outline">Конспект</div>
-            <div class="btn-main">Смотреть</div>
-        </div>
-    </div>
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready(); tg.expand(); tg.setHeaderColor('#000000');
-
-        // ДАННЫЕ (Потом это будет лететь из Google Таблиц)
-        const coursesData = [
-            {
-                id: 1,
-                title: "Реальное управление",
-                tag: "Команда",
-                desc: "Курс по управлению линейными сотрудниками. Как выстроить систему, которая работает без микроменеджмента.",
-                img: "kursy.jpg",
-                program: ["Техника Яма", "Наука управления людьми", "Делегирование полномочий"]
-            },
-            {
-                id: 2,
-                title: "Высокоохватные Reels",
-                tag: "Маркетинг",
-                desc: "Если твой бизнес не получает заявки через рилсы — вопрос не в формате, а в системе.",
-                img: "kursy.jpg",
-                program: ["Алгоритмы 2026", "Сценарии на миллион", "Монтаж и свет"]
-            }
-        ];
-
-        let history = ['home-screen'];
-
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
-            
-            if (screenId === 'home-screen') {
-                tg.BackButton.hide();
-                history = ['home-screen'];
-            } else {
-                if (history[history.length-1] !== screenId) history.push(screenId);
-                tg.BackButton.show();
-            }
-        }
-
-        // Отрисовка списка курсов
-        function renderCourses() {
-            const list = document.getElementById('courses-list');
-            list.innerHTML = coursesData.map(course => `
-                <div onclick="openDetail(${course.id})" class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] overflow-hidden mb-6">
-                    <div class="h-48 bg-cover bg-center" style="background-image: url('${course.img}')"></div>
-                    <div class="p-5">
-                        <span class="tag-sun">#${course.tag}</span>
-                        <h3 class="text-lg font-bold mt-2">${course.title}</h3>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function openDetail(id) {
-            const course = coursesData.find(c => c.id === id);
-            document.getElementById('course-header-img').style.backgroundImage = `url('${course.img}')`;
-            document.getElementById('course-tag').innerText = `#${course.tag}`;
-            document.getElementById('course-title').innerText = course.title;
-            document.getElementById('course-desc').innerText = course.desc;
-            document.getElementById('course-program').innerHTML = course.program.map(p => `<li>• ${p}</li>`).join('');
-            showScreen('detail-screen');
-        }
-
-        tg.BackButton.onClick(() => {
-            history.pop();
-            const prev = history[history.length - 1];
-            showScreen(prev);
-        });
-
-        renderCourses();
-    </script>
-</body>
-</html>
+        <div class="grid grid-cols-2 gap-4">
+            <div onclick="showScreen('efiry-screen')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
+                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="efiry.jpg" class="w-full h-full object-cover"></div>
+                <div class="text-lg font-bold uppercase mt-auto">Эфиры</div>
+            </div>
+            <div onclick="showScreen('kursy-screen')" class="card-premium rounded-2xl p-5 h-40 flex
