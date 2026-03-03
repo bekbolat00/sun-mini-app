@@ -8,129 +8,133 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root { --sun-yellow: #FFB000; }
-        body { background-color: #000000; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; overflow-x: hidden; }
+        body { background-color: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; overflow-x: hidden; }
         .screen { display: none; min-height: 100vh; padding-bottom: 100px; }
         .screen.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         .card-premium { background: linear-gradient(145deg, #141414 0%, #0a0a0c 100%); border: 1px solid #1a1a1c; transition: all 0.2s ease; }
-        .card-premium:active { transform: scale(0.96); border-color: var(--sun-yellow); box-shadow: 0 0 20px rgba(255, 176, 0, 0.1); }
         .icon-container { border: 1px solid rgba(255, 176, 0, 0.2); box-shadow: 0 0 15px rgba(255, 176, 0, 0.15); }
-
-        /* Дизайн карточек из видео референса */
-        .content-card { background: #141414; border: 1px solid #1a1a1c; border-radius: 20px; overflow: hidden; margin-bottom: 20px; cursor: pointer; }
         .tag-sun { background: rgba(255, 176, 0, 0.1); color: var(--sun-yellow); font-size: 10px; font-weight: bold; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; }
-        .filter-chip { background: #1a1a1c; color: #666; padding: 8px 16px; border-radius: 12px; font-size: 12px; font-weight: bold; white-space: nowrap; border: 1px solid transparent; }
-        .filter-chip.active { background: var(--sun-yellow); color: #000; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* Кнопки внизу курса */
+        .course-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); padding: 15px 20px 35px; border-top: 1px solid #1a1a1c; z-index: 100; display: flex; gap: 12px; }
+        .btn-main { flex: 1; background: #fff; color: #000; font-weight: bold; padding: 14px; border-radius: 12px; text-align: center; font-size: 14px; }
+        .btn-outline { flex: 1; background: #1a1a1c; color: #fff; font-weight: bold; padding: 14px; border-radius: 12px; text-align: center; font-size: 14px; border: 1px solid #2a2a2c; }
     </style>
 </head>
 <body class="pt-6">
 
     <div id="home-screen" class="screen active px-4">
         <div class="flex flex-col items-center mb-8">
-            <h1 class="text-5xl font-black tracking-widest text-white mb-1">SUN</h1>
+            <h1 class="text-5xl font-black tracking-widest mb-1">SUN</h1>
             <p class="text-[10px] font-bold tracking-[0.35em] text-[#FFB000]">INFOBUSINESS</p>
         </div>
-        <div class="bg-[#141414] border border-[#1a1a1c] rounded-xl p-3 mb-8 flex items-center">
-            <span class="text-gray-500 mr-2">🔍</span>
-            <input type="text" placeholder="Поиск по базе знаний..." class="bg-transparent border-none text-white w-full focus:outline-none placeholder-gray-600 text-sm">
-        </div>
-        
         <div class="grid grid-cols-2 gap-4">
-            <div onclick="openCategory('efiry-screen')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="efiry.png" class="w-full h-full object-cover"></div>
-                <div class="text-lg font-bold uppercase tracking-wide text-white mt-auto">Эфиры</div>
+            <div onclick="showScreen('kursy-screen')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
+                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="kursy.jpg" class="w-full h-full object-cover"></div>
+                <div class="text-lg font-bold uppercase mt-auto">Курсы</div>
             </div>
-            <div onclick="openCategory('kursy-screen')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="kursy.png" class="w-full h-full object-cover"></div>
-                <div class="text-lg font-bold uppercase tracking-wide text-white mt-auto">Курсы</div>
             </div>
-            <div onclick="openCategory('razbory-screen')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="razbory.png" class="w-full h-full object-cover"></div>
-                <div class="text-lg font-bold uppercase tracking-wide text-white mt-auto">Разборы</div>
-            </div>
-            <div onclick="openCategory('knigi-screen')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="knigi.png" class="w-full h-full object-cover"></div>
-                <div class="text-lg font-bold uppercase tracking-wide text-white mt-auto">Книги</div>
-            </div>
-        </div>
-    </div>
-
-    <div id="efiry-screen" class="screen px-4">
-        <h2 class="text-xl font-bold uppercase tracking-wider text-center mb-6">Эфиры</h2>
-        <div class="content-card">
-            <div class="h-48 bg-cover bg-center" style="background-image: url('efiry.jpg');"></div>
-            <div class="p-5">
-                <span class="tag-sun">#ПРОДАЖИ</span>
-                <h3 class="text-lg font-bold mt-2 mb-2 uppercase">Как закрывать чеки от 1 млн</h3>
-                <p class="text-gray-400 text-sm leading-relaxed">Запись эфира о психологии высоких чеков и скриптах продаж.</p>
-            </div>
-        </div>
     </div>
 
     <div id="kursy-screen" class="screen px-4">
-        <h2 class="text-xl font-bold uppercase tracking-wider text-center mb-6">Курсы</h2>
-        <div class="flex gap-2 overflow-x-auto pb-6 no-scrollbar">
-            <div class="filter-chip active">Все</div><div class="filter-chip">Маркетинг</div><div class="filter-chip">Команда</div>
-        </div>
-        <div class="content-card">
-            <div class="h-48 bg-cover bg-center" style="background-image: url('kursy.jpg');"></div>
-            <div class="p-5">
-                <span class="tag-sun">#МАРКЕТИНГ</span>
-                <h3 class="text-lg font-bold mt-2 mb-2 uppercase">Реальный инфобизнес</h3>
-                <p class="text-gray-400 text-sm leading-relaxed mb-4">Пошаговая система запуска твоего продукта.</p>
-                <div class="w-full h-1 bg-gray-800 rounded-full"><div class="h-full bg-[#FFB000]" style="width: 45%;"></div></div>
+        <h2 class="text-xl font-bold uppercase text-center mb-6">Курсы</h2>
+        <div id="courses-list">
             </div>
-        </div>
     </div>
 
-    <div id="razbory-screen" class="screen px-4">
-        <h2 class="text-xl font-bold uppercase tracking-wider text-center mb-6">Разборы</h2>
-        <div class="content-card">
-            <div class="h-48 bg-cover bg-center" style="background-image: url('razbory.jpg');"></div>
-            <div class="p-5">
-                <span class="tag-sun">#КЕЙСЫ</span>
-                <h3 class="text-lg font-bold mt-2 mb-2 uppercase">Разбор воронки на 10 млн</h3>
-                <p class="text-gray-400 text-sm leading-relaxed">Детальный разбор того, как была построена работа с трафиком.</p>
+    <div id="detail-screen" class="screen">
+        <div id="course-header-img" class="w-full h-72 bg-cover bg-center"></div>
+        <div class="px-6 -mt-6 bg-black rounded-t-[30px] pt-8 relative z-10">
+            <div class="flex justify-between items-start mb-4">
+                <span id="course-tag" class="tag-sun">#КАТЕГОРИЯ</span>
+                <span class="text-gray-500 text-2xl">☆</span>
             </div>
+            <h2 id="course-title" class="text-2xl font-black mb-4 uppercase italic">Название</h2>
+            <div id="course-desc" class="text-gray-400 text-sm leading-relaxed mb-6">Описание...</div>
+            
+            <h4 class="font-bold uppercase text-xs tracking-widest text-gray-500 mb-4">Программа:</h4>
+            <ul id="course-program" class="text-sm text-gray-300 space-y-2 mb-20">
+                </ul>
         </div>
-    </div>
-
-    <div id="knigi-screen" class="screen px-4">
-        <h2 class="text-xl font-bold uppercase tracking-wider text-center mb-6">Книги</h2>
-        <div class="content-card">
-            <div class="h-48 bg-cover bg-center" style="background-image: url('knigi.jpg');"></div>
-            <div class="p-5">
-                <span class="tag-sun">#MUSTREAD</span>
-                <h3 class="text-lg font-bold mt-2 mb-2 uppercase">Кто. Решите проблему №1</h3>
-                <p class="text-gray-400 text-sm leading-relaxed">Книга о том, как нанимать сильных людей в команду.</p>
-            </div>
+        
+        <div class="course-footer">
+            <div class="btn-outline">Конспект</div>
+            <div class="btn-main">Смотреть</div>
         </div>
-    </div>
-
-    <div class="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-sm border-t border-[#1a1a1c] flex justify-around py-3 pb-8 z-50">
-        <div onclick="showScreen('home-screen')" class="flex flex-col items-center text-[#FFB000] cursor-pointer nav-item"><span class="text-2xl mb-1">🏠</span><span class="text-[10px] font-bold uppercase tracking-wider">Домой</span></div>
-        <div class="flex flex-col items-center text-gray-600 cursor-pointer nav-item"><span class="text-2xl mb-1">👥</span><span class="text-[10px] font-bold uppercase tracking-wider">Клуб</span></div>
-        <div class="flex flex-col items-center text-gray-600 cursor-pointer nav-item"><span class="text-2xl mb-1">💬</span><span class="text-[10px] font-bold uppercase tracking-wider">Чаты</span></div>
-        <div class="flex flex-col items-center text-gray-600 cursor-pointer nav-item"><span class="text-2xl mb-1">⭐</span><span class="text-[10px] font-bold uppercase tracking-wider">Топ</span></div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
-        tg.setHeaderColor('#000000');
-        const backButton = tg.BackButton;
+        tg.ready(); tg.expand(); tg.setHeaderColor('#000000');
+
+        // ДАННЫЕ (Потом это будет лететь из Google Таблиц)
+        const coursesData = [
+            {
+                id: 1,
+                title: "Реальное управление",
+                tag: "Команда",
+                desc: "Курс по управлению линейными сотрудниками. Как выстроить систему, которая работает без микроменеджмента.",
+                img: "kursy.jpg",
+                program: ["Техника Яма", "Наука управления людьми", "Делегирование полномочий"]
+            },
+            {
+                id: 2,
+                title: "Высокоохватные Reels",
+                tag: "Маркетинг",
+                desc: "Если твой бизнес не получает заявки через рилсы — вопрос не в формате, а в системе.",
+                img: "kursy.jpg",
+                program: ["Алгоритмы 2026", "Сценарии на миллион", "Монтаж и свет"]
+            }
+        ];
+
+        let history = ['home-screen'];
 
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
-            screenId === 'home-screen' ? backButton.hide() : backButton.show();
+            
+            if (screenId === 'home-screen') {
+                tg.BackButton.hide();
+                history = ['home-screen'];
+            } else {
+                if (history[history.length-1] !== screenId) history.push(screenId);
+                tg.BackButton.show();
+            }
         }
 
-        function openCategory(screenId) { showScreen(screenId); }
-        backButton.onClick(() => { showScreen('home-screen'); });
+        // Отрисовка списка курсов
+        function renderCourses() {
+            const list = document.getElementById('courses-list');
+            list.innerHTML = coursesData.map(course => `
+                <div onclick="openDetail(${course.id})" class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] overflow-hidden mb-6">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('${course.img}')"></div>
+                    <div class="p-5">
+                        <span class="tag-sun">#${course.tag}</span>
+                        <h3 class="text-lg font-bold mt-2">${course.title}</h3>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openDetail(id) {
+            const course = coursesData.find(c => c.id === id);
+            document.getElementById('course-header-img').style.backgroundImage = `url('${course.img}')`;
+            document.getElementById('course-tag').innerText = `#${course.tag}`;
+            document.getElementById('course-title').innerText = course.title;
+            document.getElementById('course-desc').innerText = course.desc;
+            document.getElementById('course-program').innerHTML = course.program.map(p => `<li>• ${p}</li>`).join('');
+            showScreen('detail-screen');
+        }
+
+        tg.BackButton.onClick(() => {
+            history.pop();
+            const prev = history[history.length - 1];
+            showScreen(prev);
+        });
+
+        renderCourses();
     </script>
 </body>
 </html>
