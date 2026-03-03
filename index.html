@@ -54,6 +54,12 @@
                 <div class="text-lg font-bold uppercase mt-auto">Книги</div>
             </div>
         </div>
+
+        <div id="home-progress-section" class="mt-10 hidden pb-4">
+            <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4 ml-1">Что ты хочешь заманьячить?</h3>
+            <div id="home-progress-list" class="grid grid-cols-2 gap-3">
+                </div>
+        </div>
     </div>
 
     <div id="list-screen" class="screen px-4">
@@ -101,8 +107,8 @@
         const sheetUrl = baseSheetUrl + "&nocache=" + new Date().getTime();
         
         let globalData = [];
-        let currentItems = []; // Массив текущих отображаемых карточек
-        let currentSort = 'new'; // Текущая сортировка
+        let currentItems = [];
+        let currentSort = 'new';
         
         let favorites = JSON.parse(localStorage.getItem('sun_favorites')) || [];
         let userProgress = JSON.parse(localStorage.getItem('sun_progress')) || {};
@@ -118,16 +124,59 @@
                 globalData = rows.map(r => ({
                     id: r[0],
                     category: r[1] ? r[1].trim() : '',
-                    tag: r[2] || 'ИНФОБИЗ',
+                    tag: r[2] ? r[2].trim() : 'ИНФОБИЗ',
                     title: r[3] || 'Без названия',
                     desc: r[4] || 'Описание скоро появится...',
                     img: r[5] || 'kursy.jpg', 
                     link: r[6] || ''
                 })).filter(item => item.id); 
+
+                // Рисуем блоки прогресса после загрузки данных
+                renderHomeProgress();
             }
         });
 
-        let historyList = ['home-screen'];
+        // ФУНКЦИЯ ПОДСЧЕТА И ОТРИСОВКИ ПРОГРЕССА ПО ТЕМАМ (ТЕГАМ)
+        function renderHomeProgress() {
+            if (globalData.length === 0) return;
+
+            let tagStats = {};
+            
+            // Считаем сколько всего курсов по каждому тегу и сколько пройдено
+            globalData.forEach(item => {
+                const tag = item.tag;
+                if (!tagStats[tag]) tagStats[tag] = { total: 0, completed: 0 };
+                tagStats[tag].total++;
+                if (userProgress[item.id] === 100) {
+                    tagStats[tag].completed++;
+                }
+            });
+
+            const tags = Object.keys(tagStats);
+            if (tags.length === 0) return;
+
+            let html = '';
+            tags.forEach(tag => {
+                const stat = tagStats[tag];
+                const percent = Math.round((stat.completed / stat.total) * 100);
+                
+                html += `
+                    <div class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-4">
+                        <div class="font-bold text-sm mb-4 truncate text-white capitalize">${tag}</div>
+                        <div class="flex justify-between text-[8px] text-gray-500 font-bold mb-1.5 uppercase tracking-wider">
+                            <span>твой прогресс</span>
+                            <span>${percent}%</span>
+                        </div>
+                        <div class="w-full h-1 bg-[#2a2a2c] rounded-full overflow-hidden">
+                            <div class="h-full bg-[#FFB000] transition-all duration-500" style="width: ${percent}%;"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('home-progress-list').innerHTML = html;
+            document.getElementById('home-progress-section').classList.remove('hidden');
+        }
 
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -141,6 +190,8 @@
                 tg.BackButton.hide();
                 historyList = ['home-screen'];
                 currentRenderState = { type: 'home' };
+                // Обновляем прогресс при возврате на главный экран
+                renderHomeProgress(); 
             } else {
                 if (historyList[historyList.length-1] !== screenId) historyList.push(screenId);
                 tg.BackButton.show();
@@ -179,13 +230,10 @@
             document.getElementById('detail-fav').classList.toggle('text-gray-500', !favorites.includes(id));
         }
 
-        // ПРИМЕНЕНИЕ СОРТИРОВКИ К ТЕКУЩЕМУ СПИСКУ
         function sortAndRender() {
             if (currentSort === 'new') {
-                // Сортировка по убыванию ID (Новые наверху)
                 currentItems.sort((a, b) => parseInt(b.id) - parseInt(a.id));
             } else {
-                // Сортировка по возрастанию ID (Старые наверху)
                 currentItems.sort((a, b) => parseInt(a.id) - parseInt(b.id));
             }
             renderCards(currentItems);
@@ -200,11 +248,11 @@
             const list = document.getElementById('items-list');
             if (items.length === 0) {
                 list.innerHTML = `<h3 class="text-center mt-10 text-gray-500 font-bold">Здесь пока пусто</h3>`;
-                document.getElementById('sort-container').style.display = 'none'; // Скрываем фильтр, если пусто
+                document.getElementById('sort-container').style.display = 'none';
                 return;
             }
             
-            document.getElementById('sort-container').style.display = 'flex'; // Показываем фильтр
+            document.getElementById('sort-container').style.display = 'flex';
             
             list.innerHTML = items.map(item => {
                 const isFav = favorites.includes(item.id.toString());
@@ -239,7 +287,6 @@
             document.getElementById('list-title').innerText = pageTitle;
             currentItems = globalData.filter(item => item.category.toLowerCase().includes(categoryKeyword.toLowerCase()));
             
-            // Сбрасываем фильтр на "Сначала новые" при входе в раздел
             document.getElementById('sort-select').value = 'new';
             currentSort = 'new';
             sortAndRender();
@@ -275,8 +322,10 @@
 
             const watchBtn = document.getElementById('watch-btn');
             watchBtn.onclick = () => {
+                // ДОБАВЛЯЕМ ПРОГРЕСС И СРАЗУ ПЕРЕСЧИТЫВАЕМ
                 userProgress[item.id.toString()] = 100;
                 localStorage.setItem('sun_progress', JSON.stringify(userProgress));
+                renderHomeProgress(); // Пересчет для главного экрана
 
                 if (item.link) {
                     if(item.link.includes('t.me')) {
@@ -285,7 +334,7 @@
                         tg.openLink(item.link);
                     }
                 } else {
-                    tg.showAlert("Ссылка на видео пока не добавлена!");
+                    tg.showAlert("Ссылка на материал пока не добавлена!");
                 }
             };
 
