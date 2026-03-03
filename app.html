@@ -242,8 +242,14 @@
                 userProgress[id] = 100;
                 localStorage.setItem('sun_progress', JSON.stringify(userProgress));
                 renderHomeProgress();
-                tg.openLink(i.link); // Перекидывает по ссылке из Гугл таблицы
-            };
+                // Умная открывашка ссылок
+            const url = i.link.trim();
+            if (url.includes('t.me/') || url.includes('telegram.me/')) {
+                tg.openTelegramLink(url); // Открывает плавно внутри Телеграма
+            } else {
+                tg.openLink(url); // Открывает в браузере (если это YouTube и т.д.)
+            }
+        };
             showScreen('detail-screen');
         }
 
