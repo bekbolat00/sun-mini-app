@@ -137,3 +137,55 @@
             const list = document.getElementById('items-list');
             // Ищем все элементы, у которых в категории есть наше слово (например, "Курс")
             const items = globalData.filter(item => item.category.toLowerCase().includes(categoryKeyword.toLowerCase()));
+            
+            if (items.length === 0) {
+                list.innerHTML = `<h3 class="text-center mt-10 text-gray-500 font-bold">В этом разделе пока нет материалов</h3>`;
+            } else {
+                list.innerHTML = items.map(item => `
+                    <div onclick="openDetail('${item.id}')" class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] overflow-hidden mb-6 cursor-pointer">
+                        <div class="h-48 bg-cover bg-center" style="background-image: url('${item.img}')"></div>
+                        <div class="p-5">
+                            <span class="tag-sun">#${item.tag}</span>
+                            <h3 class="text-lg font-bold mt-2">${item.title}</h3>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            showScreen('list-screen');
+        }
+
+        // ОТКРЫТИЕ ДЕТАЛЕЙ И НАСТРОЙКА КНОПКИ ТЕЛЕГРАМ
+        function openDetail(id) {
+            const item = globalData.find(c => c.id === id);
+            if (!item) return;
+
+            document.getElementById('detail-header-img').style.backgroundImage = `url('${item.img}')`;
+            document.getElementById('detail-tag').innerText = `#${item.tag}`;
+            document.getElementById('detail-title').innerText = item.title;
+            document.getElementById('detail-desc').innerText = item.desc;
+            
+            const watchBtn = document.getElementById('watch-btn');
+            watchBtn.onclick = () => {
+                if (item.link) {
+                    // Магия Телеграма: если ссылка t.me, открываем бесшовно
+                    if(item.link.includes('t.me')) {
+                        tg.openTelegramLink(item.link);
+                    } else {
+                        tg.openLink(item.link);
+                    }
+                } else {
+                    tg.showAlert("Ссылка на материал пока не добавлена!");
+                }
+            };
+
+            showScreen('detail-screen');
+        }
+
+        tg.BackButton.onClick(() => {
+            historyList.pop();
+            const prev = historyList[historyList.length - 1];
+            showScreen(prev);
+        });
+    </script>
+</body>
+</html>
