@@ -6,6 +6,7 @@
     <title>SUN App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
         :root { --sun-yellow: #FFB000; }
         body { background-color: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; overflow-x: hidden; }
@@ -18,7 +19,6 @@
         .icon-container { border: 1px solid rgba(255, 176, 0, 0.2); box-shadow: 0 0 15px rgba(255, 176, 0, 0.15); }
         .tag-sun { background: rgba(255, 176, 0, 0.1); color: var(--sun-yellow); font-size: 10px; font-weight: bold; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; }
         
-        /* Кнопки внизу курса */
         .course-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); padding: 15px 20px 35px; border-top: 1px solid #1a1a1c; z-index: 100; display: flex; gap: 12px; }
         .btn-main { flex: 1; background: #fff; color: #000; font-weight: bold; padding: 14px; border-radius: 12px; text-align: center; font-size: 14px; cursor: pointer; }
         .btn-outline { flex: 1; background: #1a1a1c; color: #fff; font-weight: bold; padding: 14px; border-radius: 12px; text-align: center; font-size: 14px; border: 1px solid #2a2a2c; cursor: pointer; }
@@ -37,55 +37,47 @@
         </div>
         
         <div class="grid grid-cols-2 gap-4">
-            <div onclick="showScreen('efiry-screen')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
+            <div onclick="openCategory('Эфир', 'Эфиры')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
                 <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="efiry.jpg" class="w-full h-full object-cover"></div>
                 <div class="text-lg font-bold uppercase mt-auto">Эфиры</div>
             </div>
-            <div onclick="showScreen('kursy-screen')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
+            <div onclick="openCategory('Курс', 'Курсы')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
                 <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="kursy.jpg" class="w-full h-full object-cover"></div>
                 <div class="text-lg font-bold uppercase mt-auto">Курсы</div>
             </div>
-            <div onclick="showScreen('razbory-screen')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
+            <div onclick="openCategory('Разбор', 'Разборы')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
                 <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="razbory.jpg" class="w-full h-full object-cover"></div>
                 <div class="text-lg font-bold uppercase mt-auto">Разборы</div>
             </div>
-            <div onclick="showScreen('knigi-screen')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
+            <div onclick="openCategory('Книга', 'Книги')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
                 <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="knigi.jpg" class="w-full h-full object-cover"></div>
                 <div class="text-lg font-bold uppercase mt-auto">Книги</div>
             </div>
         </div>
     </div>
 
-    <div id="kursy-screen" class="screen px-4">
-        <h2 class="text-xl font-bold uppercase text-center mb-6">Курсы</h2>
-        <div id="courses-list">
+    <div id="list-screen" class="screen px-4">
+        <h2 id="list-title" class="text-xl font-bold uppercase text-center mb-6">Загрузка...</h2>
+        <div id="items-list">
             </div>
     </div>
 
     <div id="detail-screen" class="screen">
-        <div id="course-header-img" class="w-full h-72 bg-cover bg-center"></div>
+        <div id="detail-header-img" class="w-full h-72 bg-cover bg-center"></div>
         <div class="px-6 -mt-6 bg-black rounded-t-[30px] pt-8 relative z-10">
             <div class="flex justify-between items-start mb-4">
-                <span id="course-tag" class="tag-sun">#КАТЕГОРИЯ</span>
+                <span id="detail-tag" class="tag-sun">#КАТЕГОРИЯ</span>
                 <span class="text-gray-500 text-2xl">☆</span>
             </div>
-            <h2 id="course-title" class="text-2xl font-black mb-4 uppercase italic">Название</h2>
-            <div id="course-desc" class="text-gray-400 text-sm leading-relaxed mb-6">Описание...</div>
-            
-            <h4 class="font-bold uppercase text-xs tracking-widest text-gray-500 mb-4">Программа:</h4>
-            <ul id="course-program" class="text-sm text-gray-300 space-y-2 mb-20">
-                </ul>
+            <h2 id="detail-title" class="text-2xl font-black mb-4 uppercase italic">Название</h2>
+            <div id="detail-desc" class="text-gray-400 text-sm leading-relaxed mb-24 whitespace-pre-wrap">Описание...</div>
         </div>
         
         <div class="course-footer">
-            <div class="btn-outline">Конспект</div>
-            <div class="btn-main">Смотреть</div>
+            <div class="btn-outline" onclick="tg.showAlert('Конспект появится позже!')">Конспект</div>
+            <div id="watch-btn" class="btn-main">Смотреть</div>
         </div>
     </div>
-
-    <div id="efiry-screen" class="screen px-4"><h2 class="text-center mt-10 text-gray-500 uppercase font-bold">Эфиры (в разработке)</h2></div>
-    <div id="razbory-screen" class="screen px-4"><h2 class="text-center mt-10 text-gray-500 uppercase font-bold">Разборы (в разработке)</h2></div>
-    <div id="knigi-screen" class="screen px-4"><h2 class="text-center mt-10 text-gray-500 uppercase font-bold">Книги (в разработке)</h2></div>
 
     <div class="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-sm border-t border-[#1a1a1c] flex justify-around py-3 pb-8 z-50">
         <div onclick="showScreen('home-screen')" class="flex flex-col items-center text-[#FFB000] cursor-pointer nav-item">
@@ -101,24 +93,27 @@
         const tg = window.Telegram.WebApp;
         tg.ready(); tg.expand(); tg.setHeaderColor('#000000');
 
-        const coursesData = [
-            {
-                id: 1,
-                title: "Реальное управление",
-                tag: "Команда",
-                desc: "Курс по управлению линейными сотрудниками. Как выстроить систему, которая работает без микроменеджмента.",
-                img: "kursy.jpg",
-                program: ["Техника Яма", "Наука управления людьми", "Делегирование полномочий"]
-            },
-            {
-                id: 2,
-                title: "Высокоохватные Reels",
-                tag: "Маркетинг",
-                desc: "Если твой бизнес не получает заявки через рилсы — вопрос не в формате, а в системе.",
-                img: "kursy.jpg",
-                program: ["Алгоритмы 2026", "Сценарии на миллион", "Монтаж и свет"]
+        // ТВОЯ ТАБЛИЦА GOOGLE SHEETS
+        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4MBQNze85Cb2YOXQOIMdsQI-94xxAIp-KuQgYmiHaaXS5besYLMrNwwdFfeeqg1wZKQJ-0wfwnTFm/pub?output=csv";
+        let globalData = [];
+
+        // АВТОМАТИЧЕСКАЯ ЗАГРУЗКА БАЗЫ ДАННЫХ ПРИ СТАРТЕ
+        Papa.parse(sheetUrl, {
+            download: true,
+            header: false,
+            complete: function(results) {
+                let rows = results.data.slice(1); // Пропускаем строку с заголовками
+                globalData = rows.map(r => ({
+                    id: r[0],
+                    category: r[1] ? r[1].trim() : '',
+                    tag: r[2] || 'ИНФОБИЗ',
+                    title: r[3] || 'Без названия',
+                    desc: r[4] || 'Описание скоро появится...',
+                    img: r[5] || 'kursy.jpg', // Картинка по умолчанию, если пусто
+                    link: r[6] || ''
+                })).filter(item => item.id); // Убираем пустые строки
             }
-        ];
+        });
 
         let historyList = ['home-screen'];
 
@@ -135,36 +130,10 @@
             }
         }
 
-        function renderCourses() {
-            const list = document.getElementById('courses-list');
-            list.innerHTML = coursesData.map(course => `
-                <div onclick="openDetail(${course.id})" class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] overflow-hidden mb-6 cursor-pointer">
-                    <div class="h-48 bg-cover bg-center" style="background-image: url('${course.img}')"></div>
-                    <div class="p-5">
-                        <span class="tag-sun">#${course.tag}</span>
-                        <h3 class="text-lg font-bold mt-2">${course.title}</h3>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function openDetail(id) {
-            const course = coursesData.find(c => c.id === id);
-            document.getElementById('course-header-img').style.backgroundImage = `url('${course.img}')`;
-            document.getElementById('course-tag').innerText = `#${course.tag}`;
-            document.getElementById('course-title').innerText = course.title;
-            document.getElementById('course-desc').innerText = course.desc;
-            document.getElementById('course-program').innerHTML = course.program.map(p => `<li>• ${p}</li>`).join('');
-            showScreen('detail-screen');
-        }
-
-        tg.BackButton.onClick(() => {
-            historyList.pop();
-            const prev = historyList[historyList.length - 1];
-            showScreen(prev);
-        });
-
-        renderCourses();
-    </script>
-</body>
-</html>
+        // ОТКРЫТИЕ КАТЕГОРИИ (ФИЛЬТРАЦИЯ ДАННЫХ ИЗ ТАБЛИЦЫ)
+        function openCategory(categoryKeyword, pageTitle) {
+            document.getElementById('list-title').innerText = pageTitle;
+            
+            const list = document.getElementById('items-list');
+            // Ищем все элементы, у которых в категории есть наше слово (например, "Курс")
+            const items = globalData.filter(item => item.category.toLowerCase().includes(categoryKeyword.toLowerCase()));
