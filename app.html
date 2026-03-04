@@ -15,12 +15,10 @@
         .screen.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Сетка 2х2 как на первом скрине */
         .card-premium { background: linear-gradient(145deg, #141414 0%, #0a0a0c 100%); border: 1px solid #1a1a1c; transition: all 0.2s ease; position: relative; overflow: hidden; }
         .card-premium:active { transform: scale(0.96); border-color: var(--sun-yellow); }
         .icon-container { border: 1px solid rgba(255, 176, 0, 0.2); box-shadow: 0 0 15px rgba(255, 176, 0, 0.15); }
         
-        /* Прогресс-блоки снизу */
         .progress-card { background: #111; border: 1px solid #1a1a1c; border-radius: 16px; padding: 16px; }
         .progress-fill { height: 100%; background: var(--sun-yellow); border-radius: 10px; transition: width 0.5s ease; }
 
@@ -30,7 +28,6 @@
         .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; cursor: pointer; color: #555; }
         .nav-item.active { color: var(--sun-yellow); }
         
-        /* Кнопки в карточке деталей */
         .footer-btns { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); padding: 15px 20px 35px; border-top: 1px solid #1a1a1c; z-index: 2000; display: flex; gap: 10px; }
         .btn-main { background: #fff; color: #000; font-weight: 900; padding: 16px; border-radius: 14px; text-align: center; text-transform: uppercase; cursor: pointer; }
         .btn-outline { border: 1px solid #333; color: #fff; font-weight: 900; padding: 16px; border-radius: 14px; text-align: center; text-transform: uppercase; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;}
@@ -53,19 +50,19 @@
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-10">
-            <div onclick="openCategory('Эфир', 'Эфиры')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between">
+            <div onclick="openCategory('Эфир', 'Эфиры')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
                 <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="efiry.jpg" class="w-full h-full object-cover"></div>
                 <div class="text-lg font-black uppercase italic mt-auto">Эфиры</div>
             </div>
-            <div onclick="openCategory('Курс', 'Курсы')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between">
+            <div onclick="openCategory('Курс', 'Курсы')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
                 <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="kursy.jpg" class="w-full h-full object-cover"></div>
                 <div class="text-lg font-black uppercase italic mt-auto">Курсы</div>
             </div>
-            <div onclick="openCategory('Разбор', 'Разборы')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between">
+            <div onclick="openCategory('Разбор', 'Разборы')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
                 <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="razbory.jpg" class="w-full h-full object-cover"></div>
                 <div class="text-lg font-black uppercase italic mt-auto">Разборы</div>
             </div>
-            <div onclick="openCategory('Книг', 'Книги')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between">
+            <div onclick="openCategory('Книг', 'Книги')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
                 <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="knigi.jpg" class="w-full h-full object-cover"></div>
                 <div class="text-lg font-black uppercase italic mt-auto">Книги</div>
             </div>
@@ -78,9 +75,13 @@
         </div>
     </div>
 
+    <div id="subcat-screen" class="screen px-5">
+        <h2 id="subcat-title" class="text-xl font-black uppercase text-center mb-8 mt-4 italic">Разделы</h2>
+        <div id="subcat-list" class="space-y-0"></div>
+    </div>
+
     <div id="club-screen" class="screen px-5">
         <h2 class="text-xl font-black uppercase text-center mb-8 mt-4 italic tracking-widest">СООБЩЕСТВО</h2>
-        
         <div class="card-premium rounded-[24px] p-6 mb-8 border-yellow-500/30">
             <h3 class="text-xl font-black mb-1 uppercase italic">SUN CLUB</h3>
             <p class="text-sm text-gray-400 mb-6 italic">Твой доступ к закрытым знаниям и чатам активен.</p>
@@ -88,7 +89,6 @@
                 Продлить доступ
             </div>
         </div>
-
         <div class="bg-[#141414] border border-[#1a1a1c] rounded-[24px] p-6">
             <h3 class="text-sm font-black text-[#FFB000] mb-5 uppercase tracking-widest italic flex items-center">
                 <span class="mr-2 text-lg">⚖️</span> Правила сообщества
@@ -102,13 +102,22 @@
         </div>
     </div>
 
+    <div id="favorites-screen" class="screen px-5">
+        <h2 class="text-xl font-black uppercase text-center mb-8 mt-4 italic tracking-widest">ИЗБРАННОЕ</h2>
+        <div id="favorites-list" class="space-y-6"></div>
+    </div>
+
     <div id="list-screen" class="screen px-5">
         <h2 id="list-title" class="text-xl font-black uppercase text-center mb-8 mt-4 italic">Загрузка...</h2>
         <div id="items-list" class="space-y-6"></div>
     </div>
 
     <div id="detail-screen" class="screen">
-        <div id="detail-img" class="w-full h-80 bg-cover bg-center"></div>
+        <div id="detail-img" class="w-full h-80 bg-cover bg-center relative">
+            <div id="fav-btn" class="absolute top-5 right-5 w-12 h-12 bg-black/60 backdrop-blur-md rounded-full flex items-center justify-center text-xl border border-white/20 cursor-pointer z-50 transition-all active:scale-90">
+                ☆
+            </div>
+        </div>
         <div class="px-6 -mt-8 bg-black rounded-t-[32px] pt-8 relative z-10">
             <h2 id="detail-title" class="text-2xl font-black mb-4 uppercase italic">Загрузка...</h2>
             <div id="detail-desc" class="text-gray-400 text-sm leading-relaxed mb-32 whitespace-pre-wrap"></div>
@@ -129,7 +138,7 @@
         <div onclick="tg.showAlert('Чаты в разработке')" class="nav-item">
             <span class="text-2xl">💬</span><span class="text-[9px] font-bold uppercase mt-1">Чаты</span>
         </div>
-        <div onclick="tg.showAlert('Избранное скоро!')" class="nav-item">
+        <div onclick="openFavorites()" class="nav-item" id="nav-fav">
             <span class="text-2xl">⭐</span><span class="text-[9px] font-bold uppercase mt-1">Топ</span>
         </div>
     </nav>
@@ -142,6 +151,8 @@
         
         let globalData = [];
         let userProgress = JSON.parse(localStorage.getItem('sun_progress')) || {};
+        let userFavorites = JSON.parse(localStorage.getItem('sun_favorites')) || []; // Массив Избранного
+        let previousScreen = 'home-screen'; // Умная история для кнопки Назад
 
         Papa.parse(sheetUrl, {
             download: true,
@@ -156,14 +167,20 @@
         });
 
         function showScreen(screenId) {
+            const currentActive = document.querySelector('.screen.active');
+            // Запоминаем, откуда пришли в карточку (из поиска, списка или избранного)
+            if (currentActive && currentActive.id !== screenId && screenId === 'detail-screen') {
+                previousScreen = currentActive.id;
+            }
+
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
             
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             if(screenId === 'home-screen') document.getElementById('nav-home').classList.add('active');
             if(screenId === 'club-screen') document.getElementById('nav-club').classList.add('active');
+            if(screenId === 'favorites-screen') document.getElementById('nav-fav').classList.add('active');
 
-            // Скрываем меню навигации, когда открыта карточка с кнопками
             if (screenId === 'detail-screen') {
                 document.querySelector('.nav-bar').style.display = 'none';
             } else {
@@ -197,14 +214,62 @@
         }
 
         function openCategory(kw, title) {
-            document.getElementById('list-title').innerText = title;
+            document.getElementById('subcat-title').innerText = title;
             const items = globalData.filter(i => i.category.toLowerCase().includes(kw.toLowerCase()));
             
             if (items.length === 0) {
-                document.getElementById('items-list').innerHTML = `<p class="text-center text-gray-500 mt-20 font-black uppercase italic">Контент скоро появится</p>`;
+                document.getElementById('subcat-list').innerHTML = `<p class="text-center text-gray-500 mt-20 font-black uppercase italic">Контент скоро появится</p>`;
             } else {
-                document.getElementById('items-list').innerHTML = items.map(i => `
-                    <div onclick="openDetail('${i.id}')" class="card-premium rounded-[24px] overflow-hidden relative">
+                const tags = [...new Set(items.map(i => i.tag || 'Разное'))];
+                document.getElementById('subcat-list').innerHTML = tags.map(tag => {
+                    const tagItems = items.filter(i => (i.tag || 'Разное') === tag);
+                    const done = tagItems.filter(i => userProgress[i.id] == 100).length;
+                    const percent = Math.round((done / tagItems.length) * 100);
+
+                    return `
+                    <div onclick="openSubcategory('${kw}', '${tag}')" class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-4 flex items-center justify-between cursor-pointer active:scale-95 transition-all mb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-[#FFB000]/10 rounded-xl flex items-center justify-center text-2xl border border-yellow-500/20">📁</div>
+                            <div>
+                                <h3 class="text-white font-black uppercase italic text-md leading-tight">${tag}</h3>
+                                <p class="text-gray-500 text-[10px] font-bold uppercase mt-1">Материалов: ${tagItems.length}</p>
+                            </div>
+                        </div>
+                        <div class="text-[#FFB000] font-black text-sm">${percent}%</div>
+                    </div>
+                    `;
+                }).join('');
+            }
+            showScreen('subcat-screen');
+        }
+
+        function openSubcategory(categoryKw, tag) {
+            document.getElementById('list-title').innerText = tag;
+            const items = globalData.filter(i => i.category.toLowerCase().includes(categoryKw.toLowerCase()) && (i.tag || 'Разное') === tag);
+            
+            document.getElementById('items-list').innerHTML = items.map(i => `
+                <div onclick="openDetail('${i.id}')" class="card-premium rounded-[24px] overflow-hidden relative mb-6 cursor-pointer active:scale-95 transition-all">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('${i.img}')"></div>
+                    <div class="p-5">
+                        <span class="tag-sun">#${i.tag}</span>
+                        <h3 class="text-lg font-black italic uppercase mt-2">${i.title}</h3>
+                    </div>
+                </div>
+            `).join('');
+            
+            showScreen('list-screen');
+        }
+
+        // РЕНДЕР ИЗБРАННОГО
+        function openFavorites() {
+            const list = document.getElementById('favorites-list');
+            const favItems = globalData.filter(i => userFavorites.includes(i.id));
+            
+            if (favItems.length === 0) {
+                list.innerHTML = `<div class="text-center mt-32"><span class="text-6xl mb-4 block">⭐</span><p class="text-gray-500 font-black uppercase italic">Здесь пока пусто</p></div>`;
+            } else {
+                list.innerHTML = favItems.map(i => `
+                    <div onclick="openDetail('${i.id}')" class="card-premium rounded-[24px] overflow-hidden relative mb-6 cursor-pointer active:scale-95 transition-all">
                         <div class="h-48 bg-cover bg-center" style="background-image: url('${i.img}')"></div>
                         <div class="p-5">
                             <span class="tag-sun">#${i.tag}</span>
@@ -213,7 +278,30 @@
                     </div>
                 `).join('');
             }
-            showScreen('list-screen');
+            showScreen('favorites-screen');
+        }
+
+        function toggleFavorite(id) {
+            const index = userFavorites.indexOf(id);
+            const favBtn = document.getElementById('fav-btn');
+            
+            if (index > -1) {
+                userFavorites.splice(index, 1); // Удаляем
+                favBtn.innerHTML = '☆';
+                favBtn.style.color = '#ffffff';
+                if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+            } else {
+                userFavorites.push(id); // Добавляем
+                favBtn.innerHTML = '⭐';
+                if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+            }
+            localStorage.setItem('sun_favorites', JSON.stringify(userFavorites));
+            
+            // Если мы пришли из Избранного и убрали звезду, нужно обновить список под капотом
+            if (previousScreen === 'favorites-screen') {
+                openFavorites(); 
+                showScreen('detail-screen'); // Оставляем открытой текущую карточку
+            }
         }
 
         function openDetail(id) {
@@ -222,17 +310,25 @@
             document.getElementById('detail-title').innerText = i.title;
             document.getElementById('detail-desc').innerText = i.desc;
             
-            // Логика умных кнопок
+            // Настройка кнопки Избранного
+            const favBtn = document.getElementById('fav-btn');
+            if (userFavorites.includes(id)) {
+                favBtn.innerHTML = '⭐';
+                favBtn.style.color = '#FFB000';
+            } else {
+                favBtn.innerHTML = '☆';
+                favBtn.style.color = '#ffffff';
+            }
+            favBtn.onclick = () => toggleFavorite(id);
+
             const watchBtn = document.getElementById('watch-btn');
             const summaryBtn = document.getElementById('summary-btn');
             
             if (i.category.toLowerCase().includes('книг')) {
-                // Для книг: одна кнопка "Прочитать" на всю ширину
                 watchBtn.innerText = 'Прочитать';
                 watchBtn.className = 'btn-main w-full';
                 summaryBtn.style.display = 'none';
             } else {
-                // Для остальных: две кнопки
                 watchBtn.innerText = 'Смотреть';
                 watchBtn.className = 'btn-main w-2/3';
                 summaryBtn.style.display = 'flex';
@@ -242,18 +338,29 @@
                 userProgress[id] = 100;
                 localStorage.setItem('sun_progress', JSON.stringify(userProgress));
                 renderHomeProgress();
-                // Умная открывашка ссылок
-            const url = i.link.trim();
-            if (url.includes('t.me/') || url.includes('telegram.me/')) {
-                tg.openTelegramLink(url); // Открывает плавно внутри Телеграма
-            } else {
-                tg.openLink(url); // Открывает в браузере (если это YouTube и т.д.)
-            }
-        };
+                
+                const url = i.link.trim();
+                if (url.includes('t.me/') || url.includes('telegram.me/')) {
+                    tg.openTelegramLink(url);
+                } else {
+                    tg.openLink(url);
+                }
+            };
             showScreen('detail-screen');
         }
 
-        tg.BackButton.onClick(() => showScreen('home-screen'));
+        // УМНАЯ КНОПКА НАЗАД
+        tg.BackButton.onClick(() => {
+            const activeScreen = document.querySelector('.screen.active').id;
+            
+            if (activeScreen === 'detail-screen') {
+                showScreen(previousScreen); // Возврат туда, откуда пришли!
+            } else if (activeScreen === 'list-screen') {
+                showScreen('subcat-screen');
+            } else if (activeScreen !== 'home-screen') {
+                showScreen('home-screen');
+            }
+        });
     </script>
 </body>
 </html>
