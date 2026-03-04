@@ -7,6 +7,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { --sun-yellow: #FFB000; }
         body { background-color: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; overflow-x: hidden; margin: 0; }
@@ -187,28 +188,40 @@
             <div class="text-[#FFB000] font-black italic text-xl tracking-widest">SUN<span class="text-white text-xs ml-2 tracking-normal uppercase">Итоги месяца</span></div>
             <div onclick="closeMonthlyRecap()" class="w-10 h-10 bg-[#141414] rounded-full flex items-center justify-center text-xl text-gray-400 cursor-pointer border border-[#1a1a1c]">✕</div>
         </div>
-        <h2 class="text-xl font-black italic leading-tight mb-6 text-gray-200">СЛЕДУЮЩИЙ МЕСЯЦ БУДЕТ ЕЩЕ МОЩНЕЕ! ЛОВИ СВОЙ РЕЗУЛЬТАТ ⚡️</h2>
-        <div class="grid grid-cols-2 gap-4 mb-4">
-            <div class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-5 relative overflow-hidden">
-                <div class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-2">Изучено материалов</div>
-                <div id="recap-total" class="text-4xl font-black text-white">0</div>
-                <div class="absolute bottom-3 right-4 text-3xl opacity-20">📚</div>
+
+        <div id="story-capture-area" class="flex flex-col relative bg-[#0a0a0c] p-6 rounded-[32px] border border-[#1a1a1c] shadow-[0_0_30px_rgba(255,176,0,0.05)] mb-4">
+            <h2 class="text-xl font-black italic leading-tight mb-6 text-gray-200">СЛЕДУЮЩИЙ МЕСЯЦ БУДЕТ ЕЩЕ МОЩНЕЕ! ЛОВИ СВОЙ РЕЗУЛЬТАТ ⚡️</h2>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-5 relative overflow-hidden">
+                    <div class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-2">Изучено материалов</div>
+                    <div id="recap-total" class="text-4xl font-black text-white">0</div>
+                    <div class="absolute bottom-3 right-4 text-3xl opacity-20">📚</div>
+                </div>
+                <div class="bg-gradient-to-br from-[#FFB000]/20 to-[#141414] border border-[#FFB000]/30 rounded-[20px] p-5 relative overflow-hidden">
+                    <div class="text-[#FFB000] text-[10px] font-bold uppercase tracking-widest mb-2">Твой статус</div>
+                    <div id="recap-percent" class="text-xl font-black italic text-white leading-tight mt-1">ЛУЧШЕ ЧЕМ У 80%</div>
+                    <div class="absolute top-4 right-4 text-2xl drop-shadow-[0_0_10px_rgba(255,176,0,0.8)]">🏆</div>
+                </div>
             </div>
-            <div class="bg-gradient-to-br from-[#FFB000]/20 to-[#141414] border border-[#FFB000]/30 rounded-[20px] p-5 relative overflow-hidden">
-                <div class="text-[#FFB000] text-[10px] font-bold uppercase tracking-widest mb-2">Твой статус</div>
-                <div id="recap-percent" class="text-xl font-black italic text-white leading-tight mt-1">ЛУЧШЕ ЧЕМ У 80%</div>
-                <div class="absolute top-4 right-4 text-2xl drop-shadow-[0_0_10px_rgba(255,176,0,0.8)]">🏆</div>
+            <div class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-5 flex items-center justify-between mb-4">
+                <div>
+                    <div class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-1">Твоя главная тема</div>
+                    <div id="recap-top-tag" class="text-xl font-black italic text-white">--</div>
+                </div>
+                <div class="text-4xl">🎯</div>
+            </div>
+            <div class="text-center mt-2 mb-1">
+                <span class="text-[#FFB000] font-black italic text-[10px] tracking-[0.4em] uppercase opacity-80">SUN INFOBUSINESS</span>
             </div>
         </div>
-        <div class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-5 mb-8 flex items-center justify-between">
-            <div>
-                <div class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-1">Твоя главная тема</div>
-                <div id="recap-top-tag" class="text-xl font-black italic text-white">--</div>
-            </div>
-            <div class="text-4xl">🎯</div>
+
+        <div id="story-result-area" class="hidden flex-col items-center w-full mb-4">
+            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-4 text-center">Зажми картинку, чтобы сохранить<br>и выложить в Instagram</p>
+            <img id="story-preview-img" class="w-full rounded-[32px] shadow-[0_0_40px_rgba(255,176,0,0.15)] mb-4" />
         </div>
-        <div class="mt-auto">
-            <div onclick="tg.showAlert('Скоро здесь будет генерация картинки для Инстаграма!')" class="w-full bg-white text-black text-center font-black py-4 rounded-xl uppercase text-sm tracking-widest cursor-pointer active:scale-95 transition-transform flex items-center justify-center gap-2">
+
+        <div class="mt-auto" id="story-btn-container">
+            <div id="story-btn" onclick="generateStory()" class="w-full bg-white text-black text-center font-black py-4 rounded-xl uppercase text-sm tracking-widest cursor-pointer active:scale-95 transition-transform flex items-center justify-center gap-2">
                 <span>📸</span> Поделиться в Stories
             </div>
         </div>
@@ -396,9 +409,61 @@
             tg.BackButton.show();
         }
 
+        // --- НОВАЯ ФУНКЦИЯ: ГЕНЕРАТОР КАРТИНКИ ДЛЯ СТОРИС ---
+        function generateStory() {
+            const btn = document.getElementById('story-btn');
+            btn.innerHTML = '⏳ Генерируем магию...';
+            btn.style.opacity = '0.5';
+            btn.style.pointerEvents = 'none';
+
+            const captureArea = document.getElementById('story-capture-area');
+            
+            // Захватываем карточку и делаем из нее картинку
+            html2canvas(captureArea, {
+                backgroundColor: '#0a0a0c', // Цвет фона под карточкой
+                scale: 3, // Высокое качество для инстаграма
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                
+                // Прячем исходную HTML карточку и кнопку
+                captureArea.classList.add('hidden');
+                document.getElementById('story-btn-container').classList.add('hidden');
+                
+                // Показываем сгенерированную картинку и текст-инструкцию
+                const previewImg = document.getElementById('story-preview-img');
+                previewImg.src = imgData;
+                document.getElementById('story-result-area').classList.remove('hidden');
+                document.getElementById('story-result-area').classList.add('flex');
+                
+                // Возвращаем кнопку в норму (если юзер закроет и откроет снова)
+                btn.innerHTML = '<span>📸</span> Поделиться в Stories';
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'auto';
+                
+                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            }).catch(err => {
+                console.error(err);
+                tg.showAlert('Случилась ошибка. Попробуй еще раз!');
+                btn.innerHTML = '<span>📸</span> Поделиться в Stories';
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'auto';
+            });
+        }
+
         function closeMonthlyRecap() {
             document.getElementById('recap-modal').classList.add('hidden');
             document.getElementById('recap-modal').classList.remove('flex');
+            
+            // Если юзер сделал скрин, возвращаем всё на место при закрытии окна
+            setTimeout(() => {
+                document.getElementById('story-capture-area').classList.remove('hidden');
+                document.getElementById('story-btn-container').classList.remove('hidden');
+                document.getElementById('story-result-area').classList.add('hidden');
+                document.getElementById('story-result-area').classList.remove('flex');
+            }, 300);
+
             if (document.querySelector('.screen.active').id === 'home-screen') { tg.BackButton.hide(); }
         }
 
