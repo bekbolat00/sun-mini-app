@@ -328,40 +328,73 @@
             a.innerHTML = userFavorites.includes(t) ? "⭐" : "☆";
             a.style.color = userFavorites.includes(t) ? "#FFB000" : "#ffffff";
             a.onclick = () => toggleFavorite(t);
-            
-            const n = document.getElementById("watch-btn");
-            e.category.toLowerCase().includes("книг") ? (n.innerText = "Прочитать", n.className = "btn-main w-full", document.getElementById("summary-btn").style.display = "none") : (n.innerText = "Смотреть", n.className = "btn-main w-2/3", document.getElementById("summary-btn").style.display = "flex");
-            
-            // ТВОЯ ССЫЛКА НА GOOGLE APPS SCRIPT
+
+            const isBook = e.category.toLowerCase().includes("книг");
             const scriptApiUrl = "https://script.google.com/macros/s/AKfycbyte4_uuiiD1YFtiLq3mC55VK1ScoVjzQypwALBbqqJdqWzK5JWQln-6Hj5ILhgfN_I9g/exec";
             
-            n.onclick = () => {
-                // ПРОВЕРКА НАКРУТКИ: если смотрит впервые, даем баллы
-                if (userProgress[t] != 100) {
+            const footer = document.querySelector('.footer-btns');
+            
+            // Единый обработчик логики (Начать, Продолжить, Завершить)
+            window.handleContentAction = function(action) {
+                if (action === 'start') {
+                    // Ставим статус 50% (В процессе)
+                    userProgress[t] = 50;
+                    localStorage.setItem("sun_progress", JSON.stringify(userProgress));
+                    renderHomeProgress();
+                    openLink(e.link);
+                    renderButtons(); // Перерисовываем кнопки
+                } else if (action === 'continue') {
+                    // Просто открываем ссылку
+                    openLink(e.link);
+                } else if (action === 'finish') {
+                    // Ставим статус 100% (Завершено)
                     userProgress[t] = 100;
                     localStorage.setItem("sun_progress", JSON.stringify(userProgress));
                     renderHomeProgress();
                     
-                    // ОТПРАВЛЯЕМ БАЛЛЫ В ТАБЛИЦУ
+                    // Начисляем баллы
                     if (currentUserData) {
                         const tgUserId = currentUserData.id;
-                        const pointsReward = 10; // +10 баллов
-                        
-                        fetch(`${scriptApiUrl}?id=${tgUserId}&points=${pointsReward}`, { mode: 'no-cors' })
-                            .then(() => console.log('Сигнал на +10 баллов отправлен!'))
-                            .catch(err => console.error('Ошибка отправки:', err));
-                        
-                        // Мгновенно обновляем цифру на экране пользователя
-                        currentUserData.points = parseInt(currentUserData.points) + pointsReward;
+                        fetch(`${scriptApiUrl}?id=${tgUserId}&points=10`, { mode: 'no-cors' });
+                        currentUserData.points = parseInt(currentUserData.points) + 10;
                         updateSubscriptionUI();
                     }
+                    if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+                    renderButtons(); // Перерисовываем на "Просмотрено"
                 }
-                
-                // ОТКРЫВАЕМ САМО ВИДЕО/КНИГУ
-                const link = e.link.trim();
-                link.includes("t.me/") ? tg.openTelegramLink(link) : tg.openLink(link);
             };
-            
+
+            function openLink(link) {
+                const url = link.trim();
+                url.includes("t.me/") ? tg.openTelegramLink(url) : tg.openLink(url);
+            }
+
+            // Умная отрисовка кнопок в зависимости от статуса
+            function renderButtons() {
+                let progress = userProgress[t] || 0;
+                let conspectHtml = isBook ? '' : `<div class="btn-outline w-1/3" onclick="tg.showAlert('Конспект скоро!')">Конспект</div>`;
+                
+                if (progress === 0) {
+                    // НОВОЕ
+                    let btnText = isBook ? "Прочитать" : "Смотреть";
+                    let btnClass = isBook ? "w-full" : "w-2/3";
+                    footer.innerHTML = `${conspectHtml}<div class="btn-main ${btnClass}" onclick="handleContentAction('start')">${btnText}</div>`;
+                } else if (progress === 50) {
+                    // В ПРОЦЕССЕ (Появляется кнопка Завершить)
+                    let btnText = isBook ? "Читаю ⏳" : "Смотрю ⏳";
+                    footer.innerHTML = `
+                        <div class="btn-outline w-1/2 text-[#FFB000] border-[#FFB000]" onclick="handleContentAction('continue')">${btnText}</div>
+                        <div class="btn-main w-1/2 bg-[#FFB000] text-black" onclick="handleContentAction('finish')">Завершить ✅</div>
+                    `;
+                } else if (progress === 100) {
+                    // ЗАВЕРШЕНО
+                    let btnText = isBook ? "Прочитано ✅" : "Просмотрено ✅";
+                    let btnClass = isBook ? "w-full" : "w-2/3";
+                    footer.innerHTML = `${conspectHtml}<div class="btn-outline ${btnClass} text-gray-500 border-[#1a1a1c]" onclick="handleContentAction('continue')">${btnText}</div>`;
+                }
+            }
+
+            renderButtons();
             showScreen("detail-screen");
         }
         tg.BackButton.onClick(() => {
