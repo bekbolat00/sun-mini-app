@@ -193,7 +193,7 @@
             </div>
             <div class="bg-gradient-to-br from-[#FFB000]/20 to-[#141414] border border-[#FFB000]/30 rounded-[20px] p-5 relative overflow-hidden">
                 <div class="text-[#FFB000] text-[10px] font-bold uppercase tracking-widest mb-2">Твой статус</div>
-                <div class="text-xl font-black italic text-white leading-tight mt-1">ЛУЧШЕ ЧЕМ У 80%</div>
+                <div id="recap-percent" class="text-xl font-black italic text-white leading-tight mt-1">ЛУЧШЕ ЧЕМ У 80%</div>
                 <div class="absolute top-4 right-4 text-2xl drop-shadow-[0_0_10px_rgba(255,176,0,0.8)]">🏆</div>
             </div>
         </div>
@@ -351,6 +351,24 @@
 
             document.getElementById('recap-total').innerText = totalDone;
             document.getElementById('recap-top-tag').innerText = topTag;
+
+            // --- НОВАЯ ЛОГИКА: РЕАЛЬНЫЙ ПРОЦЕНТ ИЗ ТАБЛИЦЫ ---
+            let percentText = "НЕТ ДАННЫХ";
+            if (currentUserData && globalUsers.length > 1) {
+                const myIndex = globalUsers.findIndex(u => u.id == currentUserData.id);
+                if (myIndex === 0) {
+                    percentText = "ТЫ ТОП #1 👑"; // Если ученик на первом месте
+                } else if (myIndex > 0) {
+                    const totalUsers = globalUsers.length;
+                    const peopleBelow = totalUsers - (myIndex + 1); // Сколько людей ниже него
+                    const percent = Math.round((peopleBelow / totalUsers) * 100);
+                    percentText = `ЛУЧШЕ ЧЕМ У ${percent}%`;
+                }
+            } else if (globalUsers.length <= 1) {
+                percentText = "ПЕРВЫЙ В КЛУБЕ!"; 
+            }
+            document.getElementById('recap-percent').innerText = percentText;
+            // --------------------------------------------------
 
             document.getElementById('recap-modal').classList.remove('hidden');
             document.getElementById('recap-modal').classList.add('flex');
