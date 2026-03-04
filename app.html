@@ -153,7 +153,7 @@
         <div class="bg-gradient-to-b from-[#1a1a1c] to-[#0a0a0c] border border-[#FFB000]/20 rounded-[24px] pt-8 pb-0 px-2 mb-8 relative overflow-hidden shadow-[0_0_30px_rgba(255,176,0,0.1)]">
             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-[#FFB000] opacity-10 rounded-full blur-3xl"></div>
             <div class="flex justify-between items-end relative z-10" id="top-3-podium">
-                </div>
+            </div>
         </div>
 
         <div class="flex justify-between items-end mb-4 ml-1">
@@ -161,8 +161,7 @@
             <span class="text-[9px] text-gray-600 font-bold uppercase">Обновляется онлайн</span>
         </div>
         
-        <div id="leaderboard-list" class="space-y-3 mb-20">
-        </div>
+        <div id="leaderboard-list" class="space-y-3 mb-20"></div>
     </div>
 
     <div id="list-screen" class="screen px-5">
@@ -183,7 +182,7 @@
         </div>
     </div>
 
-    <div id="recap-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[3000] hidden flex-col px-6 pt-12 pb-8 overflow-y-auto">
+    <div id="recap-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[3000] hidden flex-col px-5 pt-12 pb-8 overflow-y-auto">
         <div class="flex justify-between items-center mb-8">
             <div class="text-[#FFB000] font-black italic text-xl tracking-widest">SUN<span class="text-white text-xs ml-2 tracking-normal uppercase">Итоги месяца</span></div>
             <div onclick="closeMonthlyRecap()" class="w-10 h-10 bg-[#141414] rounded-full flex items-center justify-center text-xl text-gray-400 cursor-pointer border border-[#1a1a1c]">✕</div>
@@ -193,12 +192,12 @@
             <h2 class="text-xl font-black italic leading-tight mb-6 text-gray-200">СЛЕДУЮЩИЙ МЕСЯЦ БУДЕТ ЕЩЕ МОЩНЕЕ! ЛОВИ СВОЙ РЕЗУЛЬТАТ ⚡️</h2>
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-5 relative overflow-hidden">
-                    <div class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-2">Изучено материалов</div>
+                    <div class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-2">Изучено</div>
                     <div id="recap-total" class="text-4xl font-black text-white">0</div>
                     <div class="absolute bottom-3 right-4 text-3xl opacity-20">📚</div>
                 </div>
                 <div class="bg-gradient-to-br from-[#FFB000]/20 to-[#141414] border border-[#FFB000]/30 rounded-[20px] p-5 relative overflow-hidden">
-                    <div class="text-[#FFB000] text-[10px] font-bold uppercase tracking-widest mb-2">Твой статус</div>
+                    <div class="text-[#FFB000] text-[10px] font-bold uppercase tracking-widest mb-2">Статус</div>
                     <div id="recap-percent" class="text-xl font-black italic text-white leading-tight mt-1">ЛУЧШЕ ЧЕМ У 80%</div>
                     <div class="absolute top-4 right-4 text-2xl drop-shadow-[0_0_10px_rgba(255,176,0,0.8)]">🏆</div>
                 </div>
@@ -215,14 +214,35 @@
             </div>
         </div>
 
-        <div id="story-result-area" class="hidden flex-col items-center w-full mb-4">
-            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-4 text-center">Зажми картинку, чтобы сохранить<br>и выложить в Instagram</p>
-            <img id="story-preview-img" class="w-full rounded-[32px] shadow-[0_0_40px_rgba(255,176,0,0.15)] mb-4" />
-        </div>
-
         <div class="mt-auto" id="story-btn-container">
             <div id="story-btn" onclick="generateStory()" class="w-full bg-white text-black text-center font-black py-4 rounded-xl uppercase text-sm tracking-widest cursor-pointer active:scale-95 transition-transform flex items-center justify-center gap-2">
-                <span>📸</span> Поделиться в Stories
+                <span>✨</span> Создать Итоги
+            </div>
+        </div>
+
+        <div id="story-result-area" class="hidden flex-col items-center w-full mt-auto">
+            <img id="story-preview-img" class="w-full rounded-[32px] shadow-[0_0_40px_rgba(255,176,0,0.15)] mb-6" />
+            
+            <div class="w-full bg-[#141414] border border-[#1a1a1c] rounded-[24px] p-6 pb-8 shadow-2xl">
+                <h3 class="text-center font-black text-white text-lg mb-6">Поделиться</h3>
+                <div class="flex justify-around items-start">
+                    
+                    <div onclick="shareToInstagram()" class="flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition-transform">
+                        <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex items-center justify-center text-white text-2xl shadow-[0_0_15px_rgba(236,72,153,0.3)]">📸</div>
+                        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Instagram</span>
+                    </div>
+
+                    <div onclick="downloadStory()" class="flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition-transform">
+                        <div class="w-14 h-14 rounded-full bg-[#1a1a1c] border border-gray-700 flex items-center justify-center text-white text-xl">⬇️</div>
+                        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Скачать</span>
+                    </div>
+
+                    <div onclick="closeMonthlyRecap()" class="flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition-transform">
+                        <div class="w-14 h-14 rounded-full bg-[#1a1a1c] border border-gray-700 flex items-center justify-center text-white text-xl opacity-80">✕</div>
+                        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Назад</span>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
@@ -286,9 +306,7 @@
                 
                 renderLeaderboard(); 
             },
-            error: function(err) {
-                tg.showAlert("Ошибка чтения базы данных.");
-            }
+            error: function(err) { tg.showAlert("Ошибка чтения базы данных."); }
         });
 
         function updateSubscriptionUI() {
@@ -318,21 +336,11 @@
             const podiumEl = document.getElementById('top-3-podium');
             let podiumHtml = '';
             
-            const u1 = globalUsers[0];
-            const u2 = globalUsers[1];
-            const u3 = globalUsers[2];
+            const u1 = globalUsers[0]; const u2 = globalUsers[1]; const u3 = globalUsers[2];
 
-            if (u2) {
-                podiumHtml += `<div class="flex flex-col items-center justify-end w-1/3 pb-0"><div class="relative mb-2"><div class="w-12 h-12 rounded-full border border-gray-400 bg-[#141414] flex items-center justify-center text-lg shadow-[0_0_15px_rgba(156,163,175,0.3)] z-10 relative">🥈</div><div class="absolute -bottom-1 -right-1 bg-gray-400 text-black text-[9px] font-black px-1.5 py-0.5 rounded border border-black z-20">2</div></div><div class="text-white font-black text-[9px] mb-1 truncate w-full text-center uppercase px-1">${u2.name}</div><div class="text-gray-400 text-[9px] font-bold mb-2">${u2.points} Б</div><div class="w-10/12 h-10 bg-gradient-to-t from-gray-400/20 to-transparent rounded-t-lg border-t border-gray-400/30"></div></div>`;
-            } else { podiumHtml += `<div class="w-1/3"></div>`; }
-
-            if (u1) {
-                podiumHtml += `<div class="flex flex-col items-center justify-end w-1/3 z-10"><div class="relative mb-2"><div class="w-16 h-16 rounded-full border-2 border-[#FFB000] bg-[#141414] flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(255,176,0,0.4)] z-10 relative">👑</div><div class="absolute -bottom-1 -right-1 bg-[#FFB000] text-black text-[10px] font-black px-2 py-0.5 rounded border border-black z-20">1</div></div><div class="text-[#FFB000] font-black text-[11px] mb-1 truncate w-full text-center uppercase px-1">${u1.name}</div><div class="text-white text-[10px] font-bold mb-2">${u1.points} Б</div><div class="w-11/12 h-14 bg-gradient-to-t from-[#FFB000]/30 to-transparent rounded-t-lg border-t border-[#FFB000]/50"></div></div>`;
-            } else { podiumHtml += `<div class="w-1/3"></div>`; }
-
-            if (u3) {
-                podiumHtml += `<div class="flex flex-col items-center justify-end w-1/3 pb-0"><div class="relative mb-2"><div class="w-10 h-10 rounded-full border border-orange-700 bg-[#141414] flex items-center justify-center text-sm shadow-[0_0_10px_rgba(194,65,12,0.3)] z-10 relative">🥉</div><div class="absolute -bottom-1 -right-1 bg-orange-700 text-white text-[8px] font-black px-1.5 py-0.5 rounded border border-black z-20">3</div></div><div class="text-white font-black text-[9px] mb-1 truncate w-full text-center uppercase px-1">${u3.name}</div><div class="text-gray-400 text-[9px] font-bold mb-2">${u3.points} Б</div><div class="w-10/12 h-6 bg-gradient-to-t from-orange-700/20 to-transparent rounded-t-lg border-t border-orange-700/30"></div></div>`;
-            } else { podiumHtml += `<div class="w-1/3"></div>`; }
+            if (u2) { podiumHtml += `<div class="flex flex-col items-center justify-end w-1/3 pb-0"><div class="relative mb-2"><div class="w-12 h-12 rounded-full border border-gray-400 bg-[#141414] flex items-center justify-center text-lg shadow-[0_0_15px_rgba(156,163,175,0.3)] z-10 relative">🥈</div><div class="absolute -bottom-1 -right-1 bg-gray-400 text-black text-[9px] font-black px-1.5 py-0.5 rounded border border-black z-20">2</div></div><div class="text-white font-black text-[9px] mb-1 truncate w-full text-center uppercase px-1">${u2.name}</div><div class="text-gray-400 text-[9px] font-bold mb-2">${u2.points} Б</div><div class="w-10/12 h-10 bg-gradient-to-t from-gray-400/20 to-transparent rounded-t-lg border-t border-gray-400/30"></div></div>`; } else { podiumHtml += `<div class="w-1/3"></div>`; }
+            if (u1) { podiumHtml += `<div class="flex flex-col items-center justify-end w-1/3 z-10"><div class="relative mb-2"><div class="w-16 h-16 rounded-full border-2 border-[#FFB000] bg-[#141414] flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(255,176,0,0.4)] z-10 relative">👑</div><div class="absolute -bottom-1 -right-1 bg-[#FFB000] text-black text-[10px] font-black px-2 py-0.5 rounded border border-black z-20">1</div></div><div class="text-[#FFB000] font-black text-[11px] mb-1 truncate w-full text-center uppercase px-1">${u1.name}</div><div class="text-white text-[10px] font-bold mb-2">${u1.points} Б</div><div class="w-11/12 h-14 bg-gradient-to-t from-[#FFB000]/30 to-transparent rounded-t-lg border-t border-[#FFB000]/50"></div></div>`; } else { podiumHtml += `<div class="w-1/3"></div>`; }
+            if (u3) { podiumHtml += `<div class="flex flex-col items-center justify-end w-1/3 pb-0"><div class="relative mb-2"><div class="w-10 h-10 rounded-full border border-orange-700 bg-[#141414] flex items-center justify-center text-sm shadow-[0_0_10px_rgba(194,65,12,0.3)] z-10 relative">🥉</div><div class="absolute -bottom-1 -right-1 bg-orange-700 text-white text-[8px] font-black px-1.5 py-0.5 rounded border border-black z-20">3</div></div><div class="text-white font-black text-[9px] mb-1 truncate w-full text-center uppercase px-1">${u3.name}</div><div class="text-gray-400 text-[9px] font-bold mb-2">${u3.points} Б</div><div class="w-10/12 h-6 bg-gradient-to-t from-orange-700/20 to-transparent rounded-t-lg border-t border-orange-700/30"></div></div>`; } else { podiumHtml += `<div class="w-1/3"></div>`; }
 
             podiumEl.innerHTML = podiumHtml;
 
@@ -340,24 +348,12 @@
             let listHtml = '';
             
             if (globalUsers.length <= 3) {
-                listHtml = `
-                <div class="bg-[#141414] border border-[#1a1a1c] rounded-[16px] p-6 flex flex-col items-center justify-center text-center mt-2 opacity-50">
-                    <span class="text-2xl mb-2 grayscale">🥷</span>
-                    <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Здесь появятся новые участники</span>
-                </div>`;
+                listHtml = `<div class="bg-[#141414] border border-[#1a1a1c] rounded-[16px] p-6 flex flex-col items-center justify-center text-center mt-2 opacity-50"><span class="text-2xl mb-2 grayscale">🥷</span><span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Здесь появятся новые участники</span></div>`;
             } else {
                 for (let i = 3; i < globalUsers.length; i++) {
                     const u = globalUsers[i];
                     const isMe = currentUserData && u.id == currentUserData.id;
-                    listHtml += `
-                    <div class="bg-[#141414] border ${isMe ? 'border-[#FFB000] shadow-[0_0_10px_rgba(255,176,0,0.1)]' : 'border-[#1a1a1c]'} rounded-[16px] p-4 flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <div class="text-gray-600 font-black text-sm w-5 text-center">${i + 1}</div>
-                            <div class="w-8 h-8 rounded-full bg-[#1a1a1c] border border-white/5 flex items-center justify-center text-xs">👤</div>
-                            <div class="font-black uppercase italic text-xs ${isMe ? 'text-[#FFB000]' : 'text-gray-300'}">${u.name} ${isMe ? '(ТЫ)' : ''}</div>
-                        </div>
-                        <div class="text-white font-black text-xs tracking-wider">${u.points} <span class="text-gray-600 text-[9px]">Б</span></div>
-                    </div>`;
+                    listHtml += `<div class="bg-[#141414] border ${isMe ? 'border-[#FFB000] shadow-[0_0_10px_rgba(255,176,0,0.1)]' : 'border-[#1a1a1c]'} rounded-[16px] p-4 flex items-center justify-between"><div class="flex items-center gap-4"><div class="text-gray-600 font-black text-sm w-5 text-center">${i + 1}</div><div class="w-8 h-8 rounded-full bg-[#1a1a1c] border border-white/5 flex items-center justify-center text-xs">👤</div><div class="font-black uppercase italic text-xs ${isMe ? 'text-[#FFB000]' : 'text-gray-300'}">${u.name} ${isMe ? '(ТЫ)' : ''}</div></div><div class="text-white font-black text-xs tracking-wider">${u.points} <span class="text-gray-600 text-[9px]">Б</span></div></div>`;
                 }
             }
             listEl.innerHTML = listHtml;
@@ -368,22 +364,11 @@
             const currentMonth = months[new Date().getMonth()];
             document.getElementById('recap-month-text').innerText = `Итоги ${currentMonth}`;
 
-            let totalDone = 0;
-            let tagCounts = {};
-            
-            globalData.forEach(item => {
-                if (userProgress[item.id] == 100) {
-                    totalDone++;
-                    let tag = item.tag || 'Разное';
-                    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-                }
-            });
+            let totalDone = 0; let tagCounts = {};
+            globalData.forEach(item => { if (userProgress[item.id] == 100) { totalDone++; let tag = item.tag || 'Разное'; tagCounts[tag] = (tagCounts[tag] || 0) + 1; }});
 
-            let topTag = "Пока нет данных";
-            let maxCount = 0;
-            for (const [tag, count] of Object.entries(tagCounts)) {
-                if (count > maxCount) { maxCount = count; topTag = tag; }
-            }
+            let topTag = "Пока нет данных"; let maxCount = 0;
+            for (const [tag, count] of Object.entries(tagCounts)) { if (count > maxCount) { maxCount = count; topTag = tag; } }
 
             document.getElementById('recap-total').innerText = totalDone;
             document.getElementById('recap-top-tag').innerText = topTag;
@@ -391,25 +376,25 @@
             let percentText = "НЕТ ДАННЫХ";
             if (currentUserData && globalUsers.length > 1) {
                 const myIndex = globalUsers.findIndex(u => u.id == currentUserData.id);
-                if (myIndex === 0) {
-                    percentText = "ТЫ ТОП #1 👑"; 
-                } else if (myIndex > 0) {
-                    const totalUsers = globalUsers.length;
-                    const peopleBelow = totalUsers - (myIndex + 1); 
-                    const percent = Math.round((peopleBelow / totalUsers) * 100);
-                    percentText = `ЛУЧШЕ ЧЕМ У ${percent}%`;
-                }
-            } else if (globalUsers.length <= 1) {
-                percentText = "ПЕРВЫЙ В КЛУБЕ!"; 
-            }
+                if (myIndex === 0) { percentText = "ТЫ ТОП #1 👑"; } 
+                else if (myIndex > 0) { const totalUsers = globalUsers.length; const peopleBelow = totalUsers - (myIndex + 1); const percent = Math.round((peopleBelow / totalUsers) * 100); percentText = `ЛУЧШЕ ЧЕМ У ${percent}%`; }
+            } else if (globalUsers.length <= 1) { percentText = "ПЕРВЫЙ В КЛУБЕ!"; }
             document.getElementById('recap-percent').innerText = percentText;
+
+            // Сбрасываем UI попапа в начальное состояние
+            document.getElementById('story-capture-area').classList.remove('hidden');
+            document.getElementById('story-btn-container').classList.remove('hidden');
+            document.getElementById('story-result-area').classList.add('hidden');
+            document.getElementById('story-result-area').classList.remove('flex');
 
             document.getElementById('recap-modal').classList.remove('hidden');
             document.getElementById('recap-modal').classList.add('flex');
             tg.BackButton.show();
         }
 
-        // --- НОВАЯ ФУНКЦИЯ: ГЕНЕРАТОР КАРТИНКИ ДЛЯ СТОРИС ---
+        // ---------------------------------------------------------
+        // НОВАЯ МАГИЯ 1FIT: СОЗДАНИЕ И СОХРАНЕНИЕ СТОРИС
+        // ---------------------------------------------------------
         function generateStory() {
             const btn = document.getElementById('story-btn');
             btn.innerHTML = '⏳ Генерируем магию...';
@@ -418,52 +403,48 @@
 
             const captureArea = document.getElementById('story-capture-area');
             
-            // Захватываем карточку и делаем из нее картинку
-            html2canvas(captureArea, {
-                backgroundColor: '#0a0a0c', // Цвет фона под карточкой
-                scale: 3, // Высокое качество для инстаграма
-                useCORS: true,
-                logging: false
-            }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
+            // Делаем скриншот карточки
+            html2canvas(captureArea, { backgroundColor: '#0a0a0c', scale: 3, useCORS: true, logging: false })
+            .then(canvas => {
+                window.generatedStoryData = canvas.toDataURL('image/png'); 
+                document.getElementById('story-preview-img').src = window.generatedStoryData;
                 
-                // Прячем исходную HTML карточку и кнопку
+                // Прячем карточку и кнопку, показываем меню 1Fit
                 captureArea.classList.add('hidden');
                 document.getElementById('story-btn-container').classList.add('hidden');
-                
-                // Показываем сгенерированную картинку и текст-инструкцию
-                const previewImg = document.getElementById('story-preview-img');
-                previewImg.src = imgData;
                 document.getElementById('story-result-area').classList.remove('hidden');
                 document.getElementById('story-result-area').classList.add('flex');
                 
-                // Возвращаем кнопку в норму (если юзер закроет и откроет снова)
-                btn.innerHTML = '<span>📸</span> Поделиться в Stories';
-                btn.style.opacity = '1';
-                btn.style.pointerEvents = 'auto';
-                
+                btn.innerHTML = '<span>✨</span> Создать Итоги';
+                btn.style.opacity = '1'; btn.style.pointerEvents = 'auto';
                 if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-            }).catch(err => {
-                console.error(err);
-                tg.showAlert('Случилась ошибка. Попробуй еще раз!');
-                btn.innerHTML = '<span>📸</span> Поделиться в Stories';
-                btn.style.opacity = '1';
-                btn.style.pointerEvents = 'auto';
             });
         }
+
+        function downloadStory() {
+            if(!window.generatedStoryData) return;
+            const a = document.createElement('a');
+            a.href = window.generatedStoryData;
+            a.download = 'sun_results.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+            tg.showAlert('Успешно скачано в галерею!');
+        }
+
+        function shareToInstagram() {
+            if(!window.generatedStoryData) return;
+            downloadStory(); // Сначала скачиваем для надежности
+            setTimeout(() => {
+                tg.openLink('https://instagram.com', {try_instant_view: false});
+            }, 800);
+        }
+        // ---------------------------------------------------------
 
         function closeMonthlyRecap() {
             document.getElementById('recap-modal').classList.add('hidden');
             document.getElementById('recap-modal').classList.remove('flex');
-            
-            // Если юзер сделал скрин, возвращаем всё на место при закрытии окна
-            setTimeout(() => {
-                document.getElementById('story-capture-area').classList.remove('hidden');
-                document.getElementById('story-btn-container').classList.remove('hidden');
-                document.getElementById('story-result-area').classList.add('hidden');
-                document.getElementById('story-result-area').classList.remove('flex');
-            }, 300);
-
             if (document.querySelector('.screen.active').id === 'home-screen') { tg.BackButton.hide(); }
         }
 
