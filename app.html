@@ -151,14 +151,14 @@
         <div class="bg-gradient-to-b from-[#1a1a1c] to-[#0a0a0c] border border-[#FFB000]/20 rounded-[24px] p-6 mb-8 relative overflow-hidden shadow-[0_0_30px_rgba(255,176,0,0.1)]">
             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-[#FFB000] opacity-20 rounded-full blur-3xl"></div>
             <div class="flex justify-between items-end relative z-10 h-32 px-2" id="top-3-podium">
-                </div>
+            </div>
         </div>
         <div class="flex justify-between items-end mb-4 ml-1">
             <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-500 italic">Турнирная таблица</h3>
             <span class="text-[9px] text-gray-600 font-bold uppercase">Обновляется онлайн</span>
         </div>
         <div id="leaderboard-list" class="space-y-3 mb-20">
-            </div>
+        </div>
     </div>
 
     <div id="list-screen" class="screen px-5">
@@ -225,6 +225,7 @@
 
         const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4MBQNze85Cb2YOXQOIMdsQI-94xxAIp-KuQgYmiHaaXS5besYLMrNwwdFfeeqg1wZKQJ-0wfwnTFm/pub?output=csv&v=" + Date.now();
         const usersSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4MBQNze85Cb2YOXQOIMdsQI-94xxAIp-KuQgYmiHaaXS5besYLMrNwwdFfeeqg1wZKQJ-0wfwnTFm/pub?gid=1142574267&single=true&output=csv&v=" + Date.now();
+        const apiUrl = "https://script.google.com/macros/s/AKfycbxBmTrt6HG6nT2zWzVH9Pb9xWMSgMbtwDQQ3ZiZ2tVzAGD1vVNlx4jvdMxXJB59T7Q/exec";
         
         let globalData = [];
         let globalUsers = []; 
@@ -422,13 +423,32 @@
             updateBtnVisuals();
 
             watchBtn.onclick = () => {
-                if (currentStatus === 0) { currentStatus = 50; } 
-                else if (currentStatus === 50) { currentStatus = 100; }
+                let pointsToAdd = 0;
+                
+                if (currentStatus === 0) { 
+                    currentStatus = 50; 
+                } else if (currentStatus === 50) { 
+                    currentStatus = 100; 
+                    pointsToAdd = isBook ? 50 : 20; // Выдаем баллы только 1 раз!
+                }
                 
                 userProgress[id] = currentStatus;
                 localStorage.setItem('sun_progress', JSON.stringify(userProgress));
                 renderHomeProgress();
                 updateBtnVisuals();
+                
+                // --- ОТПРАВКА БАЛЛОВ В ГУГЛ ТАБЛИЦУ ---
+                if (pointsToAdd > 0 && currentUserData) {
+                    fetch(`${apiUrl}?id=${currentUserData.id}&points=${pointsToAdd}`)
+                        .then(r => r.text())
+                        .then(res => {
+                            console.log(res);
+                            currentUserData.points += pointsToAdd; // Локально плюсуем
+                            updateSubscriptionUI(); // Обновляем профиль
+                            renderLeaderboard(); // Обновляем Чемпионат
+                            if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+                        }).catch(e => console.error(e));
+                }
                 
                 const url = i.link.trim(); 
                 if (url.includes('t.me/')) tg.openTelegramLink(url); 
