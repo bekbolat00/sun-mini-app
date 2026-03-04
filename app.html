@@ -48,28 +48,13 @@
             <input type="text" placeholder="Поиск по базе знаний..." class="bg-transparent border-none text-white w-full focus:outline-none placeholder-gray-600 text-sm">
         </div>
         <div class="grid grid-cols-2 gap-4 mb-10">
-            <div onclick="openCategory('Эфир', 'Эфиры')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="efiry.jpg" class="w-full h-full object-cover"></div>
-                <div class="text-lg font-black uppercase italic mt-auto">Эфиры</div>
-            </div>
-            <div onclick="openCategory('Курс', 'Курсы')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="kursy.jpg" class="w-full h-full object-cover"></div>
-                <div class="text-lg font-black uppercase italic mt-auto">Курсы</div>
-            </div>
-            <div onclick="openCategory('Разбор', 'Разборы')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="razbory.jpg" class="w-full h-full object-cover"></div>
-                <div class="text-lg font-black uppercase italic mt-auto">Разборы</div>
-            </div>
-            <div onclick="openCategory('Книг', 'Книги')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer">
-                <div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="knigi.jpg" class="w-full h-full object-cover"></div>
-                <div class="text-lg font-black uppercase italic mt-auto">Книги</div>
-            </div>
+            <div onclick="openCategory('Эфир', 'Эфиры')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer"><div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="efiry.jpg" class="w-full h-full object-cover"></div><div class="text-lg font-black uppercase italic mt-auto">Эфиры</div></div>
+            <div onclick="openCategory('Курс', 'Курсы')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer"><div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="kursy.jpg" class="w-full h-full object-cover"></div><div class="text-lg font-black uppercase italic mt-auto">Курсы</div></div>
+            <div onclick="openCategory('Разбор', 'Разборы')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer"><div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="razbory.jpg" class="w-full h-full object-cover"></div><div class="text-lg font-black uppercase italic mt-auto">Разборы</div></div>
+            <div onclick="openCategory('Книг', 'Книги')" class="card-premium rounded-2xl p-5 h-40 flex flex-col justify-between cursor-pointer"><div class="icon-container w-14 h-14 rounded-xl overflow-hidden"><img src="knigi.jpg" class="w-full h-full object-cover"></div><div class="text-lg font-black uppercase italic mt-auto">Книги</div></div>
         </div>
         <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4 ml-1 italic">Что ты хочешь заманьячить?</h3>
-        <div id="home-progress-list" class="grid grid-cols-2 gap-3">
-            <div class="skeleton h-24 rounded-2xl opacity-20"></div>
-            <div class="skeleton h-24 rounded-2xl opacity-20"></div>
-        </div>
+        <div id="home-progress-list" class="grid grid-cols-2 gap-3"><div class="skeleton h-24 rounded-2xl opacity-20"></div><div class="skeleton h-24 rounded-2xl opacity-20"></div></div>
     </div>
 
     <div id="subcat-screen" class="screen px-5">
@@ -82,9 +67,16 @@
         <div class="card-premium rounded-[24px] p-6 mb-8 border-yellow-500/30">
             <h3 class="text-xl font-black mb-1 uppercase italic">SUN CLUB</h3>
             <p class="text-sm text-gray-400 mb-6 italic">Твой доступ к закрытым знаниям и чатам активен.</p>
-            <div onclick="tg.openLink('https://pay.kaspi.kz/pay/0o2tyjk1')" class="w-full bg-[#FFB000] text-black text-center font-bold py-4 rounded-xl uppercase text-xs tracking-widest cursor-pointer">
-                Продлить доступ
-            </div>
+            <div onclick="tg.openLink('https://pay.kaspi.kz/pay/0o2tyjk1')" class="w-full bg-[#FFB000] text-black text-center font-bold py-4 rounded-xl uppercase text-xs tracking-widest cursor-pointer">Продлить доступ</div>
+        </div>
+        <div class="bg-[#141414] border border-[#1a1a1c] rounded-[24px] p-6">
+            <h3 class="text-sm font-black text-[#FFB000] mb-5 uppercase tracking-widest italic flex items-center"><span class="mr-2 text-lg">⚖️</span> Правила сообщества</h3>
+            <ul class="text-[13px] text-gray-300 space-y-4 font-medium italic">
+                <li class="leading-relaxed"><strong class="text-white uppercase">1. Уважение.</strong> Никакой токсичности. Мы здесь, чтобы расти вместе.</li>
+                <li class="leading-relaxed"><strong class="text-white uppercase">2. Без спама.</strong> Самореклама запрещена.</li>
+                <li class="leading-relaxed"><strong class="text-white uppercase">3. Конфиденциальность.</strong> Все разборы и цифры остаются внутри.</li>
+                <li class="leading-relaxed"><strong class="text-white uppercase">4. Вклад.</strong> Делись опытом — так ты растешь быстрее.</li>
+            </ul>
         </div>
     </div>
 
@@ -99,9 +91,7 @@
             <div class="w-16 h-16 rounded-full border border-[#FFB000]/50 bg-[#141414] flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(255,176,0,0.2)]">🥷</div>
             <div>
                 <h2 id="profile-name" class="text-2xl font-black italic uppercase">Загрузка...</h2>
-                <div class="flex items-center text-[#FFB000] text-xs font-bold mt-1 uppercase tracking-wider">
-                    <span class="mr-1">⭐</span> Резидент клуба
-                </div>
+                <div class="flex items-center text-[#FFB000] text-xs font-bold mt-1 uppercase tracking-wider"><span class="mr-1">⭐</span> Резидент клуба</div>
             </div>
         </div>
         <div class="card-premium rounded-[24px] p-6 mb-8 border-[#FFB000]/20 relative overflow-hidden">
@@ -120,7 +110,8 @@
                 </div>
             </div>
         </div>
-        <div onclick="tg.showAlert('Рейтинг скоро!')" class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-4 mb-8 flex items-center justify-between cursor-pointer active:scale-95 transition-transform">
+        
+        <div onclick="showScreen('leaderboard-screen')" class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-4 mb-8 flex items-center justify-between cursor-pointer active:scale-95 transition-transform">
             <div class="flex items-center gap-4">
                 <div class="w-12 h-12 bg-neutral-900 border border-[#FFB000]/20 rounded-xl flex items-center justify-center text-2xl shadow-[0_0_10px_rgba(255,176,0,0.05)]">👑</div>
                 <div>
@@ -130,6 +121,7 @@
             </div>
             <div class="text-gray-600 font-bold">></div>
         </div>
+
         <div class="flex justify-between items-end mb-4 ml-1">
             <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-500 italic">Достижения</h3>
             <span class="text-[9px] text-gray-600 font-bold uppercase">В процессе</span>
@@ -141,11 +133,27 @@
         </div>
     </div>
 
+    <div id="leaderboard-screen" class="screen px-5">
+        <div class="flex items-center gap-3 mb-8 mt-4">
+            <div onclick="showScreen('profile-screen')" class="w-10 h-10 bg-[#141414] border border-[#1a1a1c] rounded-full flex items-center justify-center text-white cursor-pointer active:scale-95 transition-transform">←</div>
+            <h2 class="text-xl font-black uppercase italic tracking-widest m-0">Чемпионат</h2>
+        </div>
+        
+        <div class="card-premium rounded-[24px] p-6 mb-8 text-center relative overflow-hidden">
+             <div class="absolute -top-10 -left-10 w-32 h-32 bg-[#FFB000] opacity-10 rounded-full blur-2xl"></div>
+             <h3 class="text-3xl font-black text-[#FFB000] italic mb-1 drop-shadow-md">SUN TOP</h3>
+             <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Самые активные резиденты</p>
+        </div>
+
+        <div id="leaderboard-list" class="space-y-3 mb-24">
+            <div class="skeleton h-16 rounded-2xl opacity-20"></div>
+            <div class="skeleton h-16 rounded-2xl opacity-20"></div>
+        </div>
+    </div>
+
     <div id="list-screen" class="screen px-5">
         <h2 id="list-title" class="text-xl font-black uppercase text-center mb-6 mt-4 italic">Загрузка...</h2>
-        <div class="flex items-center mb-5 text-[13px] font-bold text-gray-400 cursor-pointer active:text-white transition-colors w-fit">
-            Сначала новые <span class="ml-1 text-[10px]">▼</span>
-        </div>
+        <div class="flex items-center mb-5 text-[13px] font-bold text-gray-400 cursor-pointer active:text-white transition-colors w-fit">Сначала новые <span class="ml-1 text-[10px]">▼</span></div>
         <div id="items-list" class="space-y-6"></div>
     </div>
 
@@ -177,6 +185,7 @@
         const usersSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4MBQNze85Cb2YOXQOIMdsQI-94xxAIp-KuQgYmiHaaXS5besYLMrNwwdFfeeqg1wZKQJ-0wfwnTFm/pub?gid=1142574267&single=true&output=csv&v=" + Date.now();
         
         let globalData = [];
+        let globalUsers = []; // Все юзеры для Чемпионата
         let currentUserData = null;
         let userProgress = JSON.parse(localStorage.getItem('sun_progress')) || {};
         let userFavorites = JSON.parse(localStorage.getItem('sun_favorites')) || []; 
@@ -201,15 +210,30 @@
             header: false,
             complete: function(results) {
                 const rows = results.data.slice(1);
-                const users = rows.map(r => ({
-                    id: r[0], name: r[1], status: r[2], expiry: r[3], points: r[4]
-                }));
-                const tgUser = tg.initDataUnsafe.user;
+                
+                // Парсим, переводим баллы в числа и сортируем от большего к меньшему
+                globalUsers = rows.map(r => ({
+                    id: String(r[0]).trim(), 
+                    name: String(r[1]).trim() || 'Без имени', 
+                    status: r[2], 
+                    expiry: r[3], 
+                    points: parseInt(r[4]) || 0
+                })).filter(u => u.id).sort((a, b) => b.points - a.points);
+                
+                // Идентификация
+                let tgUser = tg.initDataUnsafe.user;
+                if (!tgUser) tgUser = { id: "412753295", first_name: "Бекболат (Тест)" }; // Чит-код
+                
                 if (tgUser) {
-                    currentUserData = users.find(u => u.id == tgUser.id);
+                    currentUserData = globalUsers.find(u => u.id == tgUser.id);
                     document.getElementById('profile-name').innerText = tgUser.first_name || "Ученик";
                     updateSubscriptionUI();
                 }
+                
+                renderLeaderboard(); // Отрисовываем Чемпионат
+            },
+            error: function(err) {
+                tg.showAlert("Ошибка чтения базы данных.");
             }
         });
 
@@ -217,31 +241,63 @@
             const titleEl = document.getElementById('sub-title');
             const daysEl = document.getElementById('sub-days');
             const pointsEl = document.getElementById('user-points');
+            const rankEl = document.getElementById('user-rank');
 
             if (currentUserData) {
+                // Дни
                 const parts = currentUserData.expiry.split('.');
-                const expiryDate = new Date(parts[2], parts[1] - 1, parts[0]);
-                const diffTime = expiryDate - new Date();
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                if (diffDays > 0) {
-                    titleEl.innerText = "SUN PASS АКТИВЕН";
-                    daysEl.innerText = `Осталось ${diffDays} дней`;
-                } else {
-                    titleEl.innerText = "ДОСТУП ИСТЕК";
-                    daysEl.innerText = "Продлите подписку";
-                    titleEl.style.color = '#FFB000';
+                if(parts.length === 3) {
+                    const expiryDate = new Date(parts[2], parts[1] - 1, parts[0]);
+                    const diffDays = Math.ceil((expiryDate - new Date()) / (1000 * 60 * 60 * 24));
+                    if (diffDays > 0) { titleEl.innerText = "SUN PASS АКТИВЕН"; daysEl.innerText = `Осталось ${diffDays} дней`; } 
+                    else { titleEl.innerText = "ДОСТУП ИСТЕК"; daysEl.innerText = "Продлите подписку"; titleEl.style.color = '#FFB000'; }
                 }
-                pointsEl.innerHTML = `<span class="text-lg">🏆</span> ${currentUserData.points || 0} баллов`;
+                
+                // Баллы
+                pointsEl.innerHTML = `<span class="text-lg">🏆</span> ${currentUserData.points} баллов`;
+                
+                // Место в рейтинге
+                const myIndex = globalUsers.findIndex(u => u.id == currentUserData.id);
+                rankEl.innerText = `Твое место: ${myIndex !== -1 ? myIndex + 1 : '--'}`;
             } else {
-                titleEl.innerText = "ГОСТЬ";
-                daysEl.innerText = "ID не найден в базе";
+                titleEl.innerText = "ГОСТЬ"; daysEl.innerText = "ID не найден в базе";
             }
+        }
+
+        // ОТРИСОВКА ЧЕМПИОНАТА
+        function renderLeaderboard() {
+            const listEl = document.getElementById('leaderboard-list');
+            if(globalUsers.length === 0) {
+                listEl.innerHTML = `<p class="text-center text-gray-500 font-bold text-xs uppercase italic mt-10">Тут пока пусто</p>`;
+                return;
+            }
+            
+            listEl.innerHTML = globalUsers.map((u, index) => {
+                let rankStyle = "bg-[#141414] border border-[#1a1a1c] text-gray-500";
+                let medal = `${index + 1}`;
+                
+                // Медали для ТОП-3
+                if(index === 0) { rankStyle = "bg-gradient-to-br from-yellow-400 to-yellow-600 border border-yellow-500 text-black"; medal = "🏆"; }
+                if(index === 1) { rankStyle = "bg-gradient-to-br from-gray-300 to-gray-400 border border-gray-300 text-black"; medal = "🥈"; }
+                if(index === 2) { rankStyle = "bg-gradient-to-br from-orange-500 to-orange-700 border border-orange-500 text-black"; medal = "🥉"; }
+                
+                // Подсветка карточки, если это сам юзер
+                let isMe = (currentUserData && u.id == currentUserData.id) ? "border-[#FFB000] shadow-[0_0_15px_rgba(255,176,0,0.15)]" : "border-[#1a1a1c]";
+
+                return `
+                <div class="flex items-center justify-between bg-[#141414] border ${isMe} rounded-2xl p-4 transition-all">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full ${rankStyle} flex items-center justify-center font-black text-sm shadow-lg">${medal}</div>
+                        <div class="font-bold text-white text-md truncate max-w-[140px] italic">${u.name}</div>
+                    </div>
+                    <div class="text-[#FFB000] font-black italic tracking-wider">${u.points} <span class="text-[10px] text-gray-500">Б</span></div>
+                </div>`;
+            }).join('');
         }
 
         function showScreen(screenId) {
             const currentActive = document.querySelector('.screen.active');
-            if (currentActive && currentActive.id !== screenId && screenId === 'detail-screen') previousScreen = currentActive.id;
+            if (currentActive && currentActive.id !== screenId && (screenId === 'detail-screen' || screenId === 'leaderboard-screen')) previousScreen = currentActive.id;
 
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
@@ -250,104 +306,23 @@
             if(screenId === 'home-screen') document.getElementById('nav-home').classList.add('active');
             if(screenId === 'club-screen') document.getElementById('nav-club').classList.add('active');
             if(screenId === 'favorites-screen') document.getElementById('nav-fav').classList.add('active');
-            if(screenId === 'profile-screen') {
-                document.getElementById('nav-profile').classList.add('active');
-                updateSubscriptionUI();
-            }
+            if(screenId === 'profile-screen') document.getElementById('nav-profile').classList.add('active');
 
-            document.querySelector('.nav-bar').style.display = (screenId === 'detail-screen') ? 'none' : 'flex';
+            document.querySelector('.nav-bar').style.display = (screenId === 'detail-screen' || screenId === 'leaderboard-screen') ? 'none' : 'flex';
             if (screenId === 'home-screen') { tg.BackButton.hide(); } else { tg.BackButton.show(); }
         }
 
-        function renderHomeProgress() {
-            let tagStats = {};
-            globalData.forEach(i => {
-                const t = i.tag || 'Разное';
-                if(!tagStats[t]) tagStats[t] = { total: 0, done: 0 };
-                tagStats[t].total++;
-                if(userProgress[i.id] == 100) tagStats[t].done++;
-            });
-            let html = Object.keys(tagStats).map(t => {
-                let p = Math.round((tagStats[t].done / tagStats[t].total) * 100);
-                return `<div class="progress-card">
-                    <div class="text-[10px] font-black mb-3 truncate uppercase text-gray-500 italic tracking-widest">${t}</div>
-                    <div class="flex justify-between text-[11px] font-black mb-1.5 uppercase"><span>Прогресс</span><span>${p}%</span></div>
-                    <div class="w-full h-1 bg-[#222] rounded-full overflow-hidden"><div class="progress-fill" style="width:${p}%"></div></div>
-                </div>`;
-            }).join('');
-            document.getElementById('home-progress-list').innerHTML = html;
-        }
-
-        function openCategory(kw, title) {
-            document.getElementById('subcat-title').innerText = title;
-            const items = globalData.filter(i => i.category.toLowerCase().includes(kw.toLowerCase()));
-            if (items.length === 0) {
-                document.getElementById('subcat-list').innerHTML = `<p class="text-center text-gray-500 mt-20 font-black uppercase italic">Пусто</p>`;
-            } else {
-                const tags = [...new Set(items.map(i => i.tag || 'Разное'))];
-                document.getElementById('subcat-list').innerHTML = tags.map(tag => {
-                    const tagItems = items.filter(i => (i.tag || 'Разное') === tag);
-                    const done = tagItems.filter(i => userProgress[i.id] == 100).length;
-                    const percent = Math.round((done / tagItems.length) * 100);
-                    return `<div onclick="openSubcategory('${kw}', '${tag}')" class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-4 flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-4"><div class="w-12 h-12 bg-[#FFB000]/10 rounded-xl flex items-center justify-center text-2xl border border-yellow-500/20">📁</div>
-                        <div><h3 class="text-white font-black uppercase italic leading-tight">${tag}</h3><p class="text-gray-500 text-[10px] font-bold uppercase mt-1">Книг: ${tagItems.length}</p></div></div>
-                        <div class="text-[#FFB000] font-black text-sm">${percent}%</div></div>`;
-                }).join('');
-            }
-            showScreen('subcat-screen');
-        }
-
-        function openSubcategory(categoryKw, tag) {
-            document.getElementById('list-title').innerText = tag;
-            const items = globalData.filter(i => i.category.toLowerCase().includes(categoryKw.toLowerCase()) && (i.tag || 'Разное') === tag);
-            document.getElementById('items-list').innerHTML = items.map(i => `
-                <div onclick="openDetail('${i.id}')" class="card-premium rounded-[24px] overflow-hidden relative mb-6 cursor-pointer active:scale-95 transition-all">
-                    <div class="h-48 bg-cover bg-center" style="background-image: url('${i.img}')"></div>
-                    <div class="p-5"><span class="tag-sun">#${i.tag}</span><h3 class="text-lg font-black italic uppercase mt-2">${i.title}</h3></div>
-                </div>`).join('');
-            showScreen('list-screen');
-        }
-
-        function openFavorites() {
-            const list = document.getElementById('favorites-list');
-            const favItems = globalData.filter(i => userFavorites.includes(i.id));
-            if (favItems.length === 0) list.innerHTML = `<div class="text-center mt-32"><span class="text-6xl mb-4 block">⭐</span><p class="text-gray-500 font-black uppercase italic">Пусто</p></div>`;
-            else list.innerHTML = favItems.map(i => `
-                <div onclick="openDetail('${i.id}')" class="card-premium rounded-[24px] overflow-hidden relative mb-6">
-                    <div class="h-48 bg-cover bg-center" style="background-image: url('${i.img}')"></div>
-                    <div class="p-5"><span class="tag-sun">#${i.tag}</span><h3 class="text-lg font-black italic uppercase mt-2">${i.title}</h3></div>
-                </div>`).join('');
-            showScreen('favorites-screen');
-        }
-
-        function toggleFavorite(id) {
-            const index = userFavorites.indexOf(id);
-            if (index > -1) userFavorites.splice(index, 1); else userFavorites.push(id);
-            localStorage.setItem('sun_favorites', JSON.stringify(userFavorites));
-            openDetail(id);
-            if (previousScreen === 'favorites-screen') openFavorites();
-        }
-
-        function openDetail(id) {
-            const i = globalData.find(d => d.id == id);
-            document.getElementById('detail-img').style.backgroundImage = `url('${i.img}')`;
-            document.getElementById('detail-title').innerText = i.title;
-            document.getElementById('detail-desc').innerText = i.desc;
-            const favBtn = document.getElementById('fav-btn');
-            favBtn.innerHTML = userFavorites.includes(id) ? '⭐' : '☆';
-            favBtn.style.color = userFavorites.includes(id) ? '#FFB000' : '#ffffff';
-            favBtn.onclick = () => toggleFavorite(id);
-            const watchBtn = document.getElementById('watch-btn');
-            if (i.category.toLowerCase().includes('книг')) { watchBtn.innerText = 'Прочитать'; watchBtn.className = 'btn-main w-full'; document.getElementById('summary-btn').style.display = 'none'; }
-            else { watchBtn.innerText = 'Смотреть'; watchBtn.className = 'btn-main w-2/3'; document.getElementById('summary-btn').style.display = 'flex'; }
-            watchBtn.onclick = () => { userProgress[id] = 100; localStorage.setItem('sun_progress', JSON.stringify(userProgress)); renderHomeProgress(); const url = i.link.trim(); if (url.includes('t.me/')) tg.openTelegramLink(url); else tg.openLink(url); };
-            showScreen('detail-screen');
-        }
+        // (Функции renderHomeProgress, openCategory, openSubcategory, openFavorites, toggleFavorite, openDetail остались без изменений, они сжаты для скорости)
+        function renderHomeProgress(){let t={};globalData.forEach(e=>{const a=e.tag||"Разное";t[a]||(t[a]={total:0,done:0}),t[a].total++,100==userProgress[e.id]&&t[a].done++});let e=Object.keys(t).map(e=>{let a=Math.round(t[e].done/t[e].total*100);return`<div class="progress-card"><div class="text-[10px] font-black mb-3 truncate uppercase text-gray-500 italic tracking-widest">${e}</div><div class="flex justify-between text-[11px] font-black mb-1.5 uppercase"><span>Прогресс</span><span>${a}%</span></div><div class="w-full h-1 bg-[#222] rounded-full overflow-hidden"><div class="progress-fill" style="width:${a}%"></div></div></div>`}).join("");document.getElementById("home-progress-list").innerHTML=e}
+        function openCategory(t,e){document.getElementById("subcat-title").innerText=e;const a=globalData.filter(e=>e.category.toLowerCase().includes(t.toLowerCase()));if(0===a.length)document.getElementById("subcat-list").innerHTML='<p class="text-center text-gray-500 mt-20 font-black uppercase italic">Пусто</p>';else{const e=[...new Set(a.map(t=>t.tag||"Разное"))];document.getElementById("subcat-list").innerHTML=e.map(e=>{const n=a.filter(t=>(t.tag||"Разное")===e),s=n.filter(t=>100==userProgress[t.id]).length,r=Math.round(s/n.length*100);return`<div onclick="openSubcategory('${t}', '${e}')" class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-4 flex items-center justify-between mb-4"><div class="flex items-center gap-4"><div class="w-12 h-12 bg-[#FFB000]/10 rounded-xl flex items-center justify-center text-2xl border border-yellow-500/20">📁</div><div><h3 class="text-white font-black uppercase italic leading-tight">${e}</h3><p class="text-gray-500 text-[10px] font-bold uppercase mt-1">Книг: ${n.length}</p></div></div><div class="text-[#FFB000] font-black text-sm">${r}%</div></div>`}).join("")}showScreen("subcat-screen")}
+        function openSubcategory(t,e){document.getElementById("list-title").innerText=e;const a=globalData.filter(a=>a.category.toLowerCase().includes(t.toLowerCase())&&(a.tag||"Разное")===e);document.getElementById("items-list").innerHTML=a.map(t=>`\n                <div onclick="openDetail('${t.id}')" class="card-premium rounded-[24px] overflow-hidden relative mb-6 cursor-pointer active:scale-95 transition-all">\n                    <div class="h-48 bg-cover bg-center" style="background-image: url('${t.img}')"></div>\n                    <div class="p-5"><span class="tag-sun">#${t.tag}</span><h3 class="text-lg font-black italic uppercase mt-2">${t.title}</h3></div>\n                </div>`).join(""),showScreen("list-screen")}
+        function openFavorites(){const t=document.getElementById("favorites-list"),e=globalData.filter(t=>userFavorites.includes(t.id));0===e.length?t.innerHTML='<div class="text-center mt-32"><span class="text-6xl mb-4 block">⭐</span><p class="text-gray-500 font-black uppercase italic">Пусто</p></div>':t.innerHTML=e.map(t=>`\n                <div onclick="openDetail('${t.id}')" class="card-premium rounded-[24px] overflow-hidden relative mb-6">\n                    <div class="h-48 bg-cover bg-center" style="background-image: url('${t.img}')"></div>\n                    <div class="p-5"><span class="tag-sun">#${t.tag}</span><h3 class="text-lg font-black italic uppercase mt-2">${t.title}</h3></div>\n                </div>`).join(""),showScreen("favorites-screen")}
+        function toggleFavorite(t){const e=userFavorites.indexOf(t);e>-1?userFavorites.splice(e,1):userFavorites.push(t),localStorage.setItem("sun_favorites",JSON.stringify(userFavorites)),openDetail(t),"favorites-screen"===previousScreen&&openFavorites()}
+        function openDetail(t){const e=globalData.find(e=>e.id==t);document.getElementById("detail-img").style.backgroundImage=`url('${e.img}')`,document.getElementById("detail-title").innerText=e.title,document.getElementById("detail-desc").innerText=e.desc;const a=document.getElementById("fav-btn");a.innerHTML=userFavorites.includes(t)?"⭐":"☆",a.style.color=userFavorites.includes(t)?"#FFB000":"#ffffff",a.onclick=()=>toggleFavorite(t);const n=document.getElementById("watch-btn");e.category.toLowerCase().includes("книг")?(n.innerText="Прочитать",n.className="btn-main w-full",document.getElementById("summary-btn").style.display="none"):(n.innerText="Смотреть",n.className="btn-main w-2/3",document.getElementById("summary-btn").style.display="flex"),n.onclick=()=>{userProgress[t]=100,localStorage.setItem("sun_progress",JSON.stringify(userProgress)),renderHomeProgress();const a=e.link.trim();a.includes("t.me/")?tg.openTelegramLink(a):tg.openLink(a)},showScreen("detail-screen")}
 
         tg.BackButton.onClick(() => {
             const active = document.querySelector('.screen.active').id;
-            if (active === 'detail-screen') showScreen(previousScreen);
+            if (active === 'detail-screen' || active === 'leaderboard-screen') showScreen(previousScreen);
             else if (active === 'list-screen') showScreen('subcat-screen');
             else showScreen('home-screen');
         });
