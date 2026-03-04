@@ -110,14 +110,16 @@
                 </div>
             </div>
         </div>
+        
         <div onclick="openMonthlyRecap()" class="bg-gradient-to-r from-[#141414] to-[#1a1a1c] border border-[#FFB000]/30 rounded-[20px] p-5 mb-8 flex items-center justify-between cursor-pointer relative overflow-hidden active:scale-95 transition-transform shadow-[0_0_20px_rgba(255,176,0,0.05)]">
             <div class="absolute right-0 top-0 w-32 h-32 bg-[#FFB000] opacity-10 rounded-full blur-2xl -mr-10 -mt-10"></div>
             <div class="flex flex-col z-10">
                 <span class="text-[#FFB000] text-[10px] font-bold uppercase tracking-widest mb-1">Твоя аналитика</span>
-                <span id="recap-month-text" class="text-white font-black italic text-lg uppercase tracking-wide">Итоги Февраля</span>
+                <span id="recap-month-text" class="text-white font-black italic text-lg uppercase tracking-wide">Итоги месяца</span>
             </div>
             <div class="text-4xl z-10 drop-shadow-[0_0_15px_rgba(255,176,0,0.4)]">✨</div>
         </div>
+        
         <div onclick="showScreen('leaderboard-screen')" class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-4 mb-8 flex items-center justify-between cursor-pointer active:scale-95 transition-transform">
             <div class="flex items-center gap-4">
                 <div class="w-12 h-12 bg-neutral-900 border border-[#FFB000]/20 rounded-xl flex items-center justify-center text-2xl shadow-[0_0_10px_rgba(255,176,0,0.05)]">👑</div>
@@ -141,21 +143,22 @@
     </div>
 
     <div id="leaderboard-screen" class="screen px-5">
-        <div class="flex items-center gap-3 mb-8 mt-4">
-            <div onclick="showScreen('profile-screen')" class="w-10 h-10 bg-[#141414] border border-[#1a1a1c] rounded-full flex items-center justify-center text-white cursor-pointer active:scale-95 transition-transform">←</div>
-            <h2 class="text-xl font-black uppercase italic tracking-widest m-0">Чемпионат</h2>
+        <div class="flex items-center justify-between mb-8 mt-4">
+            <div onclick="showScreen('profile-screen')" class="w-10 h-10 bg-[#141414] rounded-full flex items-center justify-center text-xl text-gray-400 cursor-pointer border border-[#1a1a1c] active:scale-95 transition-transform">‹</div>
+            <h2 class="text-xl font-black uppercase italic tracking-widest text-[#FFB000]">Рейтинг</h2>
+            <div class="w-10 h-10"></div>
         </div>
-        
-        <div class="card-premium rounded-[24px] p-6 mb-8 text-center relative overflow-hidden">
-             <div class="absolute -top-10 -left-10 w-32 h-32 bg-[#FFB000] opacity-10 rounded-full blur-2xl"></div>
-             <h3 class="text-3xl font-black text-[#FFB000] italic mb-1 drop-shadow-md">SUN TOP</h3>
-             <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Самые активные резиденты</p>
+        <div class="bg-gradient-to-b from-[#1a1a1c] to-[#0a0a0c] border border-[#FFB000]/20 rounded-[24px] p-6 mb-8 relative overflow-hidden shadow-[0_0_30px_rgba(255,176,0,0.1)]">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-[#FFB000] opacity-20 rounded-full blur-3xl"></div>
+            <div class="flex justify-between items-end relative z-10 h-32 px-2" id="top-3-podium">
+                </div>
         </div>
-
-        <div id="leaderboard-list" class="space-y-3 mb-24">
-            <div class="skeleton h-16 rounded-2xl opacity-20"></div>
-            <div class="skeleton h-16 rounded-2xl opacity-20"></div>
+        <div class="flex justify-between items-end mb-4 ml-1">
+            <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-500 italic">Турнирная таблица</h3>
+            <span class="text-[9px] text-gray-600 font-bold uppercase">Обновляется онлайн</span>
         </div>
+        <div id="leaderboard-list" class="space-y-3 mb-20">
+            </div>
     </div>
 
     <div id="list-screen" class="screen px-5">
@@ -175,14 +178,13 @@
             <div id="watch-btn" class="btn-main w-2/3">Смотреть</div>
         </div>
     </div>
+
     <div id="recap-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[3000] hidden flex-col px-6 pt-12 pb-8 overflow-y-auto">
         <div class="flex justify-between items-center mb-8">
             <div class="text-[#FFB000] font-black italic text-xl tracking-widest">SUN<span class="text-white text-xs ml-2 tracking-normal uppercase">Итоги месяца</span></div>
             <div onclick="closeMonthlyRecap()" class="w-10 h-10 bg-[#141414] rounded-full flex items-center justify-center text-xl text-gray-400 cursor-pointer border border-[#1a1a1c]">✕</div>
         </div>
-
         <h2 class="text-xl font-black italic leading-tight mb-6 text-gray-200">СЛЕДУЮЩИЙ МЕСЯЦ БУДЕТ ЕЩЕ МОЩНЕЕ! ЛОВИ СВОЙ РЕЗУЛЬТАТ ⚡️</h2>
-
         <div class="grid grid-cols-2 gap-4 mb-4">
             <div class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-5 relative overflow-hidden">
                 <div class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-2">Изучено материалов</div>
@@ -195,7 +197,6 @@
                 <div class="absolute top-4 right-4 text-2xl drop-shadow-[0_0_10px_rgba(255,176,0,0.8)]">🏆</div>
             </div>
         </div>
-
         <div class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-5 mb-8 flex items-center justify-between">
             <div>
                 <div class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-1">Твоя главная тема</div>
@@ -203,7 +204,6 @@
             </div>
             <div class="text-4xl">🎯</div>
         </div>
-
         <div class="mt-auto">
             <div onclick="tg.showAlert('Скоро здесь будет генерация картинки для Инстаграма!')" class="w-full bg-white text-black text-center font-black py-4 rounded-xl uppercase text-sm tracking-widest cursor-pointer active:scale-95 transition-transform flex items-center justify-center gap-2">
                 <span>📸</span> Поделиться в Stories
@@ -227,7 +227,7 @@
         const usersSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4MBQNze85Cb2YOXQOIMdsQI-94xxAIp-KuQgYmiHaaXS5besYLMrNwwdFfeeqg1wZKQJ-0wfwnTFm/pub?gid=1142574267&single=true&output=csv&v=" + Date.now();
         
         let globalData = [];
-        let globalUsers = []; // Все юзеры для Чемпионата
+        let globalUsers = []; 
         let currentUserData = null;
         let userProgress = JSON.parse(localStorage.getItem('sun_progress')) || {};
         let userFavorites = JSON.parse(localStorage.getItem('sun_favorites')) || []; 
@@ -252,8 +252,6 @@
             header: false,
             complete: function(results) {
                 const rows = results.data.slice(1);
-                
-                // Парсим, переводим баллы в числа и сортируем от большего к меньшему
                 globalUsers = rows.map(r => ({
                     id: String(r[0]).trim(), 
                     name: String(r[1]).trim() || 'Без имени', 
@@ -262,9 +260,8 @@
                     points: parseInt(r[4]) || 0
                 })).filter(u => u.id).sort((a, b) => b.points - a.points);
                 
-                // Идентификация
                 let tgUser = tg.initDataUnsafe.user;
-                if (!tgUser) tgUser = { id: "412753295", first_name: "Бекболат (Тест)" }; // Чит-код
+                if (!tgUser) tgUser = { id: "412753295", first_name: "Бекболат (Тест)" }; 
                 
                 if (tgUser) {
                     currentUserData = globalUsers.find(u => u.id == tgUser.id);
@@ -272,12 +269,63 @@
                     updateSubscriptionUI();
                 }
                 
-                renderLeaderboard(); // Отрисовываем Чемпионат
+                renderLeaderboard(); 
             },
             error: function(err) {
                 tg.showAlert("Ошибка чтения базы данных.");
             }
         });
+
+        function updateSubscriptionUI() {
+            const titleEl = document.getElementById('sub-title');
+            const daysEl = document.getElementById('sub-days');
+            const pointsEl = document.getElementById('user-points');
+            const rankEl = document.getElementById('user-rank');
+
+            if (currentUserData) {
+                const parts = currentUserData.expiry.split('.');
+                if(parts.length === 3) {
+                    const expiryDate = new Date(parts[2], parts[1] - 1, parts[0]);
+                    const diffDays = Math.ceil((expiryDate - new Date()) / (1000 * 60 * 60 * 24));
+                    if (diffDays > 0) { titleEl.innerText = "SUN PASS АКТИВЕН"; daysEl.innerText = `Осталось ${diffDays} дней`; } 
+                    else { titleEl.innerText = "ДОСТУП ИСТЕК"; daysEl.innerText = "Продлите подписку"; titleEl.style.color = '#FFB000'; }
+                }
+                
+                pointsEl.innerHTML = `<span class="text-lg">🏆</span> ${currentUserData.points} баллов`;
+                const myIndex = globalUsers.findIndex(u => u.id == currentUserData.id);
+                rankEl.innerText = `Твое место: ${myIndex !== -1 ? myIndex + 1 : '--'}`;
+            } else {
+                titleEl.innerText = "ГОСТЬ"; daysEl.innerText = "ID не найден в базе";
+            }
+        }
+
+        function renderLeaderboard() {
+            const podiumEl = document.getElementById('top-3-podium');
+            let podiumHtml = '';
+            
+            if (globalUsers[1]) podiumHtml += `<div class="flex flex-col items-center justify-end w-1/3"><div class="relative"><div class="w-12 h-12 rounded-full border-2 border-gray-400 bg-[#141414] flex items-center justify-center text-xl shadow-[0_0_15px_rgba(156,163,175,0.3)] z-10 relative">🥈</div><div class="absolute -bottom-2 -right-2 bg-gray-400 text-black text-[9px] font-black px-1.5 py-0.5 rounded border border-black z-20">2</div></div><div class="text-white font-black text-xs mt-3 mb-1 truncate w-full text-center uppercase">${globalUsers[1].name}</div><div class="text-gray-400 text-[10px] font-bold">${globalUsers[1].points}</div><div class="w-full h-12 bg-gradient-to-t from-gray-400/20 to-transparent mt-2 rounded-t-lg"></div></div>`;
+            if (globalUsers[0]) podiumHtml += `<div class="flex flex-col items-center justify-end w-1/3 z-10 -mt-6"><div class="relative"><div class="w-16 h-16 rounded-full border-2 border-[#FFB000] bg-[#141414] flex items-center justify-center text-3xl shadow-[0_0_20px_rgba(255,176,0,0.5)] z-10 relative">👑</div><div class="absolute -bottom-2 -right-2 bg-[#FFB000] text-black text-[10px] font-black px-2 py-0.5 rounded border border-black z-20">1</div></div><div class="text-[#FFB000] font-black text-sm mt-3 mb-1 truncate w-full text-center uppercase">${globalUsers[0].name}</div><div class="text-white text-xs font-bold">${globalUsers[0].points}</div><div class="w-full h-16 bg-gradient-to-t from-[#FFB000]/30 to-transparent mt-2 rounded-t-lg border-t border-[#FFB000]/50"></div></div>`;
+            if (globalUsers[2]) podiumHtml += `<div class="flex flex-col items-center justify-end w-1/3"><div class="relative"><div class="w-12 h-12 rounded-full border-2 border-orange-700 bg-[#141414] flex items-center justify-center text-xl shadow-[0_0_15px_rgba(194,65,12,0.3)] z-10 relative">🥉</div><div class="absolute -bottom-2 -right-2 bg-orange-700 text-white text-[9px] font-black px-1.5 py-0.5 rounded border border-black z-20">3</div></div><div class="text-white font-black text-xs mt-3 mb-1 truncate w-full text-center uppercase">${globalUsers[2].name}</div><div class="text-gray-400 text-[10px] font-bold">${globalUsers[2].points}</div><div class="w-full h-8 bg-gradient-to-t from-orange-700/20 to-transparent mt-2 rounded-t-lg"></div></div>`;
+            podiumEl.innerHTML = podiumHtml;
+
+            const listEl = document.getElementById('leaderboard-list');
+            let listHtml = '';
+            for (let i = 3; i < globalUsers.length; i++) {
+                const u = globalUsers[i];
+                const isMe = currentUserData && u.id == currentUserData.id;
+                listHtml += `
+                <div class="bg-[#141414] border ${isMe ? 'border-[#FFB000]' : 'border-[#1a1a1c]'} rounded-[16px] p-4 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="text-gray-600 font-black text-lg w-6 text-center">${i + 1}</div>
+                        <div class="w-10 h-10 rounded-full bg-[#1a1a1c] flex items-center justify-center text-lg">🥷</div>
+                        <div class="font-black uppercase italic text-sm ${isMe ? 'text-[#FFB000]' : 'text-white'}">${u.name} ${isMe ? '(ТЫ)' : ''}</div>
+                    </div>
+                    <div class="text-gray-400 font-bold text-xs">${u.points} pts</div>
+                </div>`;
+            }
+            listEl.innerHTML = listHtml;
+        }
+
         function openMonthlyRecap() {
             const months = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
             const currentMonth = months[new Date().getMonth()];
@@ -297,10 +345,7 @@
             let topTag = "Пока нет данных";
             let maxCount = 0;
             for (const [tag, count] of Object.entries(tagCounts)) {
-                if (count > maxCount) {
-                    maxCount = count;
-                    topTag = tag;
-                }
+                if (count > maxCount) { maxCount = count; topTag = tag; }
             }
 
             document.getElementById('recap-total').innerText = totalDone;
@@ -314,106 +359,7 @@
         function closeMonthlyRecap() {
             document.getElementById('recap-modal').classList.add('hidden');
             document.getElementById('recap-modal').classList.remove('flex');
-            if (document.querySelector('.screen.active').id === 'home-screen') {
-                tg.BackButton.hide();
-            }
-        }function openMonthlyRecap() {
-            const months = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
-            const currentMonth = months[new Date().getMonth()];
-            document.getElementById('recap-month-text').innerText = `Итоги ${currentMonth}`;
-
-            let totalDone = 0;
-            let tagCounts = {};
-            
-            globalData.forEach(item => {
-                if (userProgress[item.id] == 100) {
-                    totalDone++;
-                    let tag = item.tag || 'Разное';
-                    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-                }
-            });
-
-            let topTag = "Пока нет данных";
-            let maxCount = 0;
-            for (const [tag, count] of Object.entries(tagCounts)) {
-                if (count > maxCount) {
-                    maxCount = count;
-                    topTag = tag;
-                }
-            }
-
-            document.getElementById('recap-total').innerText = totalDone;
-            document.getElementById('recap-top-tag').innerText = topTag;
-
-            document.getElementById('recap-modal').classList.remove('hidden');
-            document.getElementById('recap-modal').classList.add('flex');
-            tg.BackButton.show();
-        }
-
-        function closeMonthlyRecap() {
-            document.getElementById('recap-modal').classList.add('hidden');
-            document.getElementById('recap-modal').classList.remove('flex');
-            if (document.querySelector('.screen.active').id === 'home-screen') {
-                tg.BackButton.hide();
-            }
-        }
-
-        function updateSubscriptionUI() {
-            const titleEl = document.getElementById('sub-title');
-            const daysEl = document.getElementById('sub-days');
-            const pointsEl = document.getElementById('user-points');
-            const rankEl = document.getElementById('user-rank');
-
-            if (currentUserData) {
-                // Дни
-                const parts = currentUserData.expiry.split('.');
-                if(parts.length === 3) {
-                    const expiryDate = new Date(parts[2], parts[1] - 1, parts[0]);
-                    const diffDays = Math.ceil((expiryDate - new Date()) / (1000 * 60 * 60 * 24));
-                    if (diffDays > 0) { titleEl.innerText = "SUN PASS АКТИВЕН"; daysEl.innerText = `Осталось ${diffDays} дней`; } 
-                    else { titleEl.innerText = "ДОСТУП ИСТЕК"; daysEl.innerText = "Продлите подписку"; titleEl.style.color = '#FFB000'; }
-                }
-                
-                // Баллы
-                pointsEl.innerHTML = `<span class="text-lg">🏆</span> ${currentUserData.points} баллов`;
-                
-                // Место в рейтинге
-                const myIndex = globalUsers.findIndex(u => u.id == currentUserData.id);
-                rankEl.innerText = `Твое место: ${myIndex !== -1 ? myIndex + 1 : '--'}`;
-            } else {
-                titleEl.innerText = "ГОСТЬ"; daysEl.innerText = "ID не найден в базе";
-            }
-        }
-
-        // ОТРИСОВКА ЧЕМПИОНАТА
-        function renderLeaderboard() {
-            const listEl = document.getElementById('leaderboard-list');
-            if(globalUsers.length === 0) {
-                listEl.innerHTML = `<p class="text-center text-gray-500 font-bold text-xs uppercase italic mt-10">Тут пока пусто</p>`;
-                return;
-            }
-            
-            listEl.innerHTML = globalUsers.map((u, index) => {
-                let rankStyle = "bg-[#141414] border border-[#1a1a1c] text-gray-500";
-                let medal = `${index + 1}`;
-                
-                // Медали для ТОП-3
-                if(index === 0) { rankStyle = "bg-gradient-to-br from-yellow-400 to-yellow-600 border border-yellow-500 text-black"; medal = "🏆"; }
-                if(index === 1) { rankStyle = "bg-gradient-to-br from-gray-300 to-gray-400 border border-gray-300 text-black"; medal = "🥈"; }
-                if(index === 2) { rankStyle = "bg-gradient-to-br from-orange-500 to-orange-700 border border-orange-500 text-black"; medal = "🥉"; }
-                
-                // Подсветка карточки, если это сам юзер
-                let isMe = (currentUserData && u.id == currentUserData.id) ? "border-[#FFB000] shadow-[0_0_15px_rgba(255,176,0,0.15)]" : "border-[#1a1a1c]";
-
-                return `
-                <div class="flex items-center justify-between bg-[#141414] border ${isMe} rounded-2xl p-4 transition-all">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-full ${rankStyle} flex items-center justify-center font-black text-sm shadow-lg">${medal}</div>
-                        <div class="font-bold text-white text-md truncate max-w-[140px] italic">${u.name}</div>
-                    </div>
-                    <div class="text-[#FFB000] font-black italic tracking-wider">${u.points} <span class="text-[10px] text-gray-500">Б</span></div>
-                </div>`;
-            }).join('');
+            if (document.querySelector('.screen.active').id === 'home-screen') { tg.BackButton.hide(); }
         }
 
         function showScreen(screenId) {
@@ -433,12 +379,12 @@
             if (screenId === 'home-screen') { tg.BackButton.hide(); } else { tg.BackButton.show(); }
         }
 
-        // (Функции renderHomeProgress, openCategory, openSubcategory, openFavorites, toggleFavorite, openDetail остались без изменений, они сжаты для скорости)
         function renderHomeProgress(){let t={};globalData.forEach(e=>{const a=e.tag||"Разное";t[a]||(t[a]={total:0,done:0}),t[a].total++,100==userProgress[e.id]&&t[a].done++});let e=Object.keys(t).map(e=>{let a=Math.round(t[e].done/t[e].total*100);return`<div class="progress-card"><div class="text-[10px] font-black mb-3 truncate uppercase text-gray-500 italic tracking-widest">${e}</div><div class="flex justify-between text-[11px] font-black mb-1.5 uppercase"><span>Прогресс</span><span>${a}%</span></div><div class="w-full h-1 bg-[#222] rounded-full overflow-hidden"><div class="progress-fill" style="width:${a}%"></div></div></div>`}).join("");document.getElementById("home-progress-list").innerHTML=e}
-        function openCategory(t,e){document.getElementById("subcat-title").innerText=e;const a=globalData.filter(e=>e.category.toLowerCase().includes(t.toLowerCase()));if(0===a.length)document.getElementById("subcat-list").innerHTML='<p class="text-center text-gray-500 mt-20 font-black uppercase italic">Пусто</p>';else{const e=[...new Set(a.map(t=>t.tag||"Разное"))];document.getElementById("subcat-list").innerHTML=e.map(e=>{const n=a.filter(t=>(t.tag||"Разное")===e),s=n.filter(t=>100==userProgress[t.id]).length,r=Math.round(s/n.length*100);return`<div onclick="openSubcategory('${t}', '${e}')" class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-4 flex items-center justify-between mb-4"><div class="flex items-center gap-4"><div class="w-12 h-12 bg-[#FFB000]/10 rounded-xl flex items-center justify-center text-2xl border border-yellow-500/20">📁</div><div><h3 class="text-white font-black uppercase italic leading-tight">${e}</h3><p class="text-gray-500 text-[10px] font-bold uppercase mt-1">Материалов: ${n.length}</p></div></div><div class="text-[#FFB000] font-black text-sm">${r}%</div></div>`}).join("")}showScreen("subcat-screen")}
-        function openSubcategory(t,e){document.getElementById("list-title").innerText=e;const a=globalData.filter(a=>a.category.toLowerCase().includes(t.toLowerCase())&&(a.tag||"Разное")===e);document.getElementById("items-list").innerHTML=a.map(t=>`\n                <div onclick="openDetail('${t.id}')" class="card-premium rounded-[24px] overflow-hidden relative mb-6 cursor-pointer active:scale-95 transition-all">\n                    <div class="h-48 bg-cover bg-center" style="background-image: url('${t.img}')"></div>\n                    <div class="p-5"><span class="tag-sun">#${t.tag}</span><h3 class="text-lg font-black italic uppercase mt-2">${t.title}</h3></div>\n                </div>`).join(""),showScreen("list-screen")}
-        function openFavorites(){const t=document.getElementById("favorites-list"),e=globalData.filter(t=>userFavorites.includes(t.id));0===e.length?t.innerHTML='<div class="text-center mt-32"><span class="text-6xl mb-4 block">⭐</span><p class="text-gray-500 font-black uppercase italic">Пусто</p></div>':t.innerHTML=e.map(t=>`\n                <div onclick="openDetail('${t.id}')" class="card-premium rounded-[24px] overflow-hidden relative mb-6">\n                    <div class="h-48 bg-cover bg-center" style="background-image: url('${t.img}')"></div>\n                    <div class="p-5"><span class="tag-sun">#${t.tag}</span><h3 class="text-lg font-black italic uppercase mt-2">${t.title}</h3></div>\n                </div>`).join(""),showScreen("favorites-screen")}
-        function toggleFavorite(t){const e=userFavorites.indexOf(t);e>-1?userFavorites.splice(e,1):userFavorites.push(t),localStorage.setItem("sun_favorites",JSON.stringify(userFavorites)),openDetail(t),"favorites-screen"===previousScreen&&openFavorites()}
+        function openCategory(t,e){document.getElementById("subcat-title").innerText=e;const a=globalData.filter(e=>e.category.toLowerCase().includes(t.toLowerCase()));if(0===a.length)document.getElementById("subcat-list").innerHTML='<p class="text-center text-gray-500 mt-20 font-black uppercase italic">Пусто</p>';else{const e=[...new Set(a.map(t=>t.tag||"Разное"))];document.getElementById("subcat-list").innerHTML=e.map(e=>{const n=a.filter(t=>(t.tag||"Разное")===e),s=n.filter(t=>100==userProgress[t.id]).length,r=Math.round(s/n.length*100);return`<div onclick="openSubcategory('${t}', '${e}')" class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-4 flex items-center justify-between mb-4 cursor-pointer active:scale-95 transition-transform"><div class="flex items-center gap-4"><div class="w-12 h-12 bg-[#FFB000]/10 rounded-xl flex items-center justify-center text-2xl border border-yellow-500/20">📁</div><div><h3 class="text-white font-black uppercase italic leading-tight">${e}</h3><p class="text-gray-500 text-[10px] font-bold uppercase mt-1">Материалов: ${n.length}</p></div></div><div class="text-[#FFB000] font-black text-sm">${r}%</div></div>`}).join("")}showScreen("subcat-screen")}
+        function openSubcategory(t,e){document.getElementById("list-title").innerText=e;const a=globalData.filter(a=>a.category.toLowerCase().includes(t.toLowerCase())&&(a.tag||"Разное")===e);document.getElementById("items-list").innerHTML=a.map(t=>`<div onclick="openDetail('${t.id}')" class="card-premium rounded-[24px] overflow-hidden relative mb-6 cursor-pointer active:scale-95 transition-all"><div class="h-48 bg-cover bg-center" style="background-image: url('${t.img}')"></div><div class="p-5"><span class="tag-sun">#${t.tag}</span><h3 class="text-lg font-black italic uppercase mt-2">${t.title}</h3></div></div>`).join("");showScreen("list-screen")}
+        function openFavorites(){const t=document.getElementById("favorites-list"),e=globalData.filter(t=>userFavorites.includes(t.id));0===e.length?t.innerHTML='<div class="text-center mt-32"><span class="text-6xl mb-4 block">⭐</span><p class="text-gray-500 font-black uppercase italic">Пусто</p></div>':t.innerHTML=e.map(t=>`<div onclick="openDetail('${t.id}')" class="card-premium rounded-[24px] overflow-hidden relative mb-6"><div class="h-48 bg-cover bg-center" style="background-image: url('${t.img}')"></div><div class="p-5"><span class="tag-sun">#${t.tag}</span><h3 class="text-lg font-black italic uppercase mt-2">${t.title}</h3></div></div>`).join("");showScreen("favorites-screen")}
+        function toggleFavorite(t){const e=userFavorites.indexOf(t);e>-1?userFavorites.splice(e,1):userFavorites.push(t);localStorage.setItem("sun_favorites",JSON.stringify(userFavorites));openDetail(t);"favorites-screen"===previousScreen&&openFavorites()}
+        
         function openDetail(id) {
             const i = globalData.find(d => d.id == id);
             document.getElementById('detail-img').style.backgroundImage = `url('${i.img}')`;
@@ -454,15 +400,9 @@
             const summaryBtn = document.getElementById('summary-btn');
             const isBook = i.category.toLowerCase().includes('книг');
             
-            if (isBook) {
-                watchBtn.className = 'btn-main w-full'; 
-                summaryBtn.style.display = 'none'; 
-            } else {
-                watchBtn.className = 'btn-main w-2/3'; 
-                summaryBtn.style.display = 'flex'; 
-            }
+            if (isBook) { watchBtn.className = 'btn-main w-full'; summaryBtn.style.display = 'none'; } 
+            else { watchBtn.className = 'btn-main w-2/3'; summaryBtn.style.display = 'flex'; }
 
-            // УМНАЯ ЛОГИКА ТЕКСТА КНОПКИ
             let currentStatus = userProgress[id] || 0;
             
             function updateBtnVisuals() {
@@ -475,26 +415,15 @@
                     else if (currentStatus === 50) watchBtn.innerText = '👀 Смотрю...';
                     else watchBtn.innerText = '✅ Просмотрено';
                 }
-                
-                // Меняем цвет кнопки, если завершено
-                if (currentStatus === 100) {
-                    watchBtn.style.background = '#FFB000';
-                    watchBtn.style.color = '#000';
-                } else {
-                    watchBtn.style.background = '#fff';
-                    watchBtn.style.color = '#000';
-                }
+                if (currentStatus === 100) { watchBtn.style.background = '#FFB000'; watchBtn.style.color = '#000'; } 
+                else { watchBtn.style.background = '#fff'; watchBtn.style.color = '#000'; }
             }
 
             updateBtnVisuals();
 
             watchBtn.onclick = () => {
-                // Логика переключения: 0 (новое) -> 50 (в процессе) -> 100 (готово)
-                if (currentStatus === 0) {
-                    currentStatus = 50; 
-                } else if (currentStatus === 50) {
-                    currentStatus = 100;
-                }
+                if (currentStatus === 0) { currentStatus = 50; } 
+                else if (currentStatus === 50) { currentStatus = 100; }
                 
                 userProgress[id] = currentStatus;
                 localStorage.setItem('sun_progress', JSON.stringify(userProgress));
@@ -505,13 +434,14 @@
                 if (url.includes('t.me/')) tg.openTelegramLink(url); 
                 else tg.openLink(url); 
             };
-            
             showScreen('detail-screen');
         }
+
         tg.BackButton.onClick(() => {
             const active = document.querySelector('.screen.active').id;
             if (active === 'detail-screen' || active === 'leaderboard-screen') showScreen(previousScreen);
             else if (active === 'list-screen') showScreen('subcat-screen');
+            else if (document.getElementById('recap-modal').classList.contains('flex')) closeMonthlyRecap();
             else showScreen('home-screen');
         });
     </script>
