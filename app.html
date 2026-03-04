@@ -221,20 +221,16 @@
         </div>
 
         <div id="story-result-area" class="hidden flex-col items-center w-full mt-auto">
+            <p class="text-gray-400 text-xs text-center mb-3">Зажми картинку пальцем, чтобы сохранить в галерею 👇</p>
             <img id="story-preview-img" class="w-full rounded-[32px] shadow-[0_0_40px_rgba(255,176,0,0.15)] mb-6" />
             
             <div class="w-full bg-[#141414] border border-[#1a1a1c] rounded-[24px] p-6 pb-8 shadow-2xl">
                 <h3 class="text-center font-black text-white text-lg mb-6">Поделиться</h3>
                 <div class="flex justify-around items-start">
                     
-                    <div onclick="shareToInstagram()" class="flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition-transform">
+                    <div onclick="smartShare()" class="flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition-transform">
                         <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex items-center justify-center text-white text-2xl shadow-[0_0_15px_rgba(236,72,153,0.3)]">📸</div>
-                        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Instagram</span>
-                    </div>
-
-                    <div onclick="downloadStory()" class="flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition-transform">
-                        <div class="w-14 h-14 rounded-full bg-[#1a1a1c] border border-gray-700 flex items-center justify-center text-white text-xl">⬇️</div>
-                        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Скачать</span>
+                        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider text-center">Instagram /<br>Отправить</span>
                     </div>
 
                     <div onclick="closeMonthlyRecap()" class="flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition-transform">
@@ -381,7 +377,6 @@
             } else if (globalUsers.length <= 1) { percentText = "ПЕРВЫЙ В КЛУБЕ!"; }
             document.getElementById('recap-percent').innerText = percentText;
 
-            // Сбрасываем UI попапа в начальное состояние
             document.getElementById('story-capture-area').classList.remove('hidden');
             document.getElementById('story-btn-container').classList.remove('hidden');
             document.getElementById('story-result-area').classList.add('hidden');
@@ -392,9 +387,7 @@
             tg.BackButton.show();
         }
 
-        // ---------------------------------------------------------
-        // НОВАЯ МАГИЯ 1FIT: СОЗДАНИЕ И СОХРАНЕНИЕ СТОРИС
-        // ---------------------------------------------------------
+        // --- УМНАЯ СИСТЕМА SHARE ---
         function generateStory() {
             const btn = document.getElementById('story-btn');
             btn.innerHTML = '⏳ Генерируем магию...';
@@ -403,13 +396,11 @@
 
             const captureArea = document.getElementById('story-capture-area');
             
-            // Делаем скриншот карточки
             html2canvas(captureArea, { backgroundColor: '#0a0a0c', scale: 3, useCORS: true, logging: false })
             .then(canvas => {
                 window.generatedStoryData = canvas.toDataURL('image/png'); 
                 document.getElementById('story-preview-img').src = window.generatedStoryData;
                 
-                // Прячем карточку и кнопку, показываем меню 1Fit
                 captureArea.classList.add('hidden');
                 document.getElementById('story-btn-container').classList.add('hidden');
                 document.getElementById('story-result-area').classList.remove('hidden');
@@ -421,26 +412,31 @@
             });
         }
 
-        function downloadStory() {
+        async function smartShare() {
             if(!window.generatedStoryData) return;
-            const a = document.createElement('a');
-            a.href = window.generatedStoryData;
-            a.download = 'sun_results.png';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-            tg.showAlert('Успешно скачано в галерею!');
-        }
 
-        function shareToInstagram() {
-            if(!window.generatedStoryData) return;
-            downloadStory(); // Сначала скачиваем для надежности
-            setTimeout(() => {
-                tg.openLink('https://instagram.com', {try_instant_view: false});
-            }, 800);
+            try {
+                // Пытаемся вызвать нативное меню Айфона/Андроида
+                const res = await fetch(window.generatedStoryData);
+                const blob = await res.blob();
+                const file = new File([blob], "sun_story.png", { type: "image/png" });
+
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Мои итоги в SUN'
+                    });
+                } else {
+                    // Если нативное меню недоступно
+                    tg.showAlert('Телеграм защищает галерею. Просто зажми картинку пальцем на экране и выбери "Сохранить" или "Поделиться"!');
+                }
+            } catch (err) {
+                // Если юзер отменил или произошла ошибка
+                console.error(err);
+                tg.showAlert('Телеграм не дал прямой доступ. Зажми саму картинку пальцем, чтобы сохранить её в галерею!');
+            }
         }
-        // ---------------------------------------------------------
+        // -----------------------------
 
         function closeMonthlyRecap() {
             document.getElementById('recap-modal').classList.add('hidden');
