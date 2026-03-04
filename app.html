@@ -161,7 +161,7 @@
                 let rows = results.data.slice(1);
                 globalData = rows.map(r => ({
                     id: r[0], category: r[1] || '', tag: r[2] || '', title: r[3] || '', desc: r[4] || '', img: r[5] || '', link: r[6] || ''
-                })).filter(i => i.id);
+                })).filter(i => i.id).reverse();
                 renderHomeProgress();
             }
         });
