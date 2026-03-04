@@ -439,84 +439,74 @@
         function openSubcategory(t,e){document.getElementById("list-title").innerText=e;const a=globalData.filter(a=>a.category.toLowerCase().includes(t.toLowerCase())&&(a.tag||"Разное")===e);document.getElementById("items-list").innerHTML=a.map(t=>`\n                <div onclick="openDetail('${t.id}')" class="card-premium rounded-[24px] overflow-hidden relative mb-6 cursor-pointer active:scale-95 transition-all">\n                    <div class="h-48 bg-cover bg-center" style="background-image: url('${t.img}')"></div>\n                    <div class="p-5"><span class="tag-sun">#${t.tag}</span><h3 class="text-lg font-black italic uppercase mt-2">${t.title}</h3></div>\n                </div>`).join(""),showScreen("list-screen")}
         function openFavorites(){const t=document.getElementById("favorites-list"),e=globalData.filter(t=>userFavorites.includes(t.id));0===e.length?t.innerHTML='<div class="text-center mt-32"><span class="text-6xl mb-4 block">⭐</span><p class="text-gray-500 font-black uppercase italic">Пусто</p></div>':t.innerHTML=e.map(t=>`\n                <div onclick="openDetail('${t.id}')" class="card-premium rounded-[24px] overflow-hidden relative mb-6">\n                    <div class="h-48 bg-cover bg-center" style="background-image: url('${t.img}')"></div>\n                    <div class="p-5"><span class="tag-sun">#${t.tag}</span><h3 class="text-lg font-black italic uppercase mt-2">${t.title}</h3></div>\n                </div>`).join(""),showScreen("favorites-screen")}
         function toggleFavorite(t){const e=userFavorites.indexOf(t);e>-1?userFavorites.splice(e,1):userFavorites.push(t),localStorage.setItem("sun_favorites",JSON.stringify(userFavorites)),openDetail(t),"favorites-screen"===previousScreen&&openFavorites()}
-        function openDetail(t) {
-            const e = globalData.find(e => e.id == t);
-            document.getElementById("detail-img").style.backgroundImage = `url('${e.img}')`;
-            document.getElementById("detail-title").innerText = e.title;
-            document.getElementById("detail-desc").innerText = e.desc;
+        function openDetail(id) {
+            const i = globalData.find(d => d.id == id);
+            document.getElementById('detail-img').style.backgroundImage = `url('${i.img}')`;
+            document.getElementById('detail-title').innerText = i.title;
+            document.getElementById('detail-desc').innerText = i.desc;
             
-            const a = document.getElementById("fav-btn");
-            a.innerHTML = userFavorites.includes(t) ? "⭐" : "☆";
-            a.style.color = userFavorites.includes(t) ? "#FFB000" : "#ffffff";
-            a.onclick = () => toggleFavorite(t);
+            const favBtn = document.getElementById('fav-btn');
+            favBtn.innerHTML = userFavorites.includes(id) ? '⭐' : '☆';
+            favBtn.style.color = userFavorites.includes(id) ? '#FFB000' : '#ffffff';
+            favBtn.onclick = () => toggleFavorite(id);
 
-            const isBook = e.category.toLowerCase().includes("книг");
-            const scriptApiUrl = "https://script.google.com/macros/s/AKfycbyte4_uuiiD1YFtiLq3mC55VK1ScoVjzQypwALBbqqJdqWzK5JWQln-6Hj5ILhgfN_I9g/exec";
+            const watchBtn = document.getElementById('watch-btn');
+            const summaryBtn = document.getElementById('summary-btn');
+            const isBook = i.category.toLowerCase().includes('книг');
             
-            const footer = document.querySelector('.footer-btns');
-            
-            // Единый обработчик логики (Начать, Продолжить, Завершить)
-            window.handleContentAction = function(action) {
-                if (action === 'start') {
-                    // Ставим статус 50% (В процессе)
-                    userProgress[t] = 50;
-                    localStorage.setItem("sun_progress", JSON.stringify(userProgress));
-                    renderHomeProgress();
-                    openLink(e.link);
-                    renderButtons(); // Перерисовываем кнопки
-                } else if (action === 'continue') {
-                    // Просто открываем ссылку
-                    openLink(e.link);
-                } else if (action === 'finish') {
-                    // Ставим статус 100% (Завершено)
-                    userProgress[t] = 100;
-                    localStorage.setItem("sun_progress", JSON.stringify(userProgress));
-                    renderHomeProgress();
-                    
-                    // Начисляем баллы
-                    if (currentUserData) {
-                        const tgUserId = currentUserData.id;
-                        fetch(`${scriptApiUrl}?id=${tgUserId}&points=10`, { mode: 'no-cors' });
-                        currentUserData.points = parseInt(currentUserData.points) + 10;
-                        updateSubscriptionUI();
-                    }
-                    if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-                    renderButtons(); // Перерисовываем на "Просмотрено"
-                }
-            };
-
-            function openLink(link) {
-                const url = link.trim();
-                url.includes("t.me/") ? tg.openTelegramLink(url) : tg.openLink(url);
+            if (isBook) {
+                watchBtn.className = 'btn-main w-full'; 
+                summaryBtn.style.display = 'none'; 
+            } else {
+                watchBtn.className = 'btn-main w-2/3'; 
+                summaryBtn.style.display = 'flex'; 
             }
 
-            // Умная отрисовка кнопок в зависимости от статуса
-            function renderButtons() {
-                let progress = userProgress[t] || 0;
-                let conspectHtml = isBook ? '' : `<div class="btn-outline w-1/3" onclick="tg.showAlert('Конспект скоро!')">Конспект</div>`;
+            // УМНАЯ ЛОГИКА ТЕКСТА КНОПКИ
+            let currentStatus = userProgress[id] || 0;
+            
+            function updateBtnVisuals() {
+                if (isBook) {
+                    if (currentStatus === 0) watchBtn.innerText = 'Прочитать';
+                    else if (currentStatus === 50) watchBtn.innerText = '📖 Читаю...';
+                    else watchBtn.innerText = '✅ Прочитано';
+                } else {
+                    if (currentStatus === 0) watchBtn.innerText = 'Посмотреть';
+                    else if (currentStatus === 50) watchBtn.innerText = '👀 Смотрю...';
+                    else watchBtn.innerText = '✅ Просмотрено';
+                }
                 
-                if (progress === 0) {
-                    // НОВОЕ
-                    let btnText = isBook ? "Прочитать" : "Смотреть";
-                    let btnClass = isBook ? "w-full" : "w-2/3";
-                    footer.innerHTML = `${conspectHtml}<div class="btn-main ${btnClass}" onclick="handleContentAction('start')">${btnText}</div>`;
-                } else if (progress === 50) {
-                    // В ПРОЦЕССЕ (Появляется кнопка Завершить)
-                    let btnText = isBook ? "Читаю ⏳" : "Смотрю ⏳";
-                    footer.innerHTML = `
-                        <div class="btn-outline w-1/2 text-[#FFB000] border-[#FFB000]" onclick="handleContentAction('continue')">${btnText}</div>
-                        <div class="btn-main w-1/2 bg-[#FFB000] text-black" onclick="handleContentAction('finish')">Завершить ✅</div>
-                    `;
-                } else if (progress === 100) {
-                    // ЗАВЕРШЕНО
-                    let btnText = isBook ? "Прочитано ✅" : "Просмотрено ✅";
-                    let btnClass = isBook ? "w-full" : "w-2/3";
-                    footer.innerHTML = `${conspectHtml}<div class="btn-outline ${btnClass} text-gray-500 border-[#1a1a1c]" onclick="handleContentAction('continue')">${btnText}</div>`;
+                // Меняем цвет кнопки, если завершено
+                if (currentStatus === 100) {
+                    watchBtn.style.background = '#FFB000';
+                    watchBtn.style.color = '#000';
+                } else {
+                    watchBtn.style.background = '#fff';
+                    watchBtn.style.color = '#000';
                 }
             }
 
-            renderButtons();
-            showScreen("detail-screen");
+            updateBtnVisuals();
+
+            watchBtn.onclick = () => {
+                // Логика переключения: 0 (новое) -> 50 (в процессе) -> 100 (готово)
+                if (currentStatus === 0) {
+                    currentStatus = 50; 
+                } else if (currentStatus === 50) {
+                    currentStatus = 100;
+                }
+                
+                userProgress[id] = currentStatus;
+                localStorage.setItem('sun_progress', JSON.stringify(userProgress));
+                renderHomeProgress();
+                updateBtnVisuals();
+                
+                const url = i.link.trim(); 
+                if (url.includes('t.me/')) tg.openTelegramLink(url); 
+                else tg.openLink(url); 
+            };
+            
+            showScreen('detail-screen');
         }
         tg.BackButton.onClick(() => {
             const active = document.querySelector('.screen.active').id;
