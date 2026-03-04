@@ -110,7 +110,14 @@
                 </div>
             </div>
         </div>
-        
+        <div onclick="openMonthlyRecap()" class="bg-gradient-to-r from-[#141414] to-[#1a1a1c] border border-[#FFB000]/30 rounded-[20px] p-5 mb-8 flex items-center justify-between cursor-pointer relative overflow-hidden active:scale-95 transition-transform shadow-[0_0_20px_rgba(255,176,0,0.05)]">
+            <div class="absolute right-0 top-0 w-32 h-32 bg-[#FFB000] opacity-10 rounded-full blur-2xl -mr-10 -mt-10"></div>
+            <div class="flex flex-col z-10">
+                <span class="text-[#FFB000] text-[10px] font-bold uppercase tracking-widest mb-1">Твоя аналитика</span>
+                <span id="recap-month-text" class="text-white font-black italic text-lg uppercase tracking-wide">Итоги Февраля</span>
+            </div>
+            <div class="text-4xl z-10 drop-shadow-[0_0_15px_rgba(255,176,0,0.4)]">✨</div>
+        </div>
         <div onclick="showScreen('leaderboard-screen')" class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-4 mb-8 flex items-center justify-between cursor-pointer active:scale-95 transition-transform">
             <div class="flex items-center gap-4">
                 <div class="w-12 h-12 bg-neutral-900 border border-[#FFB000]/20 rounded-xl flex items-center justify-center text-2xl shadow-[0_0_10px_rgba(255,176,0,0.05)]">👑</div>
@@ -166,6 +173,41 @@
         <div class="footer-btns">
             <div id="summary-btn" class="btn-outline w-1/3" onclick="tg.showAlert('Конспект скоро!')">Конспект</div>
             <div id="watch-btn" class="btn-main w-2/3">Смотреть</div>
+        </div>
+    </div>
+    <div id="recap-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[3000] hidden flex-col px-6 pt-12 pb-8 overflow-y-auto">
+        <div class="flex justify-between items-center mb-8">
+            <div class="text-[#FFB000] font-black italic text-xl tracking-widest">SUN<span class="text-white text-xs ml-2 tracking-normal uppercase">Итоги месяца</span></div>
+            <div onclick="closeMonthlyRecap()" class="w-10 h-10 bg-[#141414] rounded-full flex items-center justify-center text-xl text-gray-400 cursor-pointer border border-[#1a1a1c]">✕</div>
+        </div>
+
+        <h2 class="text-3xl font-black italic leading-tight mb-8">СЛЕДУЮЩИЙ МЕСЯЦ БУДЕТ ЕЩЕ МОЩНЕЕ! ЛОВИ СВОЙ РЕЗУЛЬТАТ ⚡️</h2>
+
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-5 relative overflow-hidden">
+                <div class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-2">Изучено материалов</div>
+                <div id="recap-total" class="text-4xl font-black text-white">0</div>
+                <div class="absolute bottom-3 right-4 text-3xl opacity-20">📚</div>
+            </div>
+            <div class="bg-gradient-to-br from-[#FFB000]/20 to-[#141414] border border-[#FFB000]/30 rounded-[20px] p-5 relative overflow-hidden">
+                <div class="text-[#FFB000] text-[10px] font-bold uppercase tracking-widest mb-2">Твой статус</div>
+                <div class="text-xl font-black italic text-white leading-tight mt-1">ЛУЧШЕ ЧЕМ У 80%</div>
+                <div class="absolute top-4 right-4 text-2xl drop-shadow-[0_0_10px_rgba(255,176,0,0.8)]">🏆</div>
+            </div>
+        </div>
+
+        <div class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-5 mb-8 flex items-center justify-between">
+            <div>
+                <div class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-1">Твоя главная тема</div>
+                <div id="recap-top-tag" class="text-xl font-black italic text-white">--</div>
+            </div>
+            <div class="text-4xl">🎯</div>
+        </div>
+
+        <div class="mt-auto">
+            <div onclick="tg.showAlert('Скоро здесь будет генерация картинки для Инстаграма!')" class="w-full bg-white text-black text-center font-black py-4 rounded-xl uppercase text-sm tracking-widest cursor-pointer active:scale-95 transition-transform flex items-center justify-center gap-2">
+                <span>📸</span> Поделиться в Stories
+            </div>
         </div>
     </div>
 
@@ -236,6 +278,85 @@
                 tg.showAlert("Ошибка чтения базы данных.");
             }
         });
+        function openMonthlyRecap() {
+            const months = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
+            const currentMonth = months[new Date().getMonth()];
+            document.getElementById('recap-month-text').innerText = `Итоги ${currentMonth}`;
+
+            let totalDone = 0;
+            let tagCounts = {};
+            
+            globalData.forEach(item => {
+                if (userProgress[item.id] == 100) {
+                    totalDone++;
+                    let tag = item.tag || 'Разное';
+                    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                }
+            });
+
+            let topTag = "Пока нет данных";
+            let maxCount = 0;
+            for (const [tag, count] of Object.entries(tagCounts)) {
+                if (count > maxCount) {
+                    maxCount = count;
+                    topTag = tag;
+                }
+            }
+
+            document.getElementById('recap-total').innerText = totalDone;
+            document.getElementById('recap-top-tag').innerText = topTag;
+
+            document.getElementById('recap-modal').classList.remove('hidden');
+            document.getElementById('recap-modal').classList.add('flex');
+            tg.BackButton.show();
+        }
+
+        function closeMonthlyRecap() {
+            document.getElementById('recap-modal').classList.add('hidden');
+            document.getElementById('recap-modal').classList.remove('flex');
+            if (document.querySelector('.screen.active').id === 'home-screen') {
+                tg.BackButton.hide();
+            }
+        }function openMonthlyRecap() {
+            const months = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
+            const currentMonth = months[new Date().getMonth()];
+            document.getElementById('recap-month-text').innerText = `Итоги ${currentMonth}`;
+
+            let totalDone = 0;
+            let tagCounts = {};
+            
+            globalData.forEach(item => {
+                if (userProgress[item.id] == 100) {
+                    totalDone++;
+                    let tag = item.tag || 'Разное';
+                    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                }
+            });
+
+            let topTag = "Пока нет данных";
+            let maxCount = 0;
+            for (const [tag, count] of Object.entries(tagCounts)) {
+                if (count > maxCount) {
+                    maxCount = count;
+                    topTag = tag;
+                }
+            }
+
+            document.getElementById('recap-total').innerText = totalDone;
+            document.getElementById('recap-top-tag').innerText = topTag;
+
+            document.getElementById('recap-modal').classList.remove('hidden');
+            document.getElementById('recap-modal').classList.add('flex');
+            tg.BackButton.show();
+        }
+
+        function closeMonthlyRecap() {
+            document.getElementById('recap-modal').classList.add('hidden');
+            document.getElementById('recap-modal').classList.remove('flex');
+            if (document.querySelector('.screen.active').id === 'home-screen') {
+                tg.BackButton.hide();
+            }
+        }
 
         function updateSubscriptionUI() {
             const titleEl = document.getElementById('sub-title');
