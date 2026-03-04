@@ -318,8 +318,52 @@
         function openSubcategory(t,e){document.getElementById("list-title").innerText=e;const a=globalData.filter(a=>a.category.toLowerCase().includes(t.toLowerCase())&&(a.tag||"Разное")===e);document.getElementById("items-list").innerHTML=a.map(t=>`\n                <div onclick="openDetail('${t.id}')" class="card-premium rounded-[24px] overflow-hidden relative mb-6 cursor-pointer active:scale-95 transition-all">\n                    <div class="h-48 bg-cover bg-center" style="background-image: url('${t.img}')"></div>\n                    <div class="p-5"><span class="tag-sun">#${t.tag}</span><h3 class="text-lg font-black italic uppercase mt-2">${t.title}</h3></div>\n                </div>`).join(""),showScreen("list-screen")}
         function openFavorites(){const t=document.getElementById("favorites-list"),e=globalData.filter(t=>userFavorites.includes(t.id));0===e.length?t.innerHTML='<div class="text-center mt-32"><span class="text-6xl mb-4 block">⭐</span><p class="text-gray-500 font-black uppercase italic">Пусто</p></div>':t.innerHTML=e.map(t=>`\n                <div onclick="openDetail('${t.id}')" class="card-premium rounded-[24px] overflow-hidden relative mb-6">\n                    <div class="h-48 bg-cover bg-center" style="background-image: url('${t.img}')"></div>\n                    <div class="p-5"><span class="tag-sun">#${t.tag}</span><h3 class="text-lg font-black italic uppercase mt-2">${t.title}</h3></div>\n                </div>`).join(""),showScreen("favorites-screen")}
         function toggleFavorite(t){const e=userFavorites.indexOf(t);e>-1?userFavorites.splice(e,1):userFavorites.push(t),localStorage.setItem("sun_favorites",JSON.stringify(userFavorites)),openDetail(t),"favorites-screen"===previousScreen&&openFavorites()}
-        function openDetail(t){const e=globalData.find(e=>e.id==t);document.getElementById("detail-img").style.backgroundImage=`url('${e.img}')`,document.getElementById("detail-title").innerText=e.title,document.getElementById("detail-desc").innerText=e.desc;const a=document.getElementById("fav-btn");a.innerHTML=userFavorites.includes(t)?"⭐":"☆",a.style.color=userFavorites.includes(t)?"#FFB000":"#ffffff",a.onclick=()=>toggleFavorite(t);const n=document.getElementById("watch-btn");e.category.toLowerCase().includes("книг")?(n.innerText="Прочитать",n.className="btn-main w-full",document.getElementById("summary-btn").style.display="none"):(n.innerText="Смотреть",n.className="btn-main w-2/3",document.getElementById("summary-btn").style.display="flex"),n.onclick=()=>{userProgress[t]=100,localStorage.setItem("sun_progress",JSON.stringify(userProgress)),renderHomeProgress();const a=e.link.trim();a.includes("t.me/")?tg.openTelegramLink(a):tg.openLink(a)},showScreen("detail-screen")}
-
+        function openDetail(t) {
+            const e = globalData.find(e => e.id == t);
+            document.getElementById("detail-img").style.backgroundImage = `url('${e.img}')`;
+            document.getElementById("detail-title").innerText = e.title;
+            document.getElementById("detail-desc").innerText = e.desc;
+            
+            const a = document.getElementById("fav-btn");
+            a.innerHTML = userFavorites.includes(t) ? "⭐" : "☆";
+            a.style.color = userFavorites.includes(t) ? "#FFB000" : "#ffffff";
+            a.onclick = () => toggleFavorite(t);
+            
+            const n = document.getElementById("watch-btn");
+            e.category.toLowerCase().includes("книг") ? (n.innerText = "Прочитать", n.className = "btn-main w-full", document.getElementById("summary-btn").style.display = "none") : (n.innerText = "Смотреть", n.className = "btn-main w-2/3", document.getElementById("summary-btn").style.display = "flex");
+            
+            // ТВОЯ ССЫЛКА НА GOOGLE APPS SCRIPT
+            const scriptApiUrl = "https://script.google.com/macros/s/AKfycbyte4_uuiiD1YFtiLq3mC55VK1ScoVjzQypwALBbqqJdqWzK5JWQln-6Hj5ILhgfN_I9g/exec";
+            
+            n.onclick = () => {
+                // ПРОВЕРКА НАКРУТКИ: если смотрит впервые, даем баллы
+                if (userProgress[t] != 100) {
+                    userProgress[t] = 100;
+                    localStorage.setItem("sun_progress", JSON.stringify(userProgress));
+                    renderHomeProgress();
+                    
+                    // ОТПРАВЛЯЕМ БАЛЛЫ В ТАБЛИЦУ
+                    if (currentUserData) {
+                        const tgUserId = currentUserData.id;
+                        const pointsReward = 10; // +10 баллов
+                        
+                        fetch(`${scriptApiUrl}?id=${tgUserId}&points=${pointsReward}`, { mode: 'no-cors' })
+                            .then(() => console.log('Сигнал на +10 баллов отправлен!'))
+                            .catch(err => console.error('Ошибка отправки:', err));
+                        
+                        // Мгновенно обновляем цифру на экране пользователя
+                        currentUserData.points = parseInt(currentUserData.points) + pointsReward;
+                        updateSubscriptionUI();
+                    }
+                }
+                
+                // ОТКРЫВАЕМ САМО ВИДЕО/КНИГУ
+                const link = e.link.trim();
+                link.includes("t.me/") ? tg.openTelegramLink(link) : tg.openLink(link);
+            };
+            
+            showScreen("detail-screen");
+        }
         tg.BackButton.onClick(() => {
             const active = document.querySelector('.screen.active').id;
             if (active === 'detail-screen' || active === 'leaderboard-screen') showScreen(previousScreen);
