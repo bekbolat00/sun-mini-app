@@ -107,13 +107,73 @@
         <div id="favorites-list" class="space-y-6"></div>
     </div>
 
+    <div id="profile-screen" class="screen px-5">
+        <h2 class="text-xl font-black uppercase text-center mb-8 mt-4 italic tracking-widest">ПРОФИЛЬ</h2>
+        
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-16 h-16 rounded-full border border-[#FFB000]/50 bg-[#141414] flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(255,176,0,0.2)]">🥷</div>
+            <div>
+                <h2 class="text-2xl font-black italic uppercase">Ученик</h2>
+                <div class="flex items-center text-[#FFB000] text-xs font-bold mt-1 uppercase tracking-wider">
+                    <span class="mr-1">⭐</span> Резидент клуба
+                </div>
+            </div>
+        </div>
+
+        <div class="card-premium rounded-[24px] p-6 mb-8 border-[#FFB000]/20 relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#FFB000] opacity-10 rounded-full blur-2xl"></div>
+            <div class="flex justify-between items-start mb-8 relative z-10">
+                <h3 class="text-4xl font-black italic tracking-tighter text-[#FFB000] drop-shadow-md">SUN<br><span class="text-white">PASS</span></h3>
+                <div class="w-10 h-10 rounded-full bg-[#1a1a1c] border border-[#2a2a2c] flex items-center justify-center text-gray-500">›</div>
+            </div>
+            <div class="flex justify-between items-end relative z-10">
+                <div>
+                    <div class="text-2xl font-bold text-white mb-1">12 месяцев</div>
+                    <div class="text-sm text-gray-400 font-medium">Осталось 365 дней</div>
+                </div>
+                <div class="bg-[#1a1a1c] border border-[#FFB000]/30 text-[#FFB000] font-black text-[10px] px-3 py-2 rounded-xl flex items-center gap-1 uppercase tracking-widest">
+                    <span class="text-lg">🏆</span> 0 баллов
+                </div>
+            </div>
+        </div>
+
+        <div onclick="tg.showAlert('Рейтинг и Чемпионат появятся после подключения базы данных!')" class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-4 mb-8 flex items-center justify-between cursor-pointer active:scale-95 transition-transform">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-neutral-900 border border-[#FFB000]/20 rounded-xl flex items-center justify-center text-2xl shadow-[0_0_10px_rgba(255,176,0,0.05)]">👑</div>
+                <div>
+                    <div class="text-sm font-black uppercase italic text-white">Рейтинг клуба</div>
+                    <div class="text-[10px] text-gray-500 font-bold uppercase mt-1">Твое место: --</div>
+                </div>
+            </div>
+            <div class="text-gray-600 font-bold">></div>
+        </div>
+
+        <div class="flex justify-between items-end mb-4 ml-1">
+            <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-500 italic">Достижения</h3>
+            <span class="text-[9px] text-gray-600 font-bold uppercase">В процессе</span>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-3">
+            <div class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-4 flex flex-col items-center justify-center opacity-40 grayscale">
+                <span class="text-3xl mb-3">🔥</span>
+                <span class="text-[8px] font-bold text-center uppercase tracking-wider text-gray-400">Первая кровь</span>
+            </div>
+            <div class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-4 flex flex-col items-center justify-center opacity-40 grayscale">
+                <span class="text-3xl mb-3">📚</span>
+                <span class="text-[8px] font-bold text-center uppercase tracking-wider text-gray-400">Книжный червь</span>
+            </div>
+            <div class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-4 flex flex-col items-center justify-center opacity-40 grayscale">
+                <span class="text-3xl mb-3">🦈</span>
+                <span class="text-[8px] font-bold text-center uppercase tracking-wider text-gray-400">Акула продаж</span>
+            </div>
+        </div>
+    </div>
+
     <div id="list-screen" class="screen px-5">
         <h2 id="list-title" class="text-xl font-black uppercase text-center mb-6 mt-4 italic">Загрузка...</h2>
-        
         <div class="flex items-center mb-5 text-[13px] font-bold text-gray-400 cursor-pointer active:text-white transition-colors w-fit">
             Сначала новые <span class="ml-1 text-[10px]">▼</span>
         </div>
-
         <div id="items-list" class="space-y-6"></div>
     </div>
 
@@ -146,6 +206,9 @@
         <div onclick="openFavorites()" class="nav-item" id="nav-fav">
             <span class="text-2xl">⭐</span><span class="text-[9px] font-bold uppercase mt-1">Топ</span>
         </div>
+        <div onclick="showScreen('profile-screen')" class="nav-item" id="nav-profile">
+            <span class="text-2xl">👤</span><span class="text-[9px] font-bold uppercase mt-1">Профиль</span>
+        </div>
     </nav>
 
     <script>
@@ -156,8 +219,8 @@
         
         let globalData = [];
         let userProgress = JSON.parse(localStorage.getItem('sun_progress')) || {};
-        let userFavorites = JSON.parse(localStorage.getItem('sun_favorites')) || []; // Массив Избранного
-        let previousScreen = 'home-screen'; // Умная история для кнопки Назад
+        let userFavorites = JSON.parse(localStorage.getItem('sun_favorites')) || []; 
+        let previousScreen = 'home-screen'; 
 
         Papa.parse(sheetUrl, {
             download: true,
@@ -166,14 +229,13 @@
                 let rows = results.data.slice(1);
                 globalData = rows.map(r => ({
                     id: r[0], category: r[1] || '', tag: r[2] || '', title: r[3] || '', desc: r[4] || '', img: r[5] || '', link: r[6] || ''
-                })).filter(i => i.id).reverse();
+                })).filter(i => i.id).reverse(); 
                 renderHomeProgress();
             }
         });
 
         function showScreen(screenId) {
             const currentActive = document.querySelector('.screen.active');
-            // Запоминаем, откуда пришли в карточку (из поиска, списка или избранного)
             if (currentActive && currentActive.id !== screenId && screenId === 'detail-screen') {
                 previousScreen = currentActive.id;
             }
@@ -185,6 +247,7 @@
             if(screenId === 'home-screen') document.getElementById('nav-home').classList.add('active');
             if(screenId === 'club-screen') document.getElementById('nav-club').classList.add('active');
             if(screenId === 'favorites-screen') document.getElementById('nav-fav').classList.add('active');
+            if(screenId === 'profile-screen') document.getElementById('nav-profile').classList.add('active'); 
 
             if (screenId === 'detail-screen') {
                 document.querySelector('.nav-bar').style.display = 'none';
@@ -265,7 +328,6 @@
             showScreen('list-screen');
         }
 
-        // РЕНДЕР ИЗБРАННОГО
         function openFavorites() {
             const list = document.getElementById('favorites-list');
             const favItems = globalData.filter(i => userFavorites.includes(i.id));
@@ -291,21 +353,21 @@
             const favBtn = document.getElementById('fav-btn');
             
             if (index > -1) {
-                userFavorites.splice(index, 1); // Удаляем
+                userFavorites.splice(index, 1); 
                 favBtn.innerHTML = '☆';
                 favBtn.style.color = '#ffffff';
                 if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
             } else {
-                userFavorites.push(id); // Добавляем
+                userFavorites.push(id); 
                 favBtn.innerHTML = '⭐';
+                favBtn.style.color = '#FFB000';
                 if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
             }
             localStorage.setItem('sun_favorites', JSON.stringify(userFavorites));
             
-            // Если мы пришли из Избранного и убрали звезду, нужно обновить список под капотом
             if (previousScreen === 'favorites-screen') {
                 openFavorites(); 
-                showScreen('detail-screen'); // Оставляем открытой текущую карточку
+                showScreen('detail-screen'); 
             }
         }
 
@@ -315,7 +377,6 @@
             document.getElementById('detail-title').innerText = i.title;
             document.getElementById('detail-desc').innerText = i.desc;
             
-            // Настройка кнопки Избранного
             const favBtn = document.getElementById('fav-btn');
             if (userFavorites.includes(id)) {
                 favBtn.innerHTML = '⭐';
@@ -354,12 +415,11 @@
             showScreen('detail-screen');
         }
 
-        // УМНАЯ КНОПКА НАЗАД
         tg.BackButton.onClick(() => {
             const activeScreen = document.querySelector('.screen.active').id;
             
             if (activeScreen === 'detail-screen') {
-                showScreen(previousScreen); // Возврат туда, откуда пришли!
+                showScreen(previousScreen); 
             } else if (activeScreen === 'list-screen') {
                 showScreen('subcat-screen');
             } else if (activeScreen !== 'home-screen') {
