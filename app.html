@@ -137,16 +137,6 @@
             </div>
             <div class="text-4xl z-10 drop-shadow-[0_0_15px_rgba(255,176,0,0.4)]">✨</div>
         </div>
-
-        <div class="flex justify-between items-end mb-4 ml-1">
-            <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-500 italic">Достижения</h3>
-            <span class="text-[9px] text-gray-600 font-bold uppercase">В процессе</span>
-        </div>
-        <div class="grid grid-cols-3 gap-3">
-            <div class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-4 flex flex-col items-center justify-center opacity-40 grayscale"><span class="text-3xl mb-3">🔥</span><span class="text-[8px] font-bold text-center uppercase tracking-wider text-gray-400">Первая кровь</span></div>
-            <div class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-4 flex flex-col items-center justify-center opacity-40 grayscale"><span class="text-3xl mb-3">📚</span><span class="text-[8px] font-bold text-center uppercase tracking-wider text-gray-400">Книжный червь</span></div>
-            <div class="bg-[#141414] border border-[#1a1a1c] rounded-2xl p-4 flex flex-col items-center justify-center opacity-40 grayscale"><span class="text-3xl mb-3">🦈</span><span class="text-[8px] font-bold text-center uppercase tracking-wider text-gray-400">Акула продаж</span></div>
-        </div>
     </div>
 
     <div id="rating-screen" class="screen px-5">
@@ -166,8 +156,7 @@
         </div>
 
         <div class="flex flex-col items-center">
-            <div class="flex items-center justify-center gap-6 mb-4 w-full h-28" id="league-carousel">
-                </div>
+            <div class="flex items-center justify-center gap-6 mb-4 w-full h-28" id="league-carousel"></div>
             
             <div class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1">Мой рейтинг</div>
             <div class="text-2xl font-black text-white italic tracking-wide mb-8 flex items-center gap-2" id="detail-tier-name">
@@ -187,29 +176,25 @@
 
             <div class="grid grid-cols-2 gap-3 w-full mb-8">
                 <div class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-4">
-                    <div class="text-lg font-black text-white mb-1"><span class="text-gray-400 mr-1">🔥</span> <span id="rating-streak">0 недель</span></div>
+                    <div class="text-lg font-black text-white mb-1"><span class="text-gray-400 mr-1">🔥</span> <span id="rating-streak">0 нед.</span></div>
                     <div class="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Активный режим</div>
                 </div>
                 <div class="bg-[#141414] border border-[#1a1a1c] rounded-[20px] p-4">
-                    <div class="text-lg font-black text-white mb-1"><span class="text-[#FFB000] mr-1">👑</span> 8 недель</div>
+                    <div class="text-lg font-black text-white mb-1"><span class="text-[#FFB000] mr-1">👑</span> <span id="rating-record">0 нед.</span></div>
                     <div class="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Ваш рекорд</div>
                 </div>
             </div>
 
-            <div class="w-full">
+            <div class="w-full mb-10">
                 <div class="flex justify-between items-center mb-6 px-2">
-                    <span class="text-gray-500 font-black text-lg">‹</span>
-                    <span class="text-white font-bold text-sm uppercase tracking-wider">Март 2026</span>
-                    <span class="text-gray-500 font-black text-lg">›</span>
+                    <div class="w-8 h-8 flex items-center justify-center bg-[#141414] rounded-full border border-[#1a1a1c] text-gray-400 cursor-pointer active:scale-90" onclick="changeMonth(-1)">‹</div>
+                    <span id="calendar-month-year" class="text-white font-black text-sm uppercase tracking-wider">Загрузка...</span>
+                    <div class="w-8 h-8 flex items-center justify-center bg-[#141414] rounded-full border border-[#1a1a1c] text-gray-400 cursor-pointer active:scale-90" onclick="changeMonth(1)">›</div>
                 </div>
                 <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-gray-500 mb-4">
                     <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
                 </div>
-                <div class="grid grid-cols-7 gap-y-4 text-center text-xs font-bold text-white">
-                    <div class="text-gray-700">23</div><div class="text-gray-700">24</div><div class="text-gray-700">25</div><div class="text-gray-700">26</div><div class="text-gray-700">27</div><div class="text-gray-700">28</div><div>1</div>
-                    <div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div class="bg-[#4F46E5] text-white w-7 h-7 rounded-full flex items-center justify-center mx-auto shadow-[0_0_10px_rgba(79,70,229,0.5)]">7</div><div>8</div>
-                    <div>9</div><div>10</div><div>11</div><div>12</div><div>13</div><div>14</div><div>15</div>
-                </div>
+                <div id="calendar-grid" class="grid grid-cols-7 gap-y-4 text-center text-xs font-bold text-white"></div>
             </div>
         </div>
     </div>
@@ -319,8 +304,67 @@
         let globalData = [], globalUsers = [], currentUserData = null, previousScreen = 'home-screen';
         let userProgress = JSON.parse(localStorage.getItem('sun_progress')) || {};
         let userFavorites = JSON.parse(localStorage.getItem('sun_favorites')) || {};
+        
+        // --- ПЕРЕМЕННЫЕ ДЛЯ КАЛЕНДАРЯ И АКТИВНОСТИ ---
+        let currentCalMonth = new Date().getMonth();
+        let currentCalYear = new Date().getFullYear();
+        let activeDates = JSON.parse(localStorage.getItem('sun_active_dates')) || [];
 
-        // --- ГЕНЕРАТОР SVG-ИКОНОК ЛИГ (3D-ШЕСТИУГОЛЬНИК КАК В 1FIT) ---
+        // --- ЛОГИКА КАЛЕНДАРЯ ---
+        function renderCalendar(month, year) {
+            const monthNames = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
+            document.getElementById('calendar-month-year').innerText = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+            
+            // Сдвиг для начала недели с Понедельника
+            let startDay = firstDay === 0 ? 6 : firstDay - 1;
+            let html = '';
+
+            // Дни прошлого месяца (серые)
+            for (let i = startDay - 1; i >= 0; i--) { 
+                html += `<div class="text-gray-800 opacity-50">${daysInPrevMonth - i}</div>`; 
+            }
+            
+            // Дни текущего месяца
+            const today = new Date();
+            for (let i = 1; i <= daysInMonth; i++) {
+                // Формат YYYY-MM-DD для проверки активности
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                const isActive = activeDates.includes(dateStr);
+                const isToday = i === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+
+                if (isToday) {
+                    html += `<div class="bg-[#4F46E5] text-white w-7 h-7 rounded-full flex items-center justify-center mx-auto shadow-[0_0_10px_rgba(79,70,229,0.5)]">${i}</div>`;
+                } else if (isActive) {
+                    html += `<div class="w-7 h-7 rounded-full border border-[#FFB000] text-[#FFB000] bg-[#FFB000]/10 flex items-center justify-center mx-auto drop-shadow-[0_0_8px_rgba(255,176,0,0.3)]">${i}</div>`;
+                } else {
+                    html += `<div class="text-gray-300">${i}</div>`;
+                }
+            }
+            
+            // Дни следующего месяца (серые)
+            const totalCells = startDay + daysInMonth;
+            const nextDays = Math.ceil(totalCells / 7) * 7 - totalCells;
+            for (let i = 1; i <= nextDays; i++) { 
+                html += `<div class="text-gray-800 opacity-50">${i}</div>`; 
+            }
+            
+            document.getElementById('calendar-grid').innerHTML = html;
+        }
+
+        function changeMonth(dir) {
+            currentCalMonth += dir;
+            if (currentCalMonth < 0) { currentCalMonth = 11; currentCalYear--; }
+            else if (currentCalMonth > 11) { currentCalMonth = 0; currentCalYear++; }
+            renderCalendar(currentCalMonth, currentCalYear);
+            if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+        }
+
+
+        // --- ИКОНКИ ЛИГ ---
         function getTierBadge(tierName) {
             let c1, c2, glow;
             if (tierName === 'Начальный') { c1 = '#D1D5DB'; c2 = '#4B5563'; glow = 'rgba(209,213,219,0.3)';} 
@@ -330,12 +374,7 @@
             else { c1 = '#5EEAD4'; c2 = '#115E59'; glow = 'rgba(20,184,166,0.6)';} 
             
             return `<svg viewBox="0 0 100 100" class="w-full h-full" style="filter: drop-shadow(0 5px 10px ${glow});">
-                <defs>
-                    <linearGradient id="grad-${tierName}" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="${c1}" />
-                        <stop offset="100%" stop-color="${c2}" />
-                    </linearGradient>
-                </defs>
+                <defs><linearGradient id="grad-${tierName}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${c1}" /><stop offset="100%" stop-color="${c2}" /></linearGradient></defs>
                 <polygon points="50,5 90,25 90,75 50,95 10,75 10,25" fill="url(#grad-${tierName})" stroke="#1a1a1c" stroke-width="2"/>
                 <polygon points="50,13 83,32 83,68 50,87 17,68 17,32" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
                 <polygon points="50,21 76,36 76,64 50,79 24,64 24,36" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
@@ -353,11 +392,7 @@
         ];
 
         function getTierIndex(points) {
-            if (points < 100) return 0;
-            if (points < 400) return 1;
-            if (points < 800) return 2;
-            if (points < 1400) return 3;
-            return 4;
+            if (points < 100) return 0; if (points < 400) return 1; if (points < 800) return 2; if (points < 1400) return 3; return 4;
         }
 
         function logAction(detail) {
@@ -379,6 +414,7 @@
             if (!tgUser) tgUser = { id: "412753295", first_name: "Бекболат (Тест)" };
             if (tgUser) { currentUserData = globalUsers.find(u => u.id == tgUser.id); document.getElementById('profile-name').innerText = tgUser.first_name || "Ученик"; updateSubscriptionUI(); }
             renderLeaderboards();
+            renderCalendar(currentCalMonth, currentCalYear); // Запускаем календарь
         }});
 
         function updateSubscriptionUI() {
@@ -395,12 +431,18 @@
                 const cIndex = getTierIndex(currentUserData.points);
                 const tier = ALL_TIERS[cIndex];
                 
-                // 1. Профиль
+                // Рассчет Активности (Стрика) на основе баллов: Каждые 40 баллов = 1 неделя
+                let streakWeeks = Math.floor(currentUserData.points / 40);
+                document.getElementById('widget-streak').innerText = `${streakWeeks} нед.`;
+                document.getElementById('rating-streak').innerText = `${streakWeeks} нед.`;
+                document.getElementById('rating-record').innerText = `${Math.max(4, streakWeeks)} нед.`; // Рекорд для красоты
+                
+                // Профиль
                 document.getElementById('widget-tier-icon').innerHTML = tier.svg;
                 document.getElementById('widget-points').innerText = currentUserData.points;
                 document.getElementById('widget-points').style.color = tier.color;
                 
-                // 2. Страница рейтинга (Детали Лиги)
+                // Геймификация
                 document.getElementById('detail-tier-name').innerHTML = `${tier.name} <span class="text-gray-500 text-sm font-normal not-italic">ⓘ</span>`;
                 document.getElementById('detail-tier-name').style.color = tier.color;
                 document.getElementById('detail-tier-min').innerText = tier.min;
@@ -417,18 +459,16 @@
                 }
                 document.getElementById('detail-tier-progress').style.background = tier.color;
 
-                // Рендер Карусели Звезд (как в 1Fit)
                 let prevSvg = cIndex > 0 ? ALL_TIERS[cIndex - 1].svg : '<div class="w-full h-full"></div>';
                 let nextSvg = cIndex < 4 ? ALL_TIERS[cIndex + 1].svg : '<div class="w-full h-full"></div>';
                 document.getElementById('league-carousel').innerHTML = `
                     <div class="w-16 h-16 opacity-30 blur-[1px] transition-all">${prevSvg}</div>
-                    <div class="w-[100px] h-[100px] z-10 transition-all">${tier.svg}</div>
+                    <div class="w-[100px] h-[100px] z-10 transition-all drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">${tier.svg}</div>
                     <div class="w-16 h-16 opacity-30 blur-[1px] transition-all">${nextSvg}</div>
                 `;
             }
         }
 
-        // Рендер пьедесталов (КЛАССИЧЕСКИЕ КОРОНЫ 👑🥈🥉)
         function renderLeaderboards() {
             const u1 = globalUsers[0], u2 = globalUsers[1], u3 = globalUsers[2];
             
@@ -446,7 +486,6 @@
             document.getElementById('rating-mini-podium').innerHTML = buildPodium(true);
             document.getElementById('top-3-podium').innerHTML = buildPodium(false);
 
-            // Нижний список использует 3D Звезды для красоты
             const listEl = document.getElementById('leaderboard-list'); let listHtml = '';
             for (let i = 3; i < globalUsers.length; i++) { 
                 const u = globalUsers[i], isMe = currentUserData && u.id == currentUserData.id;
@@ -517,6 +556,7 @@
         function openSubcategory(t,e){document.getElementById("list-title").innerText=e;const a=globalData.filter(a=>a.category.toLowerCase().includes(t.toLowerCase())&&(a.tag||"Разное")===e);document.getElementById("items-list").innerHTML=a.map(t=>`<div onclick="openDetail('${t.id}')" class="card-premium rounded-[24px] overflow-hidden relative mb-6 cursor-pointer active:scale-95 transition-all"><div class="h-48 bg-cover bg-center" style="background-image: url('${t.img}')"></div><div class="p-5"><span class="tag-sun">#${t.tag}</span><h3 class="text-lg font-black italic uppercase mt-2">${t.title}</h3></div></div>`).join("");showScreen("list-screen")}
         function openFavorites(){ logAction("Зашел в Избранное"); const t=document.getElementById("favorites-list"),e=globalData.filter(t=>userFavorites.includes(t.id));0===e.length?t.innerHTML='<div class="text-center mt-32"><span class="text-6xl mb-4 block">⭐</span><p class="text-gray-500 font-black uppercase italic">Пусто</p></div>':t.innerHTML=e.map(t=>`<div onclick="openDetail('${t.id}')" class="card-premium rounded-[24px] overflow-hidden relative mb-6"><div class="h-48 bg-cover bg-center" style="background-image: url('${t.img}')"></div><div class="p-5"><span class="tag-sun">#${t.tag}</span><h3 class="text-lg font-black italic uppercase mt-2">${t.title}</h3></div></div>`).join("");showScreen("favorites-screen")}
         function toggleFavorite(t){const e=userFavorites.indexOf(t);e>-1?userFavorites.splice(e,1):userFavorites.push(t);localStorage.setItem("sun_favorites",JSON.stringify(userFavorites));openDetail(t);"favorites-screen"===previousScreen&&openFavorites()}
+        
         function openDetail(id) {
             const i = globalData.find(d => d.id == id); logAction("Изучает материал: " + i.title);
             document.getElementById('detail-img').style.backgroundImage = `url('${i.img}')`; document.getElementById('detail-title').innerText = i.title; document.getElementById('detail-desc').innerText = i.desc;
@@ -524,17 +564,34 @@
             const watchBtn = document.getElementById('watch-btn'), summaryBtn = document.getElementById('summary-btn'), isBook = i.category.toLowerCase().includes('книг');
             if (isBook) { watchBtn.className = 'btn-main w-full'; summaryBtn.style.display = 'none'; } else { watchBtn.className = 'btn-main w-2/3'; summaryBtn.style.display = 'flex'; }
             let currentStatus = userProgress[id] || 0;
+            
             function updateBtnVisuals() {
                 if (isBook) { if (currentStatus === 0) watchBtn.innerText = 'Прочитать'; else if (currentStatus === 50) watchBtn.innerText = '📖 Читаю...'; else watchBtn.innerText = '✅ Прочитано'; }
                 else { if (currentStatus === 0) watchBtn.innerText = 'Посмотреть'; else if (currentStatus === 50) watchBtn.innerText = '👀 Смотрю...'; else watchBtn.innerText = '✅ Просмотрено'; }
                 if (currentStatus === 100) { watchBtn.style.background = '#FFB000'; watchBtn.style.color = '#000'; } else { watchBtn.style.background = '#fff'; watchBtn.style.color = '#000'; }
             }
             updateBtnVisuals();
+            
             watchBtn.onclick = () => {
                 let pointsToAdd = 0; if (currentStatus === 0) { currentStatus = 50; } else if (currentStatus === 50) { currentStatus = 100; pointsToAdd = isBook ? 50 : 20; }
                 userProgress[id] = currentStatus; localStorage.setItem('sun_progress', JSON.stringify(userProgress)); renderHomeProgress(); updateBtnVisuals();
+                
                 if (pointsToAdd > 0 && currentUserData) {
-                    fetch(`${apiUrl}?action=points&id=${currentUserData.id}&points=${pointsToAdd}`).then(r => r.text()).then(res => { currentUserData.points += pointsToAdd; updateSubscriptionUI(); renderLeaderboards(); if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success'); });
+                    // СОХРАНЯЕМ АКТИВНОСТЬ В КАЛЕНДАРЬ
+                    const dateNow = new Date();
+                    const todayStr = `${dateNow.getFullYear()}-${String(dateNow.getMonth() + 1).padStart(2, '0')}-${String(dateNow.getDate()).padStart(2, '0')}`;
+                    if (!activeDates.includes(todayStr)) {
+                        activeDates.push(todayStr);
+                        localStorage.setItem('sun_active_dates', JSON.stringify(activeDates));
+                        renderCalendar(currentCalMonth, currentCalYear); // Обновляем визуал календаря
+                    }
+
+                    fetch(`${apiUrl}?action=points&id=${currentUserData.id}&points=${pointsToAdd}`).then(r => r.text()).then(res => { 
+                        currentUserData.points += pointsToAdd; 
+                        updateSubscriptionUI(); 
+                        renderLeaderboards(); 
+                        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success'); 
+                    });
                 }
                 const url = i.link.trim(); if (url.includes('t.me/')) tg.openTelegramLink(url); else tg.openLink(url);
             };
