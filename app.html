@@ -32,7 +32,7 @@
 </head>
 <body class="pt-6">
 
-    <div id="home-screen" class="screen active px-5">
+    <div id="home-screen" class="screen px-5">
         <div class="flex flex-col items-center mb-8">
             <h1 class="text-5xl font-black tracking-widest italic">SUN</h1>
             <p class="text-[10px] font-bold tracking-[0.4em] text-[#FFB000]">INFOBUSINESS</p>
@@ -238,6 +238,28 @@
         </div>
     </div>
 
+    <!-- ЭКРАН БЛОКИРОВКИ (PAYWALL) -->
+    <div id="paywall-screen" class="screen px-5">
+        <div class="flex flex-col items-center justify-center min-h-[90vh] relative z-10 text-center">
+            <!-- Желтое свечение на фоне -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#FFB000] opacity-10 rounded-full blur-[100px] pointer-events-none"></div>
+
+            <h1 class="text-5xl font-black tracking-widest italic mb-2 text-white">SUN</h1>
+            <h2 class="text-xl font-black tracking-widest uppercase text-[#FFB000] mb-8">ДОСТУП ЗАКРЫТ</h2>
+
+            <p class="text-gray-300 text-sm font-medium leading-relaxed mb-10 px-4">
+                Не видим тебя среди активных участников клуба, поэтому скрыли навигацию.<br><br>Вступить можно здесь, если открыто окно продаж:
+            </p>
+
+            <button onclick="tg.openLink('https://pay.kaspi.kz/pay/0o2tyjk1')" class="w-full bg-white text-black font-black py-4 rounded-xl uppercase tracking-widest mb-4 active:scale-95 transition-transform">
+                Вступить в SUN CLUB
+            </button>
+            <button onclick="tg.openTelegramLink('https://t.me/omvroff')" class="w-full bg-[#141414] border border-[#1a1a1c] text-white font-bold py-4 rounded-xl uppercase tracking-widest mb-6 active:scale-95 transition-transform">
+                Написать в службу заботы
+            </button>
+        </div>
+    </div>
+
     <nav class="nav-bar">
         <div onclick="showScreen('home-screen')" class="nav-item active" id="nav-home"><span class="text-2xl">🏠</span><span class="text-[9px] font-bold uppercase mt-1">Домой</span></div>
         <div onclick="showScreen('club-screen')" class="nav-item" id="nav-club"><span class="text-2xl">👥</span><span class="text-[9px] font-bold uppercase mt-1">Клуб</span></div>
@@ -273,9 +295,36 @@
             const rows = results.data.slice(1);
             globalUsers = rows.map(r => ({ id: String(r[0]).trim(), name: String(r[1]).trim() || 'Без имени', status: r[2], expiry: r[3], points: parseInt(r[4]) || 0 })).filter(u => u.id).sort((a, b) => b.points - a.points);
             let tgUser = tg.initDataUnsafe.user;
-            if (!tgUser) tgUser = { id: "412753295", first_name: "Бекболат (Тест)" };
-            if (tgUser) { currentUserData = globalUsers.find(u => u.id == tgUser.id); document.getElementById('profile-name').innerText = tgUser.first_name || "Ученик"; updateSubscriptionUI(); }
+            
+            // Для тестов на ПК (оставь свой ID, чтобы тебя всегда пускало)
+            if (!tgUser) tgUser = { id: "412753295", first_name: "Бекболат" };
+
+            let hasAccess = false; // По умолчанию доступ закрыт для всех
+
+            if (tgUser) { 
+                currentUserData = globalUsers.find(u => u.id == tgUser.id); 
+                
+                // Проверяем, есть ли человек в базе и не истекла ли подписка
+                if (currentUserData) {
+                    const parts = currentUserData.expiry.split('.');
+                    if(parts.length === 3) {
+                        const expiryDate = new Date(parts[2], parts[1] - 1, parts[0]);
+                        const diffDays = Math.ceil((expiryDate - new Date()) / (1000 * 60 * 60 * 24));
+                        if (diffDays > 0) hasAccess = true; // Даем зеленый свет!
+                    }
+                }
+
+                document.getElementById('profile-name').innerText = tgUser.first_name || "Ученик"; 
+                updateSubscriptionUI(); 
+            }
             renderLeaderboard();
+
+            // ⚡️ ГЛАВНЫЙ РОУТИНГ ⚡️
+            if (hasAccess) {
+                showScreen('home-screen'); // Пускаем внутрь
+            } else {
+                showScreen('paywall-screen'); // Выкидываем на экран ошибки
+            }
         }});
 
         function updateSubscriptionUI() {
@@ -366,7 +415,7 @@
             if(screenId === 'club-screen') document.getElementById('nav-club').classList.add('active');
             if(screenId === 'favorites-screen') document.getElementById('nav-fav').classList.add('active');
             if(screenId === 'profile-screen') document.getElementById('nav-profile').classList.add('active');
-            document.querySelector('.nav-bar').style.display = (screenId === 'detail-screen' || screenId === 'leaderboard-screen') ? 'none' : 'flex';
+            document.querySelector('.nav-bar').style.display = (screenId === 'detail-screen' || screenId === 'leaderboard-screen' || screenId === 'paywall-screen') ? 'none' : 'flex';
             if (screenId === 'home-screen') tg.BackButton.hide(); else tg.BackButton.show();
         }
 
